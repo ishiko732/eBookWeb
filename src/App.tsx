@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import Login from "./pages/auth/Login";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import './locales/index';
 function App() {
   return (
     <BrowserRouter>
