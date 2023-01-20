@@ -1,8 +1,11 @@
 {
-    "login": "登录",
-    "name": "用户名",
-    "password": "密码",
-    "RememberMe": "记住我",
-    "transfer_cn": "切换中文",
-    "transfer_en": "切换英文"
+  "transfer_cn": "切换中文",
+  "transfer_en": "切换英文",
+  "login": "登录",
+  "name": "用户名",
+  "password": "密码",
+  "RememberMe": "记住我",
+  "valid_username": "请输入用户名",
+  "valid_username_minlength": "用户名至少为5位",
+  "valid_username_maxlength": "用户名最多为10位"
 }

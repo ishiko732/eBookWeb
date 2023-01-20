@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { HttpStatusCode as Status } from "../api/StatusCode";
 // 这里取决于登录的时候将 token 存储在哪里
 const token = localStorage.getItem('token')
 const instance = axios.create({
@@ -24,8 +25,15 @@ instance.interceptors.request.use(
 // 添加响应拦截器
 instance.interceptors.response.use(
     response => {
-        if (response.status === 200) {
-            return Promise.resolve(response)
+        if (response.status === Status.Ok) {
+            if (response.data?.code) {
+                if (response.data.code === Status.Ok) {
+                    return Promise.resolve(response.data)
+                } else {
+                    return Promise.reject(response)
+                }
+            }
+            return Promise.resolve(response.data)
         } else {
             return Promise.reject(response)
         }

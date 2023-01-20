@@ -12,7 +12,12 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
+import { useForm, FieldValues } from "react-hook-form";
+import { Login as LoginApi } from "../../api/auth";
+import { save_access_token, save_refresh_token } from "../../config/token"
+import { HttpStatusCode as Status } from "../../api/StatusCode";
+import { useNavigate } from "react-router-dom";
 function Copyright(props: any) {
     return (
         <Typography
@@ -32,15 +37,40 @@ function Copyright(props: any) {
 }
 
 const theme = createTheme();
-
 export default function Login() {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get("email"),
-            password: data.get("password"),
-        });
+    // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    //     event.preventDefault();
+    //     const data = new FormData(event.currentTarget);
+    //     console.log({
+    //         email: data.get("email"),
+    //         password: data.get("password"),
+    //     });
+    // };
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
+    const navigate = useNavigate();
+    const submit = (userInfo: FieldValues) => {
+        // userInfo.preventDefault();
+        console.log(userInfo);
+        LoginApi({
+            name: userInfo.username,
+            password: userInfo.password
+        }).then(res => {
+            save_access_token(res.data.access_token)
+            save_refresh_token(res.data.refresh_token)
+            setTimeout(() => {
+                navigate('/dashboard', { replace: true })
+            }, 1000)
+            console.log(res)
+        }).catch(err => {
+            console.log("登录失败")
+            console.log(err)
+        })
+
+
     };
     const { t, i18n } = useTranslation();
     return (
@@ -59,36 +89,54 @@ export default function Login() {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        {t('login')}
+                        {t("login")}
                     </Typography>
                     <Box
                         component="form"
-                        onSubmit={handleSubmit}
+                        onSubmit={handleSubmit(submit)}
                         noValidate
                         sx={{ mt: 1 }}
                     >
                         <TextField
                             margin="normal"
-                            required
                             fullWidth
-                            id="email"
-                            label={t('name')}
-                            name="email"
+                            id="username"
+                            label={t("name")}
+                            {...register("username", {
+                                required: "请输入用户名",
+                                minLength: {
+                                    value: 5,
+                                    message: "用户名至少为5位",
+                                },
+                                maxLength: {
+                                    value: 10,
+                                    message: "用户名最多为10位",
+                                },
+                            })}
+                            helperText={errors.username?.message?.toString()}
+                            error={errors.username ? true : false}
                             autoFocus
                         />
                         <TextField
                             margin="normal"
-                            required
                             fullWidth
-                            name="password"
-                            label={t('password')}
+                            label={t("password")}
                             type="password"
                             id="password"
+                            {...register("password", {
+                                required: "请输入密码",
+                                minLength: {
+                                    value: 4,
+                                    message: "密码至少为4位",
+                                },
+                            })}
+                            helperText={errors.password?.message?.toString()}
+                            error={errors.password ? true : false}
                             autoComplete="current-password"
                         />
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}
-                            label={t('RememberMe')}
+                            label={t("RememberMe")}
                         />
                         <Button
                             type="submit"
@@ -114,8 +162,14 @@ export default function Login() {
                 </Box>
                 <Copyright sx={{ mt: 8, mb: 4 }} />
                 <div>
-                    <Button fullWidth
-                        onClick={() => i18n.changeLanguage(i18n.language === 'en_US' ? 'zh_CN' : 'en_US')}>{i18n.language === 'en_US' ? t('transfer_cn') : t('transfer_en')}</Button>
+                    <Button
+                        fullWidth
+                        onClick={() =>
+                            i18n.changeLanguage(i18n.language === "en_US" ? "zh_CN" : "en_US")
+                        }
+                    >
+                        {i18n.language === "en_US" ? t("transfer_cn") : t("transfer_en")}
+                    </Button>
                 </div>
             </Container>
         </ThemeProvider>
