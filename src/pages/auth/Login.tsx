@@ -69,11 +69,12 @@ export default function Login() {
       });
   };
   const { t, i18n } = useTranslation();
-  if (Object.keys(get_access_token()).length !== 0) {
+
+  if (get_access_token().length !== 0) {
     return <Navigate replace to="/dashboard" />;
   } else {
     const refresh_token = get_refresh_token();
-    if (Object.keys(refresh_token.length !== 0)) {
+    if (get_refresh_token().length!==0) {
       refreshtoken(refresh_token)
         .then((res) => {
           save_access_token(res.data.access_token);

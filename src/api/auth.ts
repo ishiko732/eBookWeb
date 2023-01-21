@@ -24,3 +24,9 @@ export const register = (params: registerVo) =>
     headers: { "Content-Type": "application/json" },
     transformRequest: [(data) => JSON.stringify(data)],
   });
+
+// 注销
+export const logout = () =>request.get("auth/logout");
+
+// 获取个人信息
+export const info = () =>request.get("auth/info");

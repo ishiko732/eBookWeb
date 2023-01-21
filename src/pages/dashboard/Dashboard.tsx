@@ -28,6 +28,7 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 
+import { info,logout } from "../../api/auth";
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -99,9 +100,12 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
+
 function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [user,setUser]:any=React.useState(null);
+  const submittingStatus = React.useRef(true);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -112,6 +116,20 @@ function MiniDrawer() {
   };
   const { t } = useTranslation();
   const navigate = useNavigate();
+  React.useEffect(()=>{
+    // if (!submittingStatus.current){
+    //   return
+    // }
+    if(submittingStatus.current){
+      submittingStatus.current=false
+      info().then((res:any)=>{
+        setUser(res);
+      }).catch((err)=>{
+        console.log("获取信息失败");
+        console.log(err);
+      })
+    }
+  },[])
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -199,8 +217,10 @@ function MiniDrawer() {
           variant="contained"
           onClick={() => {
             delete_token();
-
-            navigate("/login");
+            logout();
+            setTimeout(() => {
+              navigate("/login");
+            }, 1000);
           }}
         >
           {t("logout")}
@@ -239,7 +259,9 @@ function MiniDrawer() {
           <br />
           access_token:{get_access_token()}
           <br />
-          access_token:{get_refresh_token()}
+          refresh_token:{get_refresh_token()}
+          <br/>
+          user:{JSON.stringify(user)}
         </Typography>
       </Box>
     </Box>
