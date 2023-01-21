@@ -1,5 +1,5 @@
 import * as React from "react";
-import {get_access_token} from "../../config/token";
+import { get_access_token } from "../../config/token";
 import { Navigate } from "react-router-dom";
 import { info } from "../../api/auth";
 
@@ -224,7 +224,7 @@ function DashboardContent() {
             </Grid>
             <Grid item xs={12}>
               <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                <OutlinedCard user={user}/>
+                <OutlinedCard user={user} />
               </Paper>
             </Grid>
             <Copyright sx={{ pt: 4 }} />

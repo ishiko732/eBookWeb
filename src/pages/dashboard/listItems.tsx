@@ -9,31 +9,31 @@ import PeopleIcon from "@mui/icons-material/People";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import LayersIcon from "@mui/icons-material/Layers";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import Button from  "@mui/material/Button";
+import Button from "@mui/material/Button";
 
-import {delete_token} from "../../config/token";
-import {logout } from "../../api/auth";
+import { delete_token } from "../../config/token";
+import { logout } from "../../api/auth";
 import { useTranslation } from "react-i18next";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-function Logout(){
+function Logout() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   return (
     <Button
-          fullWidth
-          variant="contained"
-          onClick={() => {
-            delete_token();
-            logout();
-            setTimeout(() => {
-              navigate("/login");
-            }, 1000);
-          }}
-        >
-          {t("logout")}
-      </Button>
-  )
+      fullWidth
+      variant="contained"
+      onClick={() => {
+        delete_token();
+        logout();
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      }}
+    >
+      {t("logout")}
+    </Button>
+  );
 }
 export const mainListItems = (
   // const { t } = useTranslation()[1].t();
@@ -69,7 +69,7 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Integrations" />
     </ListItemButton>
-    <Logout/>
+    <Logout />
   </React.Fragment>
 );
 
