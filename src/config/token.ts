@@ -18,9 +18,9 @@ export function delete_token(): void {
 }
 
 export function get_refresh_token(): string {
-  return localStorage.getItem(refresh_token) || "";
+  return localstorage.getItem(refresh_token) || "";
 }
 
 export function get_access_token(): string {
-  return localStorage.getItem(access_token) || "";
+  return localstorage.getItem(access_token) || "";
 }
