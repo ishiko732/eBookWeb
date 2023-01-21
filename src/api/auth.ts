@@ -26,7 +26,7 @@ export const register = (params: registerVo) =>
   });
 
 // 注销
-export const logout = () =>request.get("auth/logout");
+export const logout = () => request.get("auth/logout");
 
 // 获取个人信息
-export const info = () =>request.get("auth/info");
+export const info = () => request.get("auth/info");

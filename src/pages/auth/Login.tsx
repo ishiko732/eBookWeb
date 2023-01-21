@@ -74,7 +74,7 @@ export default function Login() {
     return <Navigate replace to="/dashboard" />;
   } else {
     const refresh_token = get_refresh_token();
-    if (get_refresh_token().length!==0) {
+    if (get_refresh_token().length !== 0) {
       refreshtoken(refresh_token)
         .then((res) => {
           save_access_token(res.data.access_token);
