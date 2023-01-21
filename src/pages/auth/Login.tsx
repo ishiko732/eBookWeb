@@ -14,11 +14,12 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
 import { useForm, FieldValues } from "react-hook-form";
-import { Login as LoginApi } from "../../api/auth";
+import { Login as LoginApi, refreshtoken } from "../../api/auth";
 import {
   save_access_token,
   save_refresh_token,
   get_access_token,
+  get_refresh_token,
 } from "../../config/token";
 import { Navigate, useNavigate } from "react-router-dom";
 function Copyright(props: any) {
@@ -70,6 +71,23 @@ export default function Login() {
   const { t, i18n } = useTranslation();
   if (Object.keys(get_access_token()).length !== 0) {
     return <Navigate replace to="/dashboard" />;
+  } else {
+    const refresh_token = get_refresh_token();
+    if (Object.keys(refresh_token.length !== 0)) {
+      refreshtoken(refresh_token)
+        .then((res) => {
+          save_access_token(res.data.access_token);
+          save_refresh_token(res.data.refresh_token);
+          setTimeout(() => {
+            navigate("/dashboard", { replace: true });
+          }, 1000);
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log("刷新失败");
+          console.log(err);
+        });
+    }
   }
   return (
     <ThemeProvider theme={theme}>

@@ -2,7 +2,7 @@ import axios from "axios";
 import { HttpStatusCode as Status } from "../api/StatusCode";
 import localstorage from "./localstorage";
 // 这里取决于登录的时候将 token 存储在哪里
-const token = localstorage.getItem("token");
+const token = localstorage.getItem("access_token");
 const instance = axios.create({
   baseURL: "http://localhost:8080/",
   timeout: 5000,
