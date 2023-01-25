@@ -23,11 +23,17 @@ function Logout() {
       fullWidth
       variant="contained"
       onClick={() => {
-        delete_token();
-        logout();
-        setTimeout(() => {
-          navigate("/login");
-        }, 1000);
+        logout().then(res=>{
+          delete_token();
+          setTimeout(() => {
+            navigate("/login");
+          }, 1000);
+        }).catch(err=>{
+          delete_token();
+          setTimeout(() => {
+            navigate("/login");
+          }, 1000);
+        })
       }}
     >
       {t("logout")}
