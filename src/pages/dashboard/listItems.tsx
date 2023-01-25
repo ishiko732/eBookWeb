@@ -42,7 +42,6 @@ function Logout() {
 }
 export const mainListItems = (
   // const { t } = useTranslation()[1].t();
-
   <React.Fragment>
     <ListItemButton component={Rlink} to="test">
       <ListItemIcon>
@@ -56,7 +55,7 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="订单" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton component={Rlink} to="/dashboard/test/hello">
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
