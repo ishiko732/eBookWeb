@@ -1,6 +1,6 @@
 import * as React from "react";
 import { get_access_token } from "../../config/token";
-import { Navigate } from "react-router-dom";
+import { Navigate,Outlet } from "react-router-dom";
 import { info } from "../../api/auth";
 
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
@@ -188,6 +188,7 @@ function DashboardContent() {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Outlet/>
             <Grid container spacing={3}>
               {/* Chart */}
               <Grid item xs={12} md={8} lg={9}>

@@ -14,8 +14,7 @@ import Button from "@mui/material/Button";
 import { delete_token } from "../../config/token";
 import { logout } from "../../api/auth";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, Link as Rlink} from "react-router-dom";
 function Logout() {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -39,13 +38,13 @@ export const mainListItems = (
   // const { t } = useTranslation()[1].t();
 
   <React.Fragment>
-    <ListItemButton>
+    <ListItemButton component={Rlink} to="test">
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton component={Rlink} to="home">
       <ListItemIcon>
         <ShoppingCartIcon />
       </ListItemIcon>
