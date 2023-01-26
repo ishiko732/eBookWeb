@@ -1,8 +1,6 @@
 import * as React from "react";
 import { get_access_token } from "../../config/token";
 import { Navigate, Outlet } from "react-router-dom";
-import { info } from "../../api/auth";
-
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -14,17 +12,11 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
 import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { listbar } from "./listItems";
-import Chart from "./Chart";
-import Deposits from "./Deposits";
-import Orders from "./Orders";
-import OutlinedCard from "./Card";
 
 function Copyright(props: any) {
   return (
@@ -98,23 +90,6 @@ function DashboardContent() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
-
-  const [user, setUser]: any = React.useState(null);
-  const submittingStatus = React.useRef(true);
-  React.useEffect(() => {
-    if (submittingStatus.current) {
-      submittingStatus.current = false;
-      info()
-        .then((res: any) => {
-          setUser(res);
-        })
-        .catch((err) => {
-          console.log("获取信息失败");
-          console.log(err);
-        });
-    }
-  }, []);
-
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
@@ -184,45 +159,6 @@ function DashboardContent() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Outlet />
-            <Grid container spacing={3}>
-              {/* Chart */}
-              <Grid item xs={12} md={8} lg={9}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 240,
-                  }}
-                >
-                  <Chart />
-                </Paper>
-              </Grid>
-              {/* Recent Deposits */}
-              <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 240,
-                  }}
-                >
-                  <Deposits />
-                </Paper>
-              </Grid>
-              {/* Recent Orders */}
-              <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  <Orders />
-                </Paper>
-              </Grid>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                <OutlinedCard user={user} />
-              </Paper>
-            </Grid>
             <Copyright sx={{ pt: 4 }} />
           </Container>
         </Box>

@@ -25,7 +25,7 @@ const routes: route[] = [
   {
     path: "/dashboard",
     element: <Dashboard />,
-    redirect: "test/hello", //开头不能添加/,不然得从根目录写起'/dashboard/home'
+    redirect: "home", //开头不能添加/,不然得从根目录写起'/dashboard/home'
     children: [
       {
         path: "/home",

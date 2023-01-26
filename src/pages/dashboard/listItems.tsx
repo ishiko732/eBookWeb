@@ -14,13 +14,13 @@ import { Link as Rlink } from "react-router-dom";
 import UserAvatar from "../../components/UserAvatar";
 export const mainListItems = (
   <React.Fragment>
-    <ListItemButton component={Rlink} to="test">
+    <ListItemButton component={Rlink} to="home">
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItemButton>
-    <ListItemButton component={Rlink} to="home">
+    <ListItemButton component={Rlink} to="test">
       <ListItemIcon>
         <ShoppingCartIcon />
       </ListItemIcon>
