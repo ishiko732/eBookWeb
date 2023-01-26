@@ -139,7 +139,7 @@ export default function NestedList({ data }: { data: ListBarData[] }) {
         );
       })}
       <Divider sx={{ my: 1, alignItems: "center" }} />
-      <UserAvatar userStatus={false}>
+      <UserAvatar userStatus={true}>
         <UserMenu />
       </UserAvatar>
     </List>

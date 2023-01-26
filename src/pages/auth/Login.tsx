@@ -72,18 +72,17 @@ export default function Login() {
 
   if (get_access_token().length !== 0) {
     return <Navigate replace to="/dashboard" />;
-  } else if(localStorage.getItem("remember")){
+  } else if (localStorage.getItem("remember")) {
     const refresh_token = get_refresh_token();
     if (get_refresh_token().length !== 0) {
-      refreshtoken(refresh_token)
-        .then((res) => {
-          save_access_token(res.data.access_token);
-          save_refresh_token(res.data.refresh_token);
-          setTimeout(() => {
-            navigate("/dashboard", { replace: true });
-          }, 1000);
-          console.log(res);
-        });
+      refreshtoken(refresh_token).then((res) => {
+        save_access_token(res.data.access_token);
+        save_refresh_token(res.data.refresh_token);
+        setTimeout(() => {
+          navigate("/dashboard", { replace: true });
+        }, 1000);
+        console.log(res);
+      });
     }
   }
   return (
@@ -150,12 +149,12 @@ export default function Login() {
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label={t("RememberMe")}
-              onChange={(event: React.SyntheticEvent,checked:boolean)=>{
-                event.preventDefault()
-                if(checked){
-                  localStorage.setItem("remember",'1')
-                }else{
-                  localStorage.removeItem("remember")
+              onChange={(event: React.SyntheticEvent, checked: boolean) => {
+                event.preventDefault();
+                if (checked) {
+                  localStorage.setItem("remember", "1");
+                } else {
+                  localStorage.removeItem("remember");
                 }
               }}
             />
