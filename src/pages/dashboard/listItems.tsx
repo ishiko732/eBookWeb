@@ -9,39 +9,10 @@ import PeopleIcon from "@mui/icons-material/People";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import LayersIcon from "@mui/icons-material/Layers";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import Button from "@mui/material/Button";
-
-import { delete_token } from "../../config/token";
-import { logout } from "../../api/auth";
-import { useTranslation } from "react-i18next";
-import { useNavigate, Link as Rlink} from "react-router-dom";
-function Logout() {
-  const navigate = useNavigate();
-  const { t } = useTranslation();
-  return (
-    <Button
-      fullWidth
-      variant="contained"
-      onClick={() => {
-        logout().then(res=>{
-          delete_token();
-          setTimeout(() => {
-            navigate("/login");
-          }, 1000);
-        }).catch(err=>{
-          delete_token();
-          setTimeout(() => {
-            navigate("/login");
-          }, 1000);
-        })
-      }}
-    >
-      {t("logout")}
-    </Button>
-  );
-}
+import { Divider, List } from "@mui/material";
+import { Link as Rlink } from "react-router-dom";
+import UserAvatar from "../../components/UserAvatar";
 export const mainListItems = (
-  // const { t } = useTranslation()[1].t();
   <React.Fragment>
     <ListItemButton component={Rlink} to="test">
       <ListItemIcon>
@@ -73,7 +44,6 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Integrations" />
     </ListItemButton>
-    <Logout />
   </React.Fragment>
 );
 
@@ -100,5 +70,17 @@ export const secondaryListItems = (
       </ListItemIcon>
       <ListItemText primary="Year-end sale" />
     </ListItemButton>
+  </React.Fragment>
+);
+
+export const listbar = (
+  <React.Fragment>
+    <List component="nav">
+      {mainListItems}
+      <Divider sx={{ my: 1 }} />
+      {secondaryListItems}
+      <Divider sx={{ my: 1, alignItems: "center" }} />
+      <UserAvatar userStatus={false} />
+    </List>
   </React.Fragment>
 );
