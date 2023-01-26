@@ -9,5 +9,7 @@
   "RememberMe": "记住我",
   "valid_username": "请输入用户名",
   "valid_username_minlength": "用户名至少为5位",
-  "valid_username_maxlength": "用户名最多为10位"
+  "valid_username_maxlength": "用户名最多为10位",
+  "Not Found":"你要访问的页面不存在。",
+  "Back Page":"返回上页"
 }

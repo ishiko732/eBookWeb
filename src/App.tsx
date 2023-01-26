@@ -8,6 +8,8 @@ import Hello from "./pages/dashboard/Hello";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./locales/index";
 import { get_access_token } from "./config/token";
+import LinearProgress  from '@mui/material/LinearProgress';
+import NotFound from "./pages/exception/404";
 const access_token = get_access_token();
 interface route {
   path: string;
@@ -56,6 +58,10 @@ const routes: route[] = [
         <Navigate to="/dashboard" />
       ),
   },
+  {
+    path: "*",
+    element:<NotFound/>
+  }
 ];
 const rotuerViews = (routerItems:route[],parent?:string)=>{ 
   return routerItems.map(
@@ -90,12 +96,6 @@ function App() {
   );
 }
 const Loading = () => (
-  <>
-     <div className='loadsvg'> 
-        <div>
-          loading...
-        </div>
-     </div> 
-  </>
+  <LinearProgress />
 )
 export default App;
