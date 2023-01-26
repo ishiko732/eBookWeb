@@ -88,21 +88,21 @@ export default function UserAvatar({ userStatus }: { userStatus: boolean }) {
   const id = open ? "simple-popover" : undefined;
   return (
     <Box component="center">
-      <StyledBadge
-        overlap="circular"
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        variant="dot"
-        sx={{
-          "& .MuiBadge-badge": {
-            backgroundColor: userStatus ? "#44b700" : "#ff0000",
-            color: userStatus ? "#44b700" : "#ff0000",
-          },
-        }}
-      >
-        <IconButton id={id} onClick={handleClick}>
+      <IconButton id={id} onClick={handleClick}>
+        <StyledBadge
+          overlap="circular"
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          variant="dot"
+          sx={{
+            "& .MuiBadge-badge": {
+              backgroundColor: userStatus ? "#44b700" : "#ff0000",
+              color: userStatus ? "#44b700" : "#ff0000",
+            },
+          }}
+        >
           <Avatar alt="User" sx={{ width: 48, height: 48 }} />
-        </IconButton>
-      </StyledBadge>
+        </StyledBadge>
+      </IconButton>
       <Popover
         id={id}
         open={open}
