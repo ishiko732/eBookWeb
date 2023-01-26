@@ -38,8 +38,13 @@ const StyledBadge = styled(Badge)(({ theme }: any) => ({
   },
 }));
 
-
-export default function UserAvatar({ userStatus,children}: { userStatus: boolean,children:JSX.Element}) {
+export default function UserAvatar({
+  userStatus,
+  children,
+}: {
+  userStatus: boolean;
+  children: JSX.Element;
+}) {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );

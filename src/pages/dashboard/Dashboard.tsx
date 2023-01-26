@@ -16,7 +16,7 @@ import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { listbar } from "./listItems";
+import { ListBar } from "./listItems";
 
 function Copyright(props: any) {
   return (
@@ -142,7 +142,7 @@ function DashboardContent() {
             </IconButton>
           </Toolbar>
           <Divider />
-          {listbar}
+          <ListBar />
         </Drawer>
         <Box
           component="main"

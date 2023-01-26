@@ -13,6 +13,22 @@ import { Divider, List } from "@mui/material";
 import { Link as Rlink } from "react-router-dom";
 import UserAvatar from "../../components/UserAvatar";
 import UserMenu from "./UserMenu";
+
+import Box from "@mui/material/Box";
+import { styled, ThemeProvider, createTheme } from "@mui/material/styles";
+import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import ArrowRight from "@mui/icons-material/ArrowRight";
+import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
+import Home from "@mui/icons-material/Home";
+import Settings from "@mui/icons-material/Settings";
+import People from "@mui/icons-material/People";
+import PermMedia from "@mui/icons-material/PermMedia";
+import Dns from "@mui/icons-material/Dns";
+import Public from "@mui/icons-material/Public";
+import ListItem from "@mui/material/ListItem";
+
 export const mainListItems = (
   <React.Fragment>
     <ListItemButton component={Rlink} to="home">
@@ -47,43 +63,23 @@ export const mainListItems = (
     </ListItemButton>
   </React.Fragment>
 );
+const data = [
+  { icon: <People />, label: "Authentication" },
+  { icon: <Dns />, label: "Database" },
+  { icon: <PermMedia />, label: "Storage" },
+  { icon: <Public />, label: "Hosting" },
+];
 
-export const secondaryListItems = (
-  <React.Fragment>
-    <ListSubheader component="div" inset>
-      Saved reports
-    </ListSubheader>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Current month" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Last quarter" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Year-end sale" />
-    </ListItemButton>
-  </React.Fragment>
-);
-
-export const listbar = (
-  <React.Fragment>
-    <List component="nav">
-      {mainListItems}
-      <Divider sx={{ my: 1 }} />
-      {secondaryListItems}
-      <Divider sx={{ my: 1, alignItems: "center" }} />
-      <UserAvatar userStatus={false}>
-        <UserMenu/>
-      </UserAvatar>
-    </List>
-  </React.Fragment>
-);
+export function ListBar() {
+  return (
+    <React.Fragment>
+      <List component="nav">
+        {mainListItems}
+        <Divider sx={{ my: 1, alignItems: "center" }} />
+        <UserAvatar userStatus={false}>
+          <UserMenu />
+        </UserAvatar>
+      </List>
+    </React.Fragment>
+  );
+}
