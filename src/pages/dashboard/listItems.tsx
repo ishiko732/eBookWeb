@@ -12,6 +12,7 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import { Divider, List } from "@mui/material";
 import { Link as Rlink } from "react-router-dom";
 import UserAvatar from "../../components/UserAvatar";
+import UserMenu from "./UserMenu";
 export const mainListItems = (
   <React.Fragment>
     <ListItemButton component={Rlink} to="home">
@@ -80,7 +81,9 @@ export const listbar = (
       <Divider sx={{ my: 1 }} />
       {secondaryListItems}
       <Divider sx={{ my: 1, alignItems: "center" }} />
-      <UserAvatar userStatus={false} />
+      <UserAvatar userStatus={false}>
+        <UserMenu/>
+      </UserAvatar>
     </List>
   </React.Fragment>
 );
