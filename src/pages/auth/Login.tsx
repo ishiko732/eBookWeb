@@ -72,7 +72,7 @@ export default function Login() {
 
   if (get_access_token().length !== 0) {
     return <Navigate replace to="/dashboard" />;
-  } else {
+  } else if(localStorage.getItem("remember")){
     const refresh_token = get_refresh_token();
     if (get_refresh_token().length !== 0) {
       refreshtoken(refresh_token)
@@ -83,10 +83,6 @@ export default function Login() {
             navigate("/dashboard", { replace: true });
           }, 1000);
           console.log(res);
-        })
-        .catch((err) => {
-          console.log("刷新失败");
-          console.log(err);
         });
     }
   }
@@ -154,6 +150,14 @@ export default function Login() {
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label={t("RememberMe")}
+              onChange={(event: React.SyntheticEvent,checked:boolean)=>{
+                event.preventDefault()
+                if(checked){
+                  localStorage.setItem("remember",'1')
+                }else{
+                  localStorage.removeItem("remember")
+                }
+              }}
             />
             <Button
               type="submit"
