@@ -8,7 +8,6 @@ import { Divider, List, Collapse } from "@mui/material";
 import { Link as Rlink } from "react-router-dom";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-
 import UserAvatar from "../../components/UserAvatar";
 import UserMenu from "./UserMenu";
 import People from "@mui/icons-material/People";
@@ -43,12 +42,44 @@ const data: ListBarData[] = [
 ];
 
 export default function NestedList({ data }: { data: ListBarData[] }) {
-  const [open, setOpen] = React.useState(new Array(data.length).fill(false));
+  const [open, setOpen] = React.useState<boolean[]>(
+    new Array(data.length).fill(false)
+  );
+  const [selected, setSelected] = React.useState<string | null>(null);
+  const submittingStatus = React.useRef(true);
+  React.useEffect(() => {
+    if (submittingStatus.current) {
+      submittingStatus.current = false;
+      const list_data = localStorage.getItem("list_data");
+      if (list_data) {
+        setOpen(JSON.parse(list_data).open);
+        setSelected(JSON.parse(list_data).selected);
+      }
+    }
+  }, []);
+
+  const handleListItemClick = (index: string) => {
+    setSelected(index);
+    localStorage.setItem(
+      "list_data",
+      JSON.stringify({
+        selected: index,
+        open: open,
+      })
+    );
+  };
 
   function handleClick(index: number) {
     let list = [...open];
     list[index] = !list[index];
     setOpen(list);
+    localStorage.setItem(
+      "list_data",
+      JSON.stringify({
+        selected: index.toString(),
+        open: list,
+      })
+    );
   }
 
   return (
@@ -62,7 +93,9 @@ export default function NestedList({ data }: { data: ListBarData[] }) {
             <ListItemButton
               component={Rlink}
               to={item.link}
+              selected={index.toString() === selected}
               onClick={() => {
+                handleListItemClick(index.toString());
                 handleClick(index);
               }}
             >
@@ -70,7 +103,7 @@ export default function NestedList({ data }: { data: ListBarData[] }) {
               <ListItemText primary={item.label} />
               {open[index] ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
-            {item.children.map((item_c) => {
+            {item.children.map((item_c: ListBarData, index_c: number) => {
               return (
                 <Collapse in={open[index]} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
@@ -78,6 +111,10 @@ export default function NestedList({ data }: { data: ListBarData[] }) {
                       sx={{ pl: 4 }}
                       component={Rlink}
                       to={item_c.link}
+                      selected={index + "-" + index_c === selected}
+                      onClick={() => {
+                        handleListItemClick(index + "-" + index_c);
+                      }}
                     >
                       <ListItemIcon>{item_c.icon}</ListItemIcon>
                       <ListItemText primary={item_c.label} />
@@ -88,7 +125,14 @@ export default function NestedList({ data }: { data: ListBarData[] }) {
             })}
           </React.Fragment>
         ) : (
-          <ListItemButton component={Rlink} to={item.link}>
+          <ListItemButton
+            component={Rlink}
+            to={item.link}
+            selected={index.toString() === selected}
+            onClick={() => {
+              handleListItemClick(index.toString());
+            }}
+          >
             <ListItemIcon>{item.icon}</ListItemIcon>
             <ListItemText primary={item.label} />
           </ListItemButton>
