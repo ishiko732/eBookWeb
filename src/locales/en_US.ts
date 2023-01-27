@@ -15,11 +15,25 @@ const customEnglishMessages = {
       remember: "remember me",
       forgot: "Forgot password?",
       signup: "Don't have an account? Sign Up",
-      valid_username: "please input username",
-      valid_username_minlength: "用户名至少为5位",
-      valid_username_maxlength: "用户名最多为10位",
-      valid_password: "please input password",
-      valid_password_minlength: "密码至少为4位",
+    },
+    register: {
+      register: "Sign up",
+      name: "name",
+      password: "password",
+      phone: "phone",
+      login: "Already have an account? Sign in",
+      readed:
+        "I want to receive inspiration, marketing promotions and updates via email.",
+    },
+    valid: {
+      username: "please input username",
+      username_minlength: "用户名至少为5位",
+      username_maxlength: "用户名最多为10位",
+      password: "please input password",
+      password_minlength: "密码至少为4位",
+      phone: "please input phone",
+      // eslint-disable-next-line no-useless-escape
+      phone_pattern: /^(\+?0?86\-?)?1[345789]\d{9}$/,
     },
   },
   error: {

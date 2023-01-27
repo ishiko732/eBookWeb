@@ -24,6 +24,7 @@ import {
 import { Navigate, useNavigate } from "react-router-dom";
 import Copyright from "../../components/Copyright";
 import SelectLanguage from "../../components/Language";
+import localstorage from "../../config/localstorage";
 
 const theme = createTheme();
 export default function Login() {
@@ -50,7 +51,7 @@ export default function Login() {
   const { t } = useTranslation();
   if (get_access_token().length !== 0) {
     return <Navigate replace to="/dashboard" />;
-  } else if (localStorage.getItem("remember")) {
+  } else if (localstorage.getItem("remember")) {
     const refresh_token = get_refresh_token();
     if (get_refresh_token().length !== 0) {
       refreshtoken(refresh_token).then((res) => {
@@ -93,14 +94,14 @@ export default function Login() {
               id="username"
               label={t("auth.login.name")}
               {...register("username", {
-                required: t("auth.login.valid_username") as string,
+                required: t("auth.valid.username") as string,
                 minLength: {
                   value: 5,
-                  message: t("auth.login.valid_username_minlength") as string,
+                  message: t("auth.valid.username_minlength") as string,
                 },
                 maxLength: {
                   value: 10,
-                  message: t("auth.login.valid_username_maxlength") as string,
+                  message: t("auth.valid.username_maxlength") as string,
                 },
               })}
               helperText={errors.username?.message?.toString()}
@@ -114,10 +115,10 @@ export default function Login() {
               type="password"
               id="password"
               {...register("password", {
-                required: t("auth.login.valid_password") as string,
+                required: t("auth.valid.password") as string,
                 minLength: {
                   value: 4,
-                  message: t("auth.login.valid_password_minlength") as string,
+                  message: t("auth.valid.password_minlength") as string,
                 },
               })}
               helperText={errors.password?.message?.toString()}
@@ -130,9 +131,9 @@ export default function Login() {
               onChange={(event: React.SyntheticEvent, checked: boolean) => {
                 event.preventDefault();
                 if (checked) {
-                  localStorage.setItem("remember", "1");
+                  localstorage.setItem("remember", "1", 6000000);
                 } else {
-                  localStorage.removeItem("remember");
+                  localstorage.removeItem("remember");
                 }
               }}
             />

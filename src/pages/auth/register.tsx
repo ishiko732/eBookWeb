@@ -13,18 +13,24 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Copyright from "../../components/Copyright";
+import { useTranslation } from "react-i18next";
+import { Controller, useForm, FieldValues } from "react-hook-form";
+import { MuiTelInput, matchIsValidTel } from "mui-tel-input";
+
 const theme = createTheme();
 
 export default function SignUp() {
   const [checked, setChecked] = React.useState(false);
+  const {
+    control,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const { t } = useTranslation();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  const submit = (registerVo: FieldValues) => {
+    console.log(registerVo);
   };
 
   return (
@@ -43,55 +49,74 @@ export default function SignUp() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            {t("auth.register.register")}
           </Typography>
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(submit)}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
+              <Grid item xs={12}>
+                <Controller
+                  control={control as any}
+                  rules={{ validate: matchIsValidTel }}
+                  render={({ field, fieldState }) => (
+                    <MuiTelInput
+                      {...field}
+                      fullWidth
+                      focusOnSelectCountry
+                      defaultCountry="CN"
+                      onlyCountries={["CN", "US", "JP"]}
+                      preferredCountries={["CN"]}
+                      helperText={
+                        fieldState.invalid ? t("auth.valid.phone") : ""
+                      }
+                      error={fieldState.invalid}
+                    />
+                  )}
+                  name="phone"
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  required
+                  margin="normal"
                   fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
+                  id="username"
+                  label={t("auth.register.name")}
+                  {...register("username", {
+                    required: t("auth.valid.username") as string,
+                    minLength: {
+                      value: 5,
+                      message: t("auth.valid.username_minlength") as string,
+                    },
+                    maxLength: {
+                      value: 10,
+                      message: t("auth.valid.username_maxlength") as string,
+                    },
+                  })}
+                  helperText={errors.username?.message?.toString()}
+                  error={errors.username ? true : false}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  required
+                  margin="normal"
                   fullWidth
-                  name="password"
-                  label="Password"
+                  label={t("auth.register.password")}
                   type="password"
                   id="password"
-                  autoComplete="new-password"
+                  {...register("password", {
+                    required: t("auth.valid.password") as string,
+                    minLength: {
+                      value: 4,
+                      message: t("auth.valid.password_minlength") as string,
+                    },
+                  })}
+                  helperText={errors.password?.message?.toString()}
+                  error={errors.password ? true : false}
+                  autoComplete="current-password"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -99,7 +124,7 @@ export default function SignUp() {
                   control={
                     <Checkbox value="allowExtraEmails" color="primary" />
                   }
-                  label="I want to receive inspiration, marketing promotions and updates via email."
+                  label={t("auth.register.readed")}
                   onChange={() => setChecked(!checked)}
                 />
               </Grid>
@@ -111,12 +136,12 @@ export default function SignUp() {
               sx={{ mt: 3, mb: 2 }}
               disabled={!checked}
             >
-              Sign Up
+              {t("auth.register.register")}
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
+                <Link href="/login" variant="body2">
+                  {t("auth.register.login")}
                 </Link>
               </Grid>
             </Grid>
