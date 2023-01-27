@@ -15,6 +15,7 @@ export default function SelectLanguage() {
   const handleChange = (event: SelectChangeEvent) => {
     setCurrentLanguage(event.target.value as string);
     i18n.changeLanguage(event.target.value);
+    localStorage.language = event.target.value;
   };
   return (
     <Box sx={{ minWidth: 120 }}>

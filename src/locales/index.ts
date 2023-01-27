@@ -17,10 +17,14 @@ const resources = {
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: "zh_CN",
+  lng: localStorage.language || "zh_CN",
+  fallbackLng: "zh_CN",
   interpolation: {
     escapeValue: false,
   },
 });
 
+// i18n.on('languageChanged', (e) => {
+//   window.location.reload()
+// });
 export default i18n;

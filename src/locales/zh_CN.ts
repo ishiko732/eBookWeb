@@ -1,4 +1,5 @@
 const customChineseMessages = {
+  hello: "您好",
   transfer: {
     language: "语言",
     change: "切换{{language}}",
@@ -17,6 +18,8 @@ const customChineseMessages = {
       valid_username: "请输入用户名",
       valid_username_minlength: "用户名至少为5位",
       valid_username_maxlength: "用户名最多为10位",
+      valid_password: "请输入密码",
+      valid_password_minlength: "密码至少为4位",
     },
   },
   error: {
@@ -25,8 +28,9 @@ const customChineseMessages = {
       "Back Page": "返回上页",
     },
   },
-  hello: "您好",
-  logout: "注销",
+  logout: {
+    logout: "注销",
+  },
 };
 
 export default customChineseMessages;

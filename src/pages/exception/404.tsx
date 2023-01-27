@@ -23,10 +23,10 @@ export default function NotFound() {
         404
       </Typography>
       <Typography variant="h6" style={{ color: "white" }}>
-        {t("Not Found")}
+        {t("error.404.Not Found")}
       </Typography>
       <Button variant="contained" onClick={() => navigate(-1)}>
-        {t("Back Page")}
+        {t("error.404.Back Page")}
       </Button>
     </Box>
   );

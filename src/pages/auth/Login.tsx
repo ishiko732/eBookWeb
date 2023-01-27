@@ -48,7 +48,6 @@ export default function Login() {
     });
   };
   const { t } = useTranslation();
-
   if (get_access_token().length !== 0) {
     return <Navigate replace to="/dashboard" />;
   } else if (localStorage.getItem("remember")) {
@@ -94,14 +93,14 @@ export default function Login() {
               id="username"
               label={t("auth.login.name")}
               {...register("username", {
-                required: "请输入用户名",
+                required: t("auth.login.valid_username") as string,
                 minLength: {
                   value: 5,
-                  message: "用户名至少为5位",
+                  message: t("auth.login.valid_username_minlength") as string,
                 },
                 maxLength: {
                   value: 10,
-                  message: "用户名最多为10位",
+                  message: t("auth.login.valid_username_maxlength") as string,
                 },
               })}
               helperText={errors.username?.message?.toString()}
@@ -115,10 +114,10 @@ export default function Login() {
               type="password"
               id="password"
               {...register("password", {
-                required: "请输入密码",
+                required: t("auth.login.valid_password") as string,
                 minLength: {
                   value: 4,
-                  message: "密码至少为4位",
+                  message: t("auth.login.valid_password_minlength") as string,
                 },
               })}
               helperText={errors.password?.message?.toString()}
