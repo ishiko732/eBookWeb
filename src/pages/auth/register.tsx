@@ -16,6 +16,8 @@ import Copyright from "../../components/Copyright";
 const theme = createTheme();
 
 export default function SignUp() {
+  const [checked, setChecked] = React.useState(false);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -98,6 +100,7 @@ export default function SignUp() {
                     <Checkbox value="allowExtraEmails" color="primary" />
                   }
                   label="I want to receive inspiration, marketing promotions and updates via email."
+                  onChange={() => setChecked(!checked)}
                 />
               </Grid>
             </Grid>
@@ -106,6 +109,7 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={!checked}
             >
               Sign Up
             </Button>

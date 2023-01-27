@@ -14,7 +14,7 @@ const customChineseMessages = {
       password: "密码",
       remember: "记住我",
       forgot: "忘记密码",
-      signup: "注册",
+      signup: "还没有账号?立即注册",
       valid_username: "请输入用户名",
       valid_username_minlength: "用户名至少为5位",
       valid_username_maxlength: "用户名最多为10位",
