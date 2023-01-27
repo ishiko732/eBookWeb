@@ -6,7 +6,6 @@ import Home from "./pages/dashboard/Home";
 import Stile from "./pages/dashboard/OutletStile";
 import Hello from "./pages/dashboard/Hello";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import "./locales/index";
 import { get_access_token } from "./config/token";
 import LinearProgress from "@mui/material/LinearProgress";
 import NotFound from "./pages/exception/404";
