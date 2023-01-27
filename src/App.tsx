@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import Login from "./pages/auth/Login";
+import SignUp from "./pages/auth/register";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Home from "./pages/dashboard/Home";
 import Stile from "./pages/dashboard/OutletStile";
@@ -20,6 +21,10 @@ const routes: route[] = [
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <SignUp />,
   },
   {
     path: "/dashboard",

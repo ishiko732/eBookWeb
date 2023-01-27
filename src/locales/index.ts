@@ -2,7 +2,7 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import enUS from "./en_US";
 import zhCN from "./zh_CN";
-import jaJP from "./ja_JP"
+import jaJP from "./ja_JP";
 const resources = {
   en_US: {
     translation: enUS,
@@ -10,9 +10,9 @@ const resources = {
   zh_CN: {
     translation: zhCN,
   },
-  ja_JP:{
+  ja_JP: {
     translation: jaJP,
-  }
+  },
 };
 
 i18n.use(initReactI18next).init({

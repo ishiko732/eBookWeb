@@ -22,7 +22,8 @@ import {
   get_refresh_token,
 } from "../../config/token";
 import { Navigate, useNavigate } from "react-router-dom";
-import Copyright from '../../components/Copyright';
+import Copyright from "../../components/Copyright";
+import SelectLanguage from "../../components/Language";
 
 const theme = createTheme();
 export default function Login() {
@@ -34,25 +35,19 @@ export default function Login() {
   const navigate = useNavigate();
   const submit = (userInfo: FieldValues) => {
     // userInfo.preventDefault();
-    console.log(userInfo);
     LoginApi({
       name: userInfo.username,
       password: userInfo.password,
-    })
-      .then((res) => {
-        save_access_token(res.data.access_token);
-        save_refresh_token(res.data.refresh_token);
-        setTimeout(() => {
-          navigate("/dashboard", { replace: true });
-        }, 1000);
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log("登录失败");
-        console.log(err);
-      });
+    }).then((res) => {
+      save_access_token(res.data.access_token);
+      save_refresh_token(res.data.refresh_token);
+      setTimeout(() => {
+        navigate("/dashboard", { replace: true });
+      }, 1000);
+      console.log(res);
+    });
   };
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   if (get_access_token().length !== 0) {
     return <Navigate replace to="/dashboard" />;
@@ -85,7 +80,7 @@ export default function Login() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            {t("login")}
+            {t("auth.login.login")}
           </Typography>
           <Box
             component="form"
@@ -97,7 +92,7 @@ export default function Login() {
               margin="normal"
               fullWidth
               id="username"
-              label={t("name")}
+              label={t("auth.login.name")}
               {...register("username", {
                 required: "请输入用户名",
                 minLength: {
@@ -116,7 +111,7 @@ export default function Login() {
             <TextField
               margin="normal"
               fullWidth
-              label={t("password")}
+              label={t("auth.login.password")}
               type="password"
               id="password"
               {...register("password", {
@@ -132,7 +127,7 @@ export default function Login() {
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
-              label={t("RememberMe")}
+              label={t("auth.login.remember")}
               onChange={(event: React.SyntheticEvent, checked: boolean) => {
                 event.preventDefault();
                 if (checked) {
@@ -148,33 +143,24 @@ export default function Login() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              {t("auth.login.login")}
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
+                {/* <Link href="#" variant="body2">
+                  {t('auth.login.forgot')}
+                </Link> */}
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link href="/register" variant="body2">
+                  {t("auth.login.signup")}
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
-        <div>
-          <Button
-            fullWidth
-            onClick={() =>
-              i18n.changeLanguage(i18n.language === "en_US" ? "zh_CN" : "en_US")
-            }
-          >
-            {i18n.language === "en_US" ? t("transfer_cn") : t("transfer_en")}
-          </Button>
-        </div>
+        <SelectLanguage />
       </Container>
     </ThemeProvider>
   );
