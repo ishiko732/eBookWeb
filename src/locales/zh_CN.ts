@@ -4,8 +4,8 @@ const customChineseMessages = {
     language: "语言",
     change: "切换{{language}}",
     zh_CN: "中文",
-    en_US: "英文",
-    ja_JP: "日语",
+    en_US: "English",
+    ja_JP: "日本语",
   },
   auth: {
     login: {
