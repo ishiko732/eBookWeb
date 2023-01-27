@@ -22,23 +22,7 @@ import {
   get_refresh_token,
 } from "../../config/token";
 import { Navigate, useNavigate } from "react-router-dom";
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import Copyright from '../../components/Copyright';
 
 const theme = createTheme();
 export default function Login() {

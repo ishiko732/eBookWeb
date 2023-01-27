@@ -57,7 +57,7 @@ export default function UserAvatar({
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
   return (
-    <Box component="center">
+    <Box component="center" sx={{ p: 2, border: "1px dashed grey" }}>
       <IconButton id={id} onClick={handleClick}>
         <StyledBadge
           overlap="circular"
