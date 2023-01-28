@@ -57,8 +57,8 @@ export default function UserAvatar({
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
   return (
-    <Box component="center" sx={{position: "fixed",bottom: "0",
-    left:"0",}} >
+    <Box component="center" sx={{position: "fixed",bottom: "16px",
+    left:"4px",}} >
       <IconButton id={id} onClick={handleClick}>
         <StyledBadge
         
@@ -83,6 +83,10 @@ export default function UserAvatar({
         anchorOrigin={{
           vertical: "top",
           horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
         }}
       >
         <ButtonGroup

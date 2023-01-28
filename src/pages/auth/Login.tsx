@@ -25,6 +25,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import Copyright from "../../components/Copyright";
 import SelectLanguage from "../../components/Language";
 import localstorage from "../../config/localstorage";
+import { Loading } from "../../components/Loading";
 
 const theme = createTheme();
 export default function Login() {
@@ -62,6 +63,7 @@ export default function Login() {
         }, 1000);
         console.log(res);
       });
+      return <Loading />;
     }
   }
   return (

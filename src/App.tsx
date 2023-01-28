@@ -8,8 +8,8 @@ import Stile from "./pages/dashboard/OutletStile";
 import Hello from "./pages/dashboard/Hello";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { get_access_token } from "./config/token";
-import LinearProgress from "@mui/material/LinearProgress";
 import NotFound from "./pages/exception/404";
+import { Loading } from "./components/Loading";
 const access_token = get_access_token();
 interface route {
   path: string;
@@ -107,5 +107,4 @@ function App() {
     </BrowserRouter>
   );
 }
-const Loading = () => <LinearProgress />;
 export default App;
