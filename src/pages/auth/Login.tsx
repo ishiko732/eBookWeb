@@ -23,7 +23,6 @@ import {
 } from "../../config/token";
 import { Navigate, useNavigate } from "react-router-dom";
 import Copyright from "../../components/Copyright";
-import SelectLanguage from "../../components/Language";
 import localstorage from "../../config/localstorage";
 import { Loading } from "../../components/Loading";
 import PostionSnackbar from "../../components/SnackBars";
@@ -187,7 +186,6 @@ export default function Login() {
           onChange={handleClose}
         />
         <Copyright sx={{ mt: 8, mb: 4 }} />
-        <SelectLanguage />
       </Container>
     </ThemeProvider>
   );
