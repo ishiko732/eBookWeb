@@ -16,6 +16,7 @@ import Copyright from "../../components/Copyright";
 import { useTranslation } from "react-i18next";
 import { Controller, useForm, FieldValues } from "react-hook-form";
 import { MuiTelInput, matchIsValidTel } from "mui-tel-input";
+import CustomizedSnackbars from "../../components/SnackBars";
 
 const theme = createTheme();
 
@@ -27,7 +28,7 @@ export default function SignUp() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const submit = (registerVo: FieldValues) => {
     console.log(registerVo);
@@ -67,9 +68,11 @@ export default function SignUp() {
                       {...field}
                       fullWidth
                       focusOnSelectCountry
-                      defaultCountry="CN"
+                      defaultCountry={t("auth.valid." + i18n.language) as any}
                       onlyCountries={["CN", "US", "JP"]}
-                      preferredCountries={["CN"]}
+                      preferredCountries={[
+                        t("auth.valid." + i18n.language) as any,
+                      ]}
                       helperText={
                         fieldState.invalid ? t("auth.valid.phone") : ""
                       }
@@ -147,6 +150,7 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
+        <CustomizedSnackbars />
         <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>

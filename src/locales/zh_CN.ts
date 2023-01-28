@@ -31,6 +31,9 @@ const customChineseMessages = {
       password: "请输入密码",
       password_minlength: "密码至少为4位",
       phone: "请输入正确的手机号",
+      zh_CN: "CN",
+      en_US: "US",
+      ja_JP: "JP",
     },
   },
   error: {

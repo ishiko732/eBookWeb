@@ -32,8 +32,9 @@ const customEnglishMessages = {
       password: "please input password",
       password_minlength: "密码至少为4位",
       phone: "please input phone",
-      // eslint-disable-next-line no-useless-escape
-      phone_pattern: /^(\+?0?86\-?)?1[345789]\d{9}$/,
+      zh_CN: "CN",
+      en_US: "US",
+      ja_JP: "JP",
     },
   },
   error: {
