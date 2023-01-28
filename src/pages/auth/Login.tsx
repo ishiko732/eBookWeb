@@ -26,10 +26,15 @@ import Copyright from "../../components/Copyright";
 import SelectLanguage from "../../components/Language";
 import localstorage from "../../config/localstorage";
 import { Loading } from "../../components/Loading";
-
+import PostionSnackbar from "../../components/SnackBars";
 const theme = createTheme();
 export default function Login() {
   const [isloading, setLoading] = React.useState(false);
+  const [alert, setAlert] = React.useState({
+    open: false,
+    message: "",
+    severity: "info",
+  });
   const {
     register,
     handleSubmit,
@@ -49,8 +54,19 @@ export default function Login() {
         navigate("/dashboard", { replace: true });
       }, 1000);
       setLoading(false);
+    }).catch((err) => {
+      setAlert({
+        ...alert,
+        severity: "error",
+        open: true,
+        message: err.msg,
+      });
+      setLoading(false);
     });
   };
+  function handleClose() {
+    setAlert({ ...alert, open: false });
+  }
   const { t } = useTranslation();
   if (get_access_token().length !== 0) {
     return <Navigate replace to="/dashboard" />;
@@ -164,6 +180,12 @@ export default function Login() {
             </Grid>
           </Box>
         </Box>
+        <PostionSnackbar
+          open={alert.open}
+          message={alert.message}
+          severity={alert.severity}
+          onChange={handleClose}
+        />
         <Copyright sx={{ mt: 8, mb: 4 }} />
         <SelectLanguage />
       </Container>
