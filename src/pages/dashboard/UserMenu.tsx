@@ -51,7 +51,7 @@ export default function UserMenu(): JSX.Element {
   };
   return (
     <React.Fragment>
-      <Button key="one">配置</Button>
+      <Button key="one">{t('config.config')}</Button>
       <Button
         fullWidth
         variant="contained"
@@ -59,7 +59,7 @@ export default function UserMenu(): JSX.Element {
           handleClickOpen(event);
         }}
       >
-        {t("logout")}
+        {t("config.logout")}
       </Button>
       <Dialog
         open={open}
