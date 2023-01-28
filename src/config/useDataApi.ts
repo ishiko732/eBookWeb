@@ -55,7 +55,7 @@ function useDataApi(api: (params?: any) => Promise<any>) {
       dispatch({ type: ApiType.INIT });
       api()
         .then((res) => {
-          dispatch({ type: ApiType.SUCCESS, payload: res});
+          dispatch({ type: ApiType.SUCCESS, payload: res });
         })
         .catch((err) => {
           dispatch({ type: ApiType.FAILURE });

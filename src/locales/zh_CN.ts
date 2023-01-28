@@ -42,17 +42,16 @@ const customChineseMessages = {
       "Back Page": "返回上页",
     },
   },
-  config:{
+  config: {
     logout: {
-      logout:"注销",
-      title:"确定注销吗?",
-      text:"确定要注销吗?",
-      disagree:"取消",
-      agree:"确定"
+      logout: "注销",
+      title: "确定要退出吗?",
+      text: "退出可能会导致你现在的一些信息丢失!",
+      disagree: "我再想想",
+      agree: "确定",
     },
-    config:"配置"
-  }
-
+    config: "配置",
+  },
 };
 
 export default customChineseMessages;

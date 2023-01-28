@@ -6,7 +6,7 @@ export interface loginVo {
 export interface registerVo {
   name: string;
   pwd: string;
-  phone: number;
+  phone: string;
 }
 
 export enum role {

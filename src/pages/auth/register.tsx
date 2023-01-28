@@ -16,12 +16,20 @@ import Copyright from "../../components/Copyright";
 import { useTranslation } from "react-i18next";
 import { Controller, useForm, FieldValues } from "react-hook-form";
 import { MuiTelInput, matchIsValidTel } from "mui-tel-input";
-import CustomizedSnackbars from "../../components/SnackBars";
-
+import PostionSnackbar from "../../components/SnackBars";
+import { register as registerApi } from "../../api/auth";
+import { Loading } from "../../components/Loading";
 const theme = createTheme();
 
 export default function SignUp() {
   const [checked, setChecked] = React.useState(false);
+  const [isloading, setLoading] = React.useState(false);
+  const [alert, setAlert] = React.useState({
+    open: false,
+    message: "",
+    severity: "info",
+  });
+
   const {
     control,
     register,
@@ -31,11 +39,38 @@ export default function SignUp() {
   const { t, i18n } = useTranslation();
 
   const submit = (registerVo: FieldValues) => {
-    console.log(registerVo);
+    setLoading(true);
+    registerApi({
+      name: registerVo.username,
+      pwd: registerVo.password,
+      phone: registerVo.phone.replaceAll(" ", ""),
+    })
+      .then((res) => {
+        setAlert({
+          ...alert,
+          open: true,
+          severity: "success",
+          message: res.data,
+        });
+        setLoading(false);
+      })
+      .catch((err) => {
+        setAlert({
+          ...alert,
+          severity: "error",
+          open: true,
+          message: err.msg,
+        });
+        setLoading(false);
+      });
   };
 
+  function handleClose() {
+    setAlert({ ...alert, open: false });
+  }
   return (
     <ThemeProvider theme={theme}>
+      {isloading ? <Loading /> : null}
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -150,7 +185,12 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
-        <CustomizedSnackbars />
+        <PostionSnackbar
+          open={alert.open}
+          message={alert.message}
+          severity={alert.severity}
+          onChange={handleClose}
+        />
         <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>

@@ -5,7 +5,6 @@ import Deposits from "./Deposits";
 import Orders from "./Orders";
 import OutlinedCard from "./Card";
 import { info } from "../../api/auth";
-import useDataApi from "../../config/useDataApi";
 import { Loading } from "../../components/Loading";
 export default function Home() {
   const [user, setUser]: any = React.useState(null);
@@ -23,8 +22,8 @@ export default function Home() {
         });
     }
   }, []);
-  if(user===null){
-    return <Loading/>
+  if (user === null) {
+    return <Loading />;
   }
   return (
     <React.Fragment>

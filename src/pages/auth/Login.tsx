@@ -29,6 +29,7 @@ import { Loading } from "../../components/Loading";
 
 const theme = createTheme();
 export default function Login() {
+  const [isloading, setLoading] = React.useState(false);
   const {
     register,
     handleSubmit,
@@ -37,6 +38,7 @@ export default function Login() {
   const navigate = useNavigate();
   const submit = (userInfo: FieldValues) => {
     // userInfo.preventDefault();
+    setLoading(true);
     LoginApi({
       name: userInfo.username,
       password: userInfo.password,
@@ -46,7 +48,7 @@ export default function Login() {
       setTimeout(() => {
         navigate("/dashboard", { replace: true });
       }, 1000);
-      console.log(res);
+      setLoading(false);
     });
   };
   const { t } = useTranslation();
@@ -68,6 +70,7 @@ export default function Login() {
   }
   return (
     <ThemeProvider theme={theme}>
+      {isloading ? <Loading /> : null}
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
