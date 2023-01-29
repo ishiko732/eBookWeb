@@ -1,6 +1,6 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
+import LoadingButton from "@mui/lab/LoadingButton";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -46,22 +46,24 @@ export default function Login() {
     LoginApi({
       name: userInfo.username,
       password: userInfo.password,
-    }).then((res) => {
-      save_access_token(res.data.access_token);
-      save_refresh_token(res.data.refresh_token);
-      setTimeout(() => {
-        navigate("/dashboard", { replace: true });
-      }, 1000);
-      setLoading(false);
-    }).catch((err) => {
-      setAlert({
-        ...alert,
-        severity: "error",
-        open: true,
-        message: err.msg,
+    })
+      .then((res) => {
+        save_access_token(res.data.access_token);
+        save_refresh_token(res.data.refresh_token);
+        setTimeout(() => {
+          navigate("/dashboard", { replace: true });
+        }, 1000);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setAlert({
+          ...alert,
+          severity: "error",
+          open: true,
+          message: err.msg,
+        });
+        setLoading(false);
       });
-      setLoading(false);
-    });
   };
   function handleClose() {
     setAlert({ ...alert, open: false });
@@ -157,14 +159,16 @@ export default function Login() {
                 }
               }}
             />
-            <Button
+            <LoadingButton
               type="submit"
               fullWidth
               variant="contained"
+              loading={isloading}
+              loadingIndicator={t("auth.login.loadingIndicator")}
               sx={{ mt: 3, mb: 2 }}
             >
               {t("auth.login.login")}
-            </Button>
+            </LoadingButton>
             <Grid container>
               <Grid item xs>
                 {/* <Link href="#" variant="body2">

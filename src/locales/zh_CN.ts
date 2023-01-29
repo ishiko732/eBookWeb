@@ -15,6 +15,7 @@ const customChineseMessages = {
       remember: "记住我",
       forgot: "忘记密码",
       signup: "还没有账号?立即注册",
+      loadingIndicator: "登录中",
     },
     register: {
       register: "注册",
@@ -23,6 +24,10 @@ const customChineseMessages = {
       phone: "手机号码",
       login: "已有账号?立即登录",
       readed: "我已阅读网站相关规定",
+      loadingIndicator: "注册中",
+      zh_CN: "+86",
+      en_US: "+1",
+      ja_JP: "+81",
     },
     valid: {
       username: "请输入用户名",

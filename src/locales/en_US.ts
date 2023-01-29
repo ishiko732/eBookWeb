@@ -15,6 +15,7 @@ const customEnglishMessages = {
       remember: "remember me",
       forgot: "Forgot password?",
       signup: "Don't have an account? Sign Up",
+      loadingIndicator: "loading",
     },
     register: {
       register: "Sign up",
@@ -24,6 +25,10 @@ const customEnglishMessages = {
       login: "Already have an account? Sign in",
       readed:
         "I want to receive inspiration, marketing promotions and updates via email.",
+      loadingIndicator: "registering",
+      zh_CN: "+86",
+      en_US: "+1",
+      ja_JP: "+81",
     },
     valid: {
       username: "please input username",
