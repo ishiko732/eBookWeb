@@ -28,7 +28,7 @@ const routes = (props: any): route[] => {
   return [
     {
       path: "/login",
-      element: <Login />,
+      element: <Login {...props} />,
     },
     {
       path: "/register",

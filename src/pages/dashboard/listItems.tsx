@@ -15,7 +15,6 @@ import PermMedia from "@mui/icons-material/PermMedia";
 import Dns from "@mui/icons-material/Dns";
 import Public from "@mui/icons-material/Public";
 import { ListBarData } from "../../Type";
-
 const data: ListBarData[] = [
   {
     icon: <DashboardIcon />,
@@ -91,6 +90,7 @@ export default function NestedList({
     <List
       sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
       component="nav"
+      key="main.list"
     >
       {data.map((item: ListBarData, index: number) => {
         return item.children ? (
@@ -111,7 +111,11 @@ export default function NestedList({
             {item.children.map((item_c: ListBarData, index_c: number) => {
               return (
                 <Collapse in={open[index]} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
+                  <List
+                    component="div"
+                    disablePadding
+                    key={`children.${item.label}`}
+                  >
                     <ListItemButton
                       sx={{ pl: 4 }}
                       component={Rlink}
