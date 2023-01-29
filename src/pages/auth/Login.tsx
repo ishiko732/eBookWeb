@@ -53,6 +53,7 @@ export default function Login(props: any) {
           });
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [isloading, setLoading] = React.useState(false);
   const [alert, setAlert] = React.useState({

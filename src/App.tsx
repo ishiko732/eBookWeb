@@ -104,7 +104,7 @@ const rotuerViews = (routerItems: route[], parent?: string) => {
 
 const App = () => {
   const [user, setUser] = React.useState<any>(null);
-  const [health, setHealth] = React.useState<any>(true);
+  const [health, setHealth] = React.useState<any>(false);
   const [isloading, setLoading] = React.useState(false);
   const onHealth = React.useRef(false);
   const submittingStatus = React.useRef(false);
@@ -143,7 +143,6 @@ const App = () => {
             .catch((err) => {
               if (health === true) {
                 setHealth(false);
-                onHealth.current=false
               }
             });
         }
