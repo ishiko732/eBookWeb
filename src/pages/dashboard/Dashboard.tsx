@@ -1,36 +1,21 @@
 import * as React from "react";
 import { get_access_token } from "../../config/token";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Container from "@mui/material/Container";
-import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { ListBar } from "./listItems";
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+
+import Copyright from "../../components/Copyright";
+import { Loading } from "../../components/Loading";
+
 const drawerWidth: number = 240;
 
 const Drawer = styled(MuiDrawer, {
@@ -60,13 +45,31 @@ const Drawer = styled(MuiDrawer, {
 }));
 const mdTheme = createTheme();
 
-function DashboardContent() {
+function DashboardContent(props: any) {
+  const { submittingStatus, user, health, onHealth, isloading, isCompleted } =
+    props;
   const [open, setOpen] = React.useState(true);
+  React.useEffect(() => {
+    submittingStatus.current = true;
+    onHealth.current = true;
+  }, []);
+
+  if (user === null) {
+    return <Loading />;
+  }
+  if (isCompleted.current === true) {
+    if (user === null) {
+      <Navigate replace to={"/login"} />;
+    }
+    isCompleted.current = false;
+  }
   const toggleDrawer = () => {
     setOpen(!open);
+    console.log(user);
   };
   return (
     <ThemeProvider theme={mdTheme}>
+      {isloading ? <Loading /> : null}
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <Drawer variant="permanent" open={open}>
@@ -84,7 +87,7 @@ function DashboardContent() {
             </IconButton>
           </Toolbar>
           <Divider />
-          <ListBar />
+          <ListBar {...props} />
         </Drawer>
         <Box
           component="main"
@@ -108,9 +111,9 @@ function DashboardContent() {
   );
 }
 
-export default function Dashboard() {
+export default function Dashboard(props: any) {
   if (get_access_token().length === 0) {
     return <Navigate replace to="/login" />;
   }
-  return <DashboardContent />;
+  return <DashboardContent {...props} />;
 }

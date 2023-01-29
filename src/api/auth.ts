@@ -34,6 +34,11 @@ export const info = () => request.get("auth/info");
 // 获取在线用户列表
 export const loginUser = () => request.get("auth/loginUsers");
 
+export const health = () => request.get("auth/health");
+
+export const underline = (uid: number) =>
+  request.post("auth/underline", { uid: uid });
+
 /**
  * update 更新用户信息
  */

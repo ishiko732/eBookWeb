@@ -4,24 +4,9 @@ import Chart from "./Chart";
 import Deposits from "./Deposits";
 import Orders from "./Orders";
 import OutlinedCard from "./Card";
-import { info } from "../../api/auth";
 import { Loading } from "../../components/Loading";
-export default function Home() {
-  const [user, setUser]: any = React.useState(null);
-  const submittingStatus = React.useRef(true);
-  React.useEffect(() => {
-    if (submittingStatus.current) {
-      submittingStatus.current = false;
-      info()
-        .then((res: any) => {
-          setUser(res);
-        })
-        .catch((err) => {
-          console.log("获取信息失败");
-          console.log(err);
-        });
-    }
-  }, []);
+export default function Home(props: any) {
+  const { user } = props;
   if (user === null) {
     return <Loading />;
   }

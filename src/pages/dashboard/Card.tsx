@@ -7,28 +7,6 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { get_access_token, get_refresh_token } from "../../config/token";
 
-// const card = (
-//   <React.Fragment>
-//     <CardContent>
-//       <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-//         message
-//       </Typography>
-//       <Typography sx={{ mb: 1.5 }} color="text.secondary">
-//       access_token:{get_access_token()}<br/>
-//         refresh_token:{get_refresh_token()}
-//       </Typography>
-//       <Typography variant="body2">
-//         {/* user:{JSON.stringify(user)} */}
-//         texs
-//         <br />
-//         {'"a benevolent smile"'}
-//       </Typography>
-//     </CardContent>
-//     <CardActions>
-//       <Button size="small">Learn More</Button>
-//     </CardActions>
-//   </React.Fragment>
-// );
 const bull = (
   <Box
     component="span"
@@ -64,7 +42,6 @@ const card = (user: any) => (
 );
 
 export default function OutlinedCard({ user }: any) {
-  console.log(user);
   return (
     <Box sx={{ minWidth: 275 }}>
       <Card variant="outlined">{card(user)}</Card>

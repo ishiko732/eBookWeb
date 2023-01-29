@@ -20,7 +20,7 @@ const data: ListBarData[] = [
   {
     icon: <DashboardIcon />,
     label: "Dashboard",
-    link: "home",
+    link: "#",
     children: [
       { icon: <Dns />, label: "Database", link: "home" },
       { icon: <Public />, label: "Hosting", link: "test" },
@@ -29,19 +29,25 @@ const data: ListBarData[] = [
   {
     icon: <ShoppingCartIcon />,
     label: "Customers",
-    link: "test",
+    link: "#",
     children: [
       { icon: <Dns />, label: "Database", link: "home" },
       { icon: <Public />, label: "Hosting", link: "test" },
     ],
   },
   { icon: <People />, label: "Authentication", link: "/dashboard/test/hello" },
-  { icon: <Dns />, label: "Database", link: "home" },
+  { icon: <Dns />, label: "Database", link: "#" },
   { icon: <PermMedia />, label: "Storage", link: "home" },
   { icon: <Public />, label: "Hosting", link: "home" },
 ];
 
-export default function NestedList({ data }: { data: ListBarData[] }) {
+export default function NestedList({
+  data,
+  userStatus,
+}: {
+  data: ListBarData[];
+  userStatus?: boolean;
+}) {
   const [open, setOpen] = React.useState<boolean[]>(
     new Array(data.length).fill(false)
   );
@@ -68,7 +74,6 @@ export default function NestedList({ data }: { data: ListBarData[] }) {
       })
     );
   };
-
   function handleClick(index: number) {
     let list = [...open];
     list[index] = !list[index];
@@ -139,16 +144,16 @@ export default function NestedList({ data }: { data: ListBarData[] }) {
         );
       })}
       <Divider sx={{ my: 1, alignItems: "center" }} />
-      <UserAvatar userStatus={true}>
+      <UserAvatar userStatus={userStatus || false}>
         <UserMenu />
       </UserAvatar>
     </List>
   );
 }
-export function ListBar() {
+export function ListBar(props: any) {
   return (
     <React.Fragment>
-      <NestedList data={data} />
+      <NestedList data={data} userStatus={props.health} />
     </React.Fragment>
   );
 }

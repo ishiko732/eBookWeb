@@ -77,9 +77,7 @@ export default function Login() {
       refreshtoken(refresh_token).then((res) => {
         save_access_token(res.data.access_token);
         save_refresh_token(res.data.refresh_token);
-        setTimeout(() => {
-          navigate("/dashboard", { replace: true });
-        }, 1000);
+        navigate("/dashboard", { replace: true });
         console.log(res);
       });
       return <Loading />;
