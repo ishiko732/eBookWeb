@@ -43,9 +43,13 @@ const data: ListBarData[] = [
 export default function NestedList({
   data,
   userStatus,
+  props,
+  main_open
 }: {
   data: ListBarData[];
+  main_open:boolean
   userStatus?: boolean;
+  props?:any
 }) {
   const [open, setOpen] = React.useState<boolean[]>(
     new Array(data.length).fill(false)
@@ -68,6 +72,7 @@ export default function NestedList({
     localStorage.setItem(
       "list_data",
       JSON.stringify({
+        mainOpen:main_open as boolean,
         selected: index,
         open: open,
       })
@@ -80,6 +85,7 @@ export default function NestedList({
     localStorage.setItem(
       "list_data",
       JSON.stringify({
+        mainOpen:main_open as boolean,
         selected: index.toString(),
         open: list,
       })
@@ -96,6 +102,7 @@ export default function NestedList({
         return item.children ? (
           <React.Fragment>
             <ListItemButton
+              key={`main.${item.label}`}
               component={Rlink}
               to={item.link}
               selected={index.toString() === selected}
@@ -117,6 +124,7 @@ export default function NestedList({
                     key={`children.${item.label}`}
                   >
                     <ListItemButton
+                      key={`children.${item.label}.${item_c.label}`}
                       sx={{ pl: 4 }}
                       component={Rlink}
                       to={item_c.link}
@@ -149,7 +157,7 @@ export default function NestedList({
       })}
       <Divider sx={{ my: 1, alignItems: "center" }} />
       <UserAvatar userStatus={userStatus || false}>
-        <UserMenu />
+        <UserMenu {...props} />
       </UserAvatar>
     </List>
   );
@@ -157,7 +165,7 @@ export default function NestedList({
 export function ListBar(props: any) {
   return (
     <React.Fragment>
-      <NestedList data={data} userStatus={props.health} />
+      <NestedList data={data} userStatus={props.health} main_open={props.open}/>
     </React.Fragment>
   );
 }

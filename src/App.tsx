@@ -114,7 +114,7 @@ function App() {
   const [isloading, setLoading] = React.useState(false);
   const onHealth = React.useRef(false);
   const submittingStatus = React.useRef(false);
-  const isCompleted = React.useRef(false);
+  const [isCompleted,setCompleted] = React.useState(false);
   React.useEffect(() => {
     if (submittingStatus.current) {
       submittingStatus.current = false;
@@ -122,35 +122,48 @@ function App() {
       info()
         .then((res: any) => {
           setUser(res.data);
-          isCompleted.current = true;
+          setCompleted(true)
           setLoading(false);
         })
         .catch(() => {
-          isCompleted.current = true;
+          setCompleted(true)
           setLoading(false);
         });
     }
-  }, [user]);
+  }, [submittingStatus]);
 
   React.useEffect(() => {
     let healthTime = null;
     if (onHealth.current) {
+      healthApi().then((res) => {
+        console.log(res.data);
+        if ("OK" === res.data) {
+          if (health === false) {
+            setHealth(true);
+          }
+        } 
+      }).catch((err)=>{
+        if (health === true) {
+          setHealth(false);
+        }
+      });
+
       if (healthTime) {
         clearInterval(healthTime);
       }
       healthTime = setInterval(() => {
-        healthApi().then((res) => {
-          console.log(res.data);
-          if ("OK" === res.data) {
-            if (health === false) {
-              setHealth(true);
-            }
-          } else {
-            if (health === true) {
-              setHealth(false);
-            }
+      healthApi().then((res) => {
+        console.log(res.data);
+        if ("OK" === res.data) {
+          if (health === false) {
+            setHealth(true);
           }
-        });
+        } 
+      }).catch((err)=>{
+        if (health === true) {
+          setHealth(false);
+        }
+      });
       }, 60000);
     } else {
       if (healthTime) {
@@ -174,6 +187,7 @@ function App() {
             isloading,
             setLoading,
             isCompleted,
+            setCompleted
           })
         )}
       </Routes>

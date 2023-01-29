@@ -3,11 +3,10 @@ import { HttpStatusCode as Status } from "../utils/StatusCode";
 import localstorage from "./localstorage";
 import {
   get_refresh_token,
-  delete_token,
   save_access_token,
   save_refresh_token,
 } from "./token";
-import { useNavigate } from "react-router-dom";
+import { logOut } from "./logOut";
 // 这里取决于登录的时候将 token 存储在哪里
 const instance = axios.create({
   baseURL: "http://localhost:8080/",
@@ -24,7 +23,7 @@ instance.interceptors.request.use(
     // 将 token 添加到请求头
     const token = localstorage.getItem("access_token");
     token && (config.headers.Authorization = `Bearer ${token}`);
-    return config;
+    return config; 
   },
   (error) => {
     return Promise.reject(error);
@@ -75,18 +74,8 @@ instance.interceptors.response.use(
             // request是上面创建的axios的实例
             return instance(error.config);
           } catch (error) {
-            delete_token();
-            const navigate = useNavigate();
-            setTimeout(() => {
-              navigate("/login", { replace: true });
-            }, 1000);
+            logOut()
           }
-        } else {
-          delete_token();
-          const navigate = useNavigate();
-          setTimeout(() => {
-            navigate("/login", { replace: true });
-          }, 1000);
         }
         // "用户未登录或用户已过期,请重新登录"
         break;

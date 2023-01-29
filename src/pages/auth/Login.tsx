@@ -27,17 +27,13 @@ import localstorage from "../../config/localstorage";
 import { Loading } from "../../components/Loading";
 import PostionSnackbar from "../../components/SnackBars";
 const theme = createTheme();
-export default function Login(props: any) {
+export default function Login() {
   const [isloading, setLoading] = React.useState(false);
   const [alert, setAlert] = React.useState({
     open: false,
     message: "",
     severity: "info",
   });
-  const { onHealth } = props;
-  React.useEffect(() => {
-    onHealth.current = false;
-  }, []);
   const {
     register,
     handleSubmit,
@@ -54,10 +50,10 @@ export default function Login(props: any) {
       .then((res) => {
         save_access_token(res.data.access_token);
         save_refresh_token(res.data.refresh_token);
+        setLoading(false);
         setTimeout(() => {
           navigate("/dashboard", { replace: true });
         }, 1000);
-        setLoading(false);
       })
       .catch((err) => {
         setAlert({
@@ -78,12 +74,15 @@ export default function Login(props: any) {
   } else if (localstorage.getItem("remember")) {
     const refresh_token = get_refresh_token();
     if (get_refresh_token().length !== 0) {
+      setLoading(true);
       refreshtoken(refresh_token).then((res) => {
         save_access_token(res.data.access_token);
         save_refresh_token(res.data.refresh_token);
-        navigate("/dashboard");
-      });
-      return <Loading />;
+        setLoading(false);
+        navigate("/dashboard",{replace:true});
+      }).catch(()=>{
+        setLoading(false);
+      })
     }
   }
   return (
@@ -154,7 +153,7 @@ export default function Login(props: any) {
               onChange={(event: React.SyntheticEvent, checked: boolean) => {
                 event.preventDefault();
                 if (checked) {
-                  localstorage.setItem("remember", "1", 6000000);
+                  localstorage.setItem("remember", "1", 2629800000);
                 } else {
                   localstorage.removeItem("remember");
                 }
