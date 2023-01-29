@@ -7,10 +7,7 @@ import OutlinedCard from "./Card";
 import { Loading } from "../../components/Loading";
 export default function Home(props: any) {
   const { user } = props;
-  if (user === null) {
-    return <Loading />;
-  }
-  return (
+  return user ? (
     <React.Fragment>
       <Grid container spacing={3}>
         {/* Chart */}
@@ -52,5 +49,7 @@ export default function Home(props: any) {
         </Paper>
       </Grid>
     </React.Fragment>
+  ) : (
+    <Loading />
   );
 }

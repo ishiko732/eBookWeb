@@ -31,6 +31,7 @@ instance.interceptors.request.use(
 );
 
 // 添加响应拦截器
+let refresh = false;
 instance.interceptors.response.use(
   (response) => {
     if (response.status === Status.Ok) {
@@ -43,17 +44,22 @@ instance.interceptors.response.use(
       }
       return Promise.resolve(response.data);
     } else {
-      return Promise.reject(response);
+      return Promise.reject(response.data);
     }
   },
   async function (error) {
     // 相应错误处理
     // 比如： token 过期， 无权限访问， 路径不存在， 服务器问题等
-    switch (error.response.status) {
+    console.log(error.response.data.code);
+    switch (error.response.data.code) {
       case 401:
         const refresh_token = get_refresh_token();
         if (refresh_token.length !== 0) {
           // 1. 请求新token
+          if (refresh) {
+            return Promise.reject(error);
+          }
+          refresh = true;
           try {
             const res = await axios({
               url: "http://localhost:8080/auth/regenerateToken",
@@ -67,13 +73,20 @@ instance.interceptors.response.use(
               },
             });
             // 2. 保存到token
+            if (!res.data.data) {
+              console.log("请求新token失败");
+              return Promise.reject(error);
+            }
             console.log("请求新token", res.data.data);
             save_access_token(res.data.data.access_token);
             save_refresh_token(res.data.data.refresh_token);
             // 3. 重发请求
             // request是上面创建的axios的实例
+            refresh = false;
             return instance(error.config);
           } catch (error) {
+            refresh = false;
+            console.log(error);
             logOut();
           }
         }

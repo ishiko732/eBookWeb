@@ -7,11 +7,11 @@ import Home from "./pages/dashboard/Home";
 import Stile from "./components/OutletStile";
 import Hello from "./pages/dashboard/Hello";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { get_access_token } from "./config/token";
 import NotFound from "./pages/exception/404";
 import { Loading } from "./components/Loading";
 import { info, health as healthApi } from "./api/auth";
-const access_token = get_access_token();
+import { get_refresh_token } from "./config/token";
+
 interface route {
   path: string;
   element: JSX.Element;
@@ -57,7 +57,7 @@ const routes = (props: any): route[] => {
     {
       path: "/",
       element:
-        access_token === "" ? (
+        get_refresh_token() === "" ? (
           <Navigate to="/login" />
         ) : (
           <Navigate to="/dashboard" />
@@ -102,60 +102,54 @@ const rotuerViews = (routerItems: route[], parent?: string) => {
   });
 };
 
-function App() {
+const App = () => {
   const [user, setUser] = React.useState<any>(null);
   const [health, setHealth] = React.useState<any>(true);
   const [isloading, setLoading] = React.useState(false);
   const onHealth = React.useRef(false);
   const submittingStatus = React.useRef(false);
-  const [isCompleted, setCompleted] = React.useState(false);
+  const first = React.useRef(true);
   React.useEffect(() => {
+    console.log("user 请求更新:" + JSON.stringify(user));
     if (submittingStatus.current) {
       submittingStatus.current = false;
       setLoading(true);
       info()
         .then((res: any) => {
           setUser(res.data);
-          setCompleted(true);
           setLoading(false);
         })
         .catch(() => {
-          setCompleted(true);
           setLoading(false);
         });
     }
   }, [user]);
 
   React.useEffect(() => {
-    let healthTime = null;
-    if (onHealth.current) {
-      onHealth.current = false;
-      if (healthTime) {
-        clearInterval(healthTime);
-      }
-      healthTime = setInterval(() => {
-        healthApi()
-          .then((res) => {
-            console.log(res.data);
-            if ("OK" === res.data) {
-              if (health === false) {
-                setHealth(true);
+    if (first.current) {
+      first.current = false;
+      console.log("Health 请求更新:" + health);
+      setInterval(() => {
+        if (onHealth.current) {
+          healthApi()
+            .then((res) => {
+              console.log(res.data);
+              if ("OK" === res.data) {
+                if (health === false) {
+                  setHealth(true);
+                }
               }
-            }
-          })
-          .catch((err) => {
-            if (health === true) {
-              setHealth(false);
-            }
-          });
-      }, 180000);
-    } else {
-      if (healthTime) {
-        clearInterval(healthTime);
-        healthTime = null;
-      }
+            })
+            .catch((err) => {
+              if (health === true) {
+                setHealth(false);
+              }
+            });
+        }
+      }, 60000);
     }
-  }, [health]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <BrowserRouter>
@@ -170,12 +164,10 @@ function App() {
             onHealth,
             isloading,
             setLoading,
-            isCompleted,
-            setCompleted,
           })
         )}
       </Routes>
     </BrowserRouter>
   );
-}
+};
 export default App;

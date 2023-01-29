@@ -8,10 +8,6 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import UserAvatar from "../../components/UserAvatar";
 import UserMenu from "./UserMenu";
-import People from "@mui/icons-material/People";
-import PermMedia from "@mui/icons-material/PermMedia";
-import Dns from "@mui/icons-material/Dns";
-import Public from "@mui/icons-material/Public";
 import { ListBarData } from "../../Type";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import TerminalIcon from "@mui/icons-material/Terminal";
@@ -26,6 +22,8 @@ import WebIcon from "@mui/icons-material/Web";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import PublicIcon from "@mui/icons-material/Public";
+import Tooltip from "@mui/material/Tooltip";
+
 const data: ListBarData[] = [
   {
     icon: <SettingsSuggestIcon color="primary" />,
@@ -111,6 +109,8 @@ export default function NestedList({
   );
   const [selected, setSelected] = React.useState<string | null>(null);
   const submittingStatus = React.useRef(true);
+  const [tipOpen, setTipOpen] = React.useState<string>("");
+
   React.useEffect(() => {
     if (submittingStatus.current) {
       submittingStatus.current = false;
@@ -156,20 +156,35 @@ export default function NestedList({
       {data.map((item: ListBarData, index: number) => {
         return item.children ? (
           <React.Fragment>
-            <ListItemButton
-              key={`main.${item.label}`}
-              component={Rlink}
-              to={item.link}
-              selected={index.toString() === selected}
-              onClick={() => {
-                handleListItemClick(index.toString());
-                handleClick(index);
+            <Tooltip
+              enterDelay={700}
+              title={t(item.label)}
+              placement="right"
+              open={tipOpen === index.toString()}
+              onClose={() => {
+                setTipOpen("");
+              }}
+              onOpen={() => {
+                if (!main_open) {
+                  return setTipOpen(index.toString());
+                }
               }}
             >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={t(item.label)} />
-              {open[index] ? <ExpandLess /> : <ExpandMore />}
-            </ListItemButton>
+              <ListItemButton
+                key={`main.${item.label}`}
+                component={Rlink}
+                to={item.link}
+                selected={index.toString() === selected}
+                onClick={() => {
+                  handleListItemClick(index.toString());
+                  handleClick(index);
+                }}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={t(item.label)} />
+                {open[index] ? <ExpandLess /> : <ExpandMore />}
+              </ListItemButton>
+            </Tooltip>
             {item.children.map((item_c: ListBarData, index_c: number) => {
               return (
                 <Collapse in={open[index]} timeout="auto" unmountOnExit>
@@ -178,36 +193,66 @@ export default function NestedList({
                     disablePadding
                     key={`children.${item.label}`}
                   >
-                    <ListItemButton
-                      key={`children.${item.label}.${item_c.label}`}
-                      sx={{ pl: 4 }}
-                      component={Rlink}
-                      to={item_c.link}
-                      selected={index + "-" + index_c === selected}
-                      onClick={() => {
-                        handleListItemClick(index + "-" + index_c);
+                    <Tooltip
+                      enterDelay={700}
+                      title={t(item_c.label)}
+                      placement="right"
+                      open={tipOpen === index + "-" + index_c}
+                      onClose={() => {
+                        setTipOpen("");
+                      }}
+                      onOpen={() => {
+                        if (!main_open) {
+                          return setTipOpen(index + "-" + index_c);
+                        }
                       }}
                     >
-                      <ListItemIcon>{item_c.icon}</ListItemIcon>
-                      <ListItemText primary={t(item_c.label)} />
-                    </ListItemButton>
+                      <ListItemButton
+                        key={`children.${item.label}.${item_c.label}`}
+                        sx={{ pl: 4 }}
+                        component={Rlink}
+                        to={item_c.link}
+                        selected={index + "-" + index_c === selected}
+                        onClick={() => {
+                          handleListItemClick(index + "-" + index_c);
+                        }}
+                      >
+                        <ListItemIcon>{item_c.icon}</ListItemIcon>
+                        <ListItemText primary={t(item_c.label)} />
+                      </ListItemButton>
+                    </Tooltip>
                   </List>
                 </Collapse>
               );
             })}
           </React.Fragment>
         ) : (
-          <ListItemButton
-            component={Rlink}
-            to={item.link}
-            selected={index.toString() === selected}
-            onClick={() => {
-              handleListItemClick(index.toString());
+          <Tooltip
+            enterDelay={700}
+            title={t(item.label)}
+            placement="right"
+            open={tipOpen === index.toString()}
+            onClose={() => {
+              setTipOpen("");
+            }}
+            onOpen={() => {
+              if (!main_open) {
+                return setTipOpen(index.toString());
+              }
             }}
           >
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={t(item.label)} />
-          </ListItemButton>
+            <ListItemButton
+              component={Rlink}
+              to={item.link}
+              selected={index.toString() === selected}
+              onClick={() => {
+                handleListItemClick(index.toString());
+              }}
+            >
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={t(item.label)} />
+            </ListItemButton>
+          </Tooltip>
         );
       })}
       <Divider sx={{ my: 1, alignItems: "center" }} />

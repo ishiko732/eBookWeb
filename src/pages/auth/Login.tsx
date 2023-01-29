@@ -18,16 +18,42 @@ import { Login as LoginApi, refreshtoken } from "../../api/auth";
 import {
   save_access_token,
   save_refresh_token,
-  get_access_token,
   get_refresh_token,
 } from "../../config/token";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import Copyright from "../../components/Copyright";
 import localstorage from "../../config/localstorage";
 import { Loading } from "../../components/Loading";
 import PostionSnackbar from "../../components/SnackBars";
 const theme = createTheme();
 export default function Login(props: any) {
+  const { setHealth, onHealth, submittingStatus, setUser } = props;
+
+  React.useEffect(() => {
+    onHealth.current = false;
+    setHealth(false);
+    // if (get_access_token().length !== 0) {
+    //   return <Navigate replace to="/dashboard" />;
+    // } else
+    if (localstorage.getItem("remember")) {
+      const refresh_token = get_refresh_token();
+      if (get_refresh_token().length !== 0) {
+        setLoading(true);
+        refreshtoken(refresh_token)
+          .then((res) => {
+            save_access_token(res.data.access_token);
+            save_refresh_token(res.data.refresh_token);
+            submittingStatus.current = true;
+            setUser(null);
+            setLoading(false);
+            setUrl("/dashboard");
+          })
+          .catch(() => {
+            setLoading(false);
+          });
+      }
+    }
+  }, []);
   const [isloading, setLoading] = React.useState(false);
   const [alert, setAlert] = React.useState({
     open: false,
@@ -40,11 +66,9 @@ export default function Login(props: any) {
     formState: { errors },
   } = useForm();
   const [url, setUrl] = React.useState<string | null>(null);
-  const navigate = useNavigate();
-  const submit = (userInfo: FieldValues) => {
-    // userInfo.preventDefault();
+  const submit = async (userInfo: FieldValues) => {
     setLoading(true);
-    LoginApi({
+    await LoginApi({
       name: userInfo.username,
       password: userInfo.password,
     })
@@ -68,26 +92,6 @@ export default function Login(props: any) {
     setAlert({ ...alert, open: false });
   }
   const { t } = useTranslation();
-  if (get_access_token().length !== 0) {
-    return <Navigate replace to="/dashboard" />;
-  } else if (localstorage.getItem("remember")) {
-    const refresh_token = get_refresh_token();
-    if (get_refresh_token().length !== 0) {
-      setLoading(true);
-      refreshtoken(refresh_token)
-        .then((res) => {
-          save_access_token(res.data.access_token);
-          save_refresh_token(res.data.refresh_token);
-          setLoading(false);
-          setUrl("/dashboard");
-        })
-        .catch(() => {
-          setLoading(false);
-        });
-    }
-  }
-  const { setHealth } = props;
-  setHealth(false);
   return url ? (
     <Navigate to="/dashboard" {...props} />
   ) : (

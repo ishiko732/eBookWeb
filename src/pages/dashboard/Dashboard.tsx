@@ -1,5 +1,5 @@
 import * as React from "react";
-import { get_refresh_token } from "../../config/token";
+import { get_access_token, get_refresh_token } from "../../config/token";
 import { Navigate, Outlet } from "react-router-dom";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -45,14 +45,8 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function DashboardContent(props: any) {
-  const {
-    submittingStatus,
-
-    setUser,
-    isloading,
-    onHealth,
-    setHealth,
-  } = props;
+  const { submittingStatus, user, setUser, isloading, onHealth, setHealth } =
+    props;
   const list_data = localStorage.getItem("list_data");
   const [open, setOpen] = React.useState(
     list_data ? JSON.parse(list_data).mainOpen : true
@@ -61,8 +55,13 @@ function DashboardContent(props: any) {
   React.useEffect(() => {
     onHealth.current = true;
     setHealth(true);
-    submittingStatus.current = true;
-    setUser(null);
+    if (user == null) {
+      submittingStatus.current = true;
+      setUser(get_access_token());
+    } else if (user === get_access_token()) {
+      setUser(null);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
