@@ -143,6 +143,7 @@ const App = () => {
             .catch((err) => {
               if (health === true) {
                 setHealth(false);
+                onHealth.current=false
               }
             });
         }
