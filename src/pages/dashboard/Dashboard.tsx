@@ -1,6 +1,6 @@
 import * as React from "react";
-import { get_access_token, get_refresh_token } from "../../config/token";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import { get_refresh_token } from "../../config/token";
+import { Navigate, Outlet } from "react-router-dom";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -14,7 +14,6 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { ListBar } from "./listItems";
 import Copyright from "../../components/Copyright";
 import { Loading } from "../../components/Loading";
-import { info } from "../../api/auth";
 
 const drawerWidth: number = 240;
 
@@ -48,11 +47,9 @@ const mdTheme = createTheme();
 function DashboardContent(props: any) {
   const {
     submittingStatus,
-    user,
+
     setUser,
     isloading,
-    setLoading,
-    setCompleted,
     onHealth,
     setHealth,
   } = props;
@@ -60,27 +57,13 @@ function DashboardContent(props: any) {
   const [open, setOpen] = React.useState(
     list_data ? JSON.parse(list_data).mainOpen : true
   );
-  function changeUser(user: any, status: boolean) {
-    setCompleted(status);
-    setLoading(!status);
-    setUser(user);
-  }
 
   React.useEffect(() => {
     onHealth.current = true;
     setHealth(true);
     submittingStatus.current = true;
     setUser(null);
-    // if (!submittingStatus.current && user == null) {
-    //   setLoading(true);
-    //   info()
-    //     .then((res: any) => {
-    //       changeUser(res.data, true);
-    //     })
-    //     .catch(() => {
-    //       changeUser(null, true);
-    //     });
-    // }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const toggleDrawer = () => {

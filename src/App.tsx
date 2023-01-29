@@ -4,15 +4,9 @@ import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/register";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Home from "./pages/dashboard/Home";
-import Stile from "./pages/dashboard/OutletStile";
+import Stile from "./components/OutletStile";
 import Hello from "./pages/dashboard/Hello";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-  useNavigate,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { get_access_token } from "./config/token";
 import NotFound from "./pages/exception/404";
 import { Loading } from "./components/Loading";
@@ -165,7 +159,6 @@ function App() {
 
   return (
     <BrowserRouter>
-      {/* <RouteProvider routes={routes}/> */}
       <Routes>
         {rotuerViews(
           routes({
