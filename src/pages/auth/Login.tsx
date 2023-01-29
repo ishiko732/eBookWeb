@@ -27,7 +27,7 @@ import localstorage from "../../config/localstorage";
 import { Loading } from "../../components/Loading";
 import PostionSnackbar from "../../components/SnackBars";
 const theme = createTheme();
-export default function Login() {
+export default function Login(props: any) {
   const [isloading, setLoading] = React.useState(false);
   const [alert, setAlert] = React.useState({
     open: false,
@@ -86,8 +86,10 @@ export default function Login() {
         });
     }
   }
+  const { setHealth } = props;
+  setHealth(false);
   return url ? (
-    <Navigate replace to="/dashboard" />
+    <Navigate to="/dashboard" {...props} />
   ) : (
     <ThemeProvider theme={theme}>
       {isloading ? <Loading /> : null}

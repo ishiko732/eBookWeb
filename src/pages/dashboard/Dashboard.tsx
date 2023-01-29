@@ -1,5 +1,5 @@
 import * as React from "react";
-import { get_access_token } from "../../config/token";
+import { get_access_token, get_refresh_token } from "../../config/token";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -54,12 +54,12 @@ function DashboardContent(props: any) {
     setLoading,
     setCompleted,
     onHealth,
+    setHealth,
   } = props;
   const list_data = localStorage.getItem("list_data");
   const [open, setOpen] = React.useState(
     list_data ? JSON.parse(list_data).mainOpen : true
   );
-  const navigate = useNavigate();
   function changeUser(user: any, status: boolean) {
     setCompleted(status);
     setLoading(!status);
@@ -68,16 +68,19 @@ function DashboardContent(props: any) {
 
   React.useEffect(() => {
     onHealth.current = true;
-    if (!submittingStatus.current && user == null) {
-      setLoading(true);
-      info()
-        .then((res: any) => {
-          changeUser(res.data, true);
-        })
-        .catch(() => {
-          changeUser(null, true);
-        });
-    }
+    setHealth(true);
+    submittingStatus.current = true;
+    setUser(null);
+    // if (!submittingStatus.current && user == null) {
+    //   setLoading(true);
+    //   info()
+    //     .then((res: any) => {
+    //       changeUser(res.data, true);
+    //     })
+    //     .catch(() => {
+    //       changeUser(null, true);
+    //     });
+    // }
   }, []);
 
   const toggleDrawer = () => {
@@ -128,7 +131,7 @@ function DashboardContent(props: any) {
 }
 
 export default function Dashboard(props: any) {
-  if (get_access_token().length === 0) {
+  if (get_refresh_token().length === 0) {
     return <Navigate replace to="/login" />;
   }
   return <DashboardContent {...props} />;

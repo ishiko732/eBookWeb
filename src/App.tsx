@@ -130,27 +130,12 @@ function App() {
           setLoading(false);
         });
     }
-  }, [submittingStatus]);
+  }, [user]);
 
   React.useEffect(() => {
     let healthTime = null;
     if (onHealth.current) {
       onHealth.current = false;
-      healthApi()
-        .then((res) => {
-          console.log(res.data);
-          if ("OK" === res.data) {
-            if (health === false) {
-              setHealth(true);
-            }
-          }
-        })
-        .catch((err) => {
-          if (health === true) {
-            setHealth(false);
-          }
-        });
-
       if (healthTime) {
         clearInterval(healthTime);
       }
@@ -169,14 +154,14 @@ function App() {
               setHealth(false);
             }
           });
-      }, 60000);
+      }, 180000);
     } else {
       if (healthTime) {
         clearInterval(healthTime);
         healthTime = null;
       }
     }
-  }, [health, onHealth]);
+  }, [health]);
 
   return (
     <BrowserRouter>
@@ -188,6 +173,7 @@ function App() {
             user,
             setUser,
             health,
+            setHealth,
             onHealth,
             isloading,
             setLoading,
