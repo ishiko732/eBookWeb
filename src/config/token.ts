@@ -1,4 +1,4 @@
-import localstorage from "./localstorage";
+import localstorage from "../utils/localstorage";
 const access_token = "access_token";
 const refresh_token = "refresh_token";
 const access_token_expire_length = 300000; //5分钟

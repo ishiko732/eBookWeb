@@ -8,91 +8,10 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import UserAvatar from "../../components/UserAvatar";
 import UserMenu from "./UserMenu";
-import { ListBarData } from "../../Type";
-import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
-import TerminalIcon from "@mui/icons-material/Terminal";
-import AppSettingsAltIcon from "@mui/icons-material/AppSettingsAlt";
-import OnlinePredictionIcon from "@mui/icons-material/OnlinePrediction";
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import TheatersIcon from "@mui/icons-material/Theaters";
-import MenuBookIcon from "@mui/icons-material/MenuBook";
-import ShareIcon from "@mui/icons-material/Share";
 import { useTranslation } from "react-i18next";
-import WebIcon from "@mui/icons-material/Web";
-import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import EventNoteIcon from "@mui/icons-material/EventNote";
-import PublicIcon from "@mui/icons-material/Public";
 import Tooltip from "@mui/material/Tooltip";
-
-const data: ListBarData[] = [
-  {
-    icon: <SettingsSuggestIcon color="primary" />,
-    label: "menu.System",
-    link: "#",
-    children: [
-      {
-        icon: <TerminalIcon color="primary" />,
-        label: "menu.System-systemConfig",
-        link: "home",
-      },
-      {
-        icon: <OnlinePredictionIcon color="primary" />,
-        label: "menu.System-onlineConfig",
-        link: "test",
-      },
-    ],
-  },
-  {
-    icon: <AppSettingsAltIcon color="primary" />,
-    label: "menu.Admin",
-    link: "#",
-    children: [
-      {
-        icon: <ManageAccountsIcon color="primary" />,
-        label: "menu.Admin-userConfig",
-        link: "home",
-      },
-      {
-        icon: <TheatersIcon color="primary" />,
-        label: "menu.Admin-mediaConfig",
-        link: "test",
-      },
-      {
-        icon: <MenuBookIcon color="primary" />,
-        label: "menu.Admin-bookConfig",
-        link: "test",
-      },
-      {
-        icon: <ShareIcon color="primary" />,
-        label: "menu.Admin-shareConfig",
-        link: "test",
-      },
-    ],
-  },
-  {
-    icon: <WebIcon sx={{ color: "#3f51b5" }} />,
-    label: "menu.Browse",
-    link: "#",
-    children: [
-      {
-        icon: <PublicIcon sx={{ color: "#3f51b5" }} />,
-        label: "menu.Browse-public",
-        link: "home",
-      },
-      {
-        icon: <LibraryBooksIcon sx={{ color: "#3f51b5" }} />,
-        label: "menu.Browse-Read",
-        link: "#",
-      },
-      {
-        icon: <EventNoteIcon sx={{ color: "#3f51b5" }} />,
-        label: "menu.Browse-Notes",
-        link: "home",
-      },
-    ],
-  },
-];
-
+import { ListBarData, menus } from "../../config/config";
+import { role } from "../../api/entity/auth";
 export default function NestedList({
   data,
   userStatus,
@@ -266,7 +185,7 @@ export function ListBar(props: any) {
   return (
     <React.Fragment>
       <NestedList
-        data={data}
+        data={menus(props.user?.role || role.USER)}
         userStatus={props.health}
         main_open={props.open}
       />

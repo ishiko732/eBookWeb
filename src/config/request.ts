@@ -1,6 +1,6 @@
 import axios from "axios";
 import { HttpStatusCode as Status } from "../utils/StatusCode";
-import localstorage from "./localstorage";
+import localstorage from "../utils/localstorage";
 import {
   get_refresh_token,
   save_access_token,

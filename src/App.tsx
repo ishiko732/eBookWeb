@@ -1,74 +1,10 @@
 import React from "react";
 import "./App.css";
-import Login from "./pages/auth/Login";
-import SignUp from "./pages/auth/register";
-import Dashboard from "./pages/dashboard/Dashboard";
-import Home from "./pages/dashboard/Home";
-import Stile from "./components/OutletStile";
-import Hello from "./pages/dashboard/Hello";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import NotFound from "./pages/exception/404";
 import { Loading } from "./components/Loading";
 import { info, health as healthApi } from "./api/auth";
-import { get_refresh_token } from "./config/token";
+import { route, routes } from "./config/config";
 
-interface route {
-  path: string;
-  element: JSX.Element;
-  redirect?: string;
-  children?: route[];
-}
-const routes = (props: any): route[] => {
-  return [
-    {
-      path: "/login",
-      element: <Login {...props} />,
-    },
-    {
-      path: "/register",
-      element: <SignUp />,
-    },
-    {
-      path: "/dashboard",
-      element: <Dashboard {...props} />,
-      redirect: "home", //开头不能添加/,不然得从根目录写起'/dashboard/home'
-      children: [
-        {
-          path: "/home",
-          element: <Home {...props} />,
-        },
-        {
-          path: "/test",
-          element: <Stile />,
-          redirect: ".",
-          children: [
-            {
-              path: "/",
-              element: <Hello text="TEST" />,
-            },
-            {
-              path: "/hello",
-              element: <Hello text="Hello" />,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      path: "/",
-      element:
-        get_refresh_token() === "" ? (
-          <Navigate to="/login" />
-        ) : (
-          <Navigate to="/dashboard" />
-        ),
-    },
-    {
-      path: "*",
-      element: <NotFound />,
-    },
-  ];
-};
 const rotuerViews = (routerItems: route[], parent?: string) => {
   return routerItems.map((item: route) => {
     const path = parent ? `${parent}${item.path}` : `${item.path}`;

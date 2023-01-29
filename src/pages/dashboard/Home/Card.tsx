@@ -5,7 +5,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { get_access_token, get_refresh_token } from "../../config/token";
+import { get_access_token, get_refresh_token } from "../../../config/token";
 
 const bull = (
   <Box

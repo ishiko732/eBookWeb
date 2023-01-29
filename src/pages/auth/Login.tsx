@@ -22,7 +22,7 @@ import {
 } from "../../config/token";
 import { Navigate } from "react-router-dom";
 import Copyright from "../../components/Copyright";
-import localstorage from "../../config/localstorage";
+import localstorage from "../../utils/localstorage";
 import { Loading } from "../../components/Loading";
 import PostionSnackbar from "../../components/SnackBars";
 const theme = createTheme();
@@ -53,7 +53,7 @@ export default function Login(props: any) {
           });
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [isloading, setLoading] = React.useState(false);
   const [alert, setAlert] = React.useState({

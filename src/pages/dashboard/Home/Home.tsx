@@ -4,7 +4,7 @@ import Chart from "./Chart";
 import Deposits from "./Deposits";
 import Orders from "./Orders";
 import OutlinedCard from "./Card";
-import { Loading } from "../../components/Loading";
+import { Loading } from "../../../components/Loading";
 export default function Home(props: any) {
   const { user } = props;
   return user ? (
