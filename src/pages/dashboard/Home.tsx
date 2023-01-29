@@ -6,7 +6,7 @@ import Orders from "./Orders";
 import OutlinedCard from "./Card";
 import { Loading } from "../../components/Loading";
 export default function Home(props: any) {
-  const { user} = props;
+  const { user } = props;
   if (user === null) {
     return <Loading />;
   }

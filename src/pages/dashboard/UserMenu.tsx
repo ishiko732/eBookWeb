@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import AlertDialog from "../../components/AlertDialog";
 import { logOut } from "../../config/logOut";
-export default function UserMenu(props:any): JSX.Element {
+export default function UserMenu(props: any): JSX.Element {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [open, setOpen] = React.useState(false);
@@ -22,13 +22,13 @@ export default function UserMenu(props:any): JSX.Element {
       .then((res) => {
         logOut();
         setTimeout(() => {
-            navigate("/login",{replace:true});
+          navigate("/login", { replace: true });
         }, 1000);
       })
       .catch((err) => {
         logOut();
         setTimeout(() => {
-            navigate("/login",{replace:true});
+          navigate("/login", { replace: true });
         }, 1000);
       });
   };

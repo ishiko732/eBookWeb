@@ -1,6 +1,6 @@
 import * as React from "react";
 import { get_access_token } from "../../config/token";
-import { Navigate, Outlet,useNavigate } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -46,29 +46,39 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function DashboardContent(props: any) {
-  const { submittingStatus, user,setUser, isloading,setLoading, setCompleted } = props;
+  const {
+    submittingStatus,
+    user,
+    setUser,
+    isloading,
+    setLoading,
+    setCompleted,
+    onHealth,
+  } = props;
   const list_data = localStorage.getItem("list_data");
-  const [open, setOpen] = React.useState(list_data?JSON.parse(list_data).mainOpen:true);
-  const navigate=useNavigate()
-  function changeUser(user:any,status:boolean){
-    setCompleted(status)
-    setLoading(!status)
-    setUser(user)
+  const [open, setOpen] = React.useState(
+    list_data ? JSON.parse(list_data).mainOpen : true
+  );
+  const navigate = useNavigate();
+  function changeUser(user: any, status: boolean) {
+    setCompleted(status);
+    setLoading(!status);
+    setUser(user);
   }
 
-  React.useEffect(()=>{
-    if(!submittingStatus.current&&user==null){
+  React.useEffect(() => {
+    onHealth.current = true;
+    if (!submittingStatus.current && user == null) {
       setLoading(true);
       info()
         .then((res: any) => {
-          changeUser(res.data,true)
+          changeUser(res.data, true);
         })
         .catch(() => {
-          changeUser(null,true)
+          changeUser(null, true);
         });
     }
-  },[])
-
+  }, []);
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -93,7 +103,7 @@ function DashboardContent(props: any) {
             </IconButton>
           </Toolbar>
           <Divider />
-          <ListBar {...props} open={open}/>
+          <ListBar {...props} open={open} />
         </Drawer>
         <Box
           component="main"

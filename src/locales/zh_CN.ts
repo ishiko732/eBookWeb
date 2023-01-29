@@ -57,6 +57,20 @@ const customChineseMessages = {
     },
     config: "配置",
   },
+  menu: {
+    System: "系统管理",
+    "System-systemConfig": "系统配置",
+    "System-onlineConfig": "在线管理",
+    Admin: "应用管理",
+    "Admin-userConfig": "用户权限管理",
+    "Admin-mediaConfig": "媒体文件管理",
+    "Admin-bookConfig": "电子书 管理",
+    "Admin-shareConfig": "图书更新管理",
+    Browse: "浏览图书",
+    "Browse-public": "获取图书",
+    "Browse-Read": "阅读图书",
+    "Browse-Notes": "笔记复习",
+  },
 };
 
 export default customChineseMessages;

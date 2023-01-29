@@ -23,7 +23,7 @@ instance.interceptors.request.use(
     // 将 token 添加到请求头
     const token = localstorage.getItem("access_token");
     token && (config.headers.Authorization = `Bearer ${token}`);
-    return config; 
+    return config;
   },
   (error) => {
     return Promise.reject(error);
@@ -74,7 +74,7 @@ instance.interceptors.response.use(
             // request是上面创建的axios的实例
             return instance(error.config);
           } catch (error) {
-            logOut()
+            logOut();
           }
         }
         // "用户未登录或用户已过期,请重新登录"
