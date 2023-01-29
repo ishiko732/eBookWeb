@@ -1,6 +1,6 @@
 import * as React from "react";
 import { get_access_token } from "../../config/token";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -46,8 +46,7 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function DashboardContent(props: any) {
-  const { submittingStatus, user, health, onHealth, isloading, isCompleted } =
-    props;
+  const { submittingStatus, user, onHealth, isloading, isCompleted } = props;
   const [open, setOpen] = React.useState(true);
   React.useEffect(() => {
     submittingStatus.current = true;

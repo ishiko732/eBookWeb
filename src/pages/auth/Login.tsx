@@ -27,13 +27,17 @@ import localstorage from "../../config/localstorage";
 import { Loading } from "../../components/Loading";
 import PostionSnackbar from "../../components/SnackBars";
 const theme = createTheme();
-export default function Login() {
+export default function Login(props: any) {
   const [isloading, setLoading] = React.useState(false);
   const [alert, setAlert] = React.useState({
     open: false,
     message: "",
     severity: "info",
   });
+  const { onHealth } = props;
+  React.useEffect(() => {
+    onHealth.current = false;
+  }, []);
   const {
     register,
     handleSubmit,
@@ -77,8 +81,7 @@ export default function Login() {
       refreshtoken(refresh_token).then((res) => {
         save_access_token(res.data.access_token);
         save_refresh_token(res.data.refresh_token);
-        navigate("/dashboard", { replace: true });
-        console.log(res);
+        navigate("/dashboard");
       });
       return <Loading />;
     }
