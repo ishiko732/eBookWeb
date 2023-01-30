@@ -2,10 +2,9 @@ import React from "react";
 import { logout } from "../../api/auth";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import Button from "@mui/material/Button";
 import AlertDialog from "../../components/AlertDialog";
 import { logOut } from "../../config/logOut";
-import { Menu, MenuItem } from "@mui/material";
+import { MenuItem } from "@mui/material";
 export default function UserMenu(props: any): JSX.Element {
   const navigate = useNavigate();
   const { t } = useTranslation();

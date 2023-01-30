@@ -27,7 +27,6 @@ import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import PublicIcon from "@mui/icons-material/Public";
 import { role } from "../api/entity/auth";
-
 export interface route {
   path: string;
   element: JSX.Element;

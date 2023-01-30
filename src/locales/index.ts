@@ -4,6 +4,8 @@ import enUS from "./en_US";
 import zhCN from "./zh_CN";
 import jaJP from "./ja_JP";
 import { defaultLanguage } from "../config/config";
+import queryString from "query-string";
+
 const resources = {
   en_US: {
     translation: enUS,
@@ -16,9 +18,19 @@ const resources = {
   },
 };
 
+export const languages = ["zh_CN", "ja_JP", "en_US"];
+const language = () => {
+  const parsed = queryString.parse(window.location.search);
+  const language = parsed["lang"];
+  if (language != null && languages.indexOf(language as string) !== -1) {
+    return language as string;
+  } else {
+    return localStorage.language || defaultLanguage;
+  }
+};
 i18n.use(initReactI18next).init({
   resources,
-  lng: localStorage.language || defaultLanguage,
+  lng: language(),
   fallbackLng: defaultLanguage,
   interpolation: {
     escapeValue: false,

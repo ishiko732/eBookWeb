@@ -7,6 +7,7 @@ import {
   save_refresh_token,
 } from "./token";
 import { logOut } from "./logOut";
+import { defaultLanguage } from "./config";
 // 这里取决于登录的时候将 token 存储在哪里
 const instance = axios.create({
   baseURL: "http://localhost:8080/",
@@ -16,13 +17,14 @@ const instance = axios.create({
 // 设置post请求头
 instance.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded";
-
 // 添加请求拦截器
 instance.interceptors.request.use(
   (config) => {
     // 将 token 添加到请求头
     const token = localstorage.getItem("access_token");
     token && (config.headers.Authorization = `Bearer ${token}`);
+    config.headers["Accept-Language"] =
+      localStorage.language || defaultLanguage;
     return config;
   },
   (error) => {
