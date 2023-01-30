@@ -62,7 +62,7 @@ const customChineseMessages = {
     config: {
       config: "配置",
       message: "用户信息",
-      user: "用户名:{{name}}({{uid}})",
+      user: "用户名:{{name}}(UID:{{uid}})",
       role: "角色:{{role}}",
       phone: "手机号码:{{phone}}",
       status: "用户状态:",

@@ -63,7 +63,7 @@ const customEnglishMessages = {
     config: {
       config: "configuration",
       message: "user information",
-      user: "user:{{name}}({{uid}})",
+      user: "user:{{name}}(UID:{{uid}})",
       role: "role:{{role}}",
       phone: "phone:{{phone}}",
       status: "user status:",

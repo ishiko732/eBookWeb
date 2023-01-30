@@ -23,6 +23,7 @@ export const language = () => {
   const parsed = queryString.parse(window.location.search);
   const language = parsed["lang"] || parsed["language"] || parsed["i18n"];
   if (language != null && languages.indexOf(language as string) !== -1) {
+    localStorage.language = language;
     return language as string;
   } else {
     return localStorage.language || defaultLanguage;
