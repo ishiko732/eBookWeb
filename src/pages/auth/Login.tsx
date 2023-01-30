@@ -19,6 +19,7 @@ import {
   save_access_token,
   save_refresh_token,
   get_refresh_token,
+  delete_token,
 } from "../../config/token";
 import { Navigate } from "react-router-dom";
 import Copyright from "../../components/Copyright";
@@ -52,6 +53,8 @@ export default function Login(props: any) {
           .catch(() => {
             setLoading(false);
           });
+      }else{
+        delete_token();
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

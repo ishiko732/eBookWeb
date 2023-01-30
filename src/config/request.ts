@@ -7,7 +7,6 @@ import {
   save_refresh_token,
 } from "./token";
 import { logOut } from "./logOut";
-import { defaultLanguage } from "./config";
 import { language } from "../locales";
 // 这里取决于登录的时候将 token 存储在哪里
 const instance = axios.create({
