@@ -14,16 +14,25 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { ListBar } from "./listItems";
 import Copyright from "../../components/Copyright";
 import { Loading } from "../../components/Loading";
+import { defaultLanguage } from "../../config/config";
+import { useTranslation } from "react-i18next";
 
-const drawerWidth: number = 300;
-
+export const languages_width:any = {
+  "zh_CN":240, 
+  "ja_JP":250, 
+  "en_US":320
+}
+interface DrawerProps{
+  open:boolean,
+  width:number
+}
 const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
+  shouldForwardProp: (prop) => prop!=='open'
+})<DrawerProps>(({ theme, open,width }) => ({
   "& .MuiDrawer-paper": {
     position: "relative",
     whiteSpace: "nowrap",
-    width: drawerWidth,
+    width: width,
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -51,7 +60,7 @@ function DashboardContent(props: any) {
   const [open, setOpen] = React.useState(
     list_data ? JSON.parse(list_data).mainOpen : true
   );
-
+  const { i18n } = useTranslation();
   React.useEffect(() => {
     onHealth.current = true;
     if (user == null) {
@@ -81,7 +90,7 @@ function DashboardContent(props: any) {
       {isloading ? <Loading /> : null}
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <Drawer variant="permanent" open={open}>
+        <Drawer variant="permanent" open={open} width={languages_width[i18n.language||defaultLanguage]}>
           <Toolbar
             sx={{
               display: "flex",
