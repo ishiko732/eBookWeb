@@ -15,13 +15,13 @@ import { role } from "../../api/entity/auth";
 export default function NestedList({
   data,
   userStatus,
-  props,
+  user,
   main_open,
 }: {
   data: ListBarData[];
   main_open: boolean;
   userStatus?: boolean;
-  props?: any;
+  user?: any;
 }) {
   const [open, setOpen] = React.useState<boolean[]>(
     new Array(data.length).fill(false)
@@ -175,7 +175,7 @@ export default function NestedList({
         );
       })}
       <Divider sx={{ my: 1, alignItems: "center" }} />
-      <UserAvatar userStatus={userStatus || false} />
+      <UserAvatar userStatus={userStatus || false} user={user} />
     </List>
   );
 }
@@ -186,6 +186,7 @@ export function ListBar(props: any) {
         data={menus(props.user?.role || role.USER)}
         userStatus={props.health}
         main_open={props.open}
+        user={props.user}
       />
     </React.Fragment>
   );

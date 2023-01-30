@@ -47,9 +47,52 @@ const customEnglishMessages = {
       "Not Found": "The page you’re looking for doesn’t exist.",
       "Back Page": "Back Page",
     },
+    "403": {
+      forbidden: "You do not have permission to access this page",
+      "Back Page": "Back Page",
+    },
   },
-  logout: {
-    logout: "Log out",
+  config: {
+    logout: {
+      logout: "Log out",
+      title: "Are you sure you want to log out?",
+      text: "Signing out may cause some of your current information to be lost!",
+      disagree: "let me think again",
+      agree: "Sure",
+    },
+    config: {
+      config: "configuration",
+      message: "user information",
+      user: "user:{{name}}({{uid}})",
+      role: "role:{{role}}",
+      phone: "phone:{{phone}}",
+      status: "user status:",
+    },
+  },
+  menu: {
+    System: "System Management",
+    "System-systemConfig": "System Configuration",
+    "System-onlineConfig": "Online Management",
+    Admin: "Application Management",
+    "Admin-userConfig": "User Permission Management",
+    "Admin-mediaConfig": "Media File Management",
+    "Admin-bookConfig": "e-Book Management",
+    "Admin-shareConfig": "Book Sharing Management",
+    Browse: "Browse Books",
+    "Browse-public": "Get Public Books",
+    "Browse-Read": "Read",
+    "Browse-Notes": "Notes&Review",
+  },
+  role: {
+    SUPERADMIN: "SuperAdmin",
+    ADMIN: "Admin",
+    USER: "User",
+    TEMP: "Temp User",
+  },
+  userStatus: {
+    EXPIRED: "Expired",
+    ENABLED: "Enabled",
+    LOCKED: "Locked",
   },
 };
 

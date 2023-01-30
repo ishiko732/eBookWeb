@@ -7,7 +7,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import i18next from "i18next";
 import { useTranslation } from "react-i18next";
 
-export default function SelectLanguage() {
+export default function SelectLanguage(props: any) {
   const { t, i18n } = useTranslation();
   const languages = Object.keys(i18next.services.resourceStore.data);
   const [currentLanguage, setCurrentLanguage] = React.useState(i18n.language);
@@ -18,7 +18,7 @@ export default function SelectLanguage() {
     localStorage.language = event.target.value;
   };
   return (
-    <Box sx={{ minWidth: 120 }}>
+    <Box sx={{ minWidth: 120 }} {...props}>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">
           {t("transfer.language")}

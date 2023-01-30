@@ -59,7 +59,14 @@ const customChineseMessages = {
       disagree: "我再想想",
       agree: "确定",
     },
-    config: "配置",
+    config: {
+      config: "配置",
+      message: "用户信息",
+      user: "用户名:{{name}}({{uid}})",
+      role: "角色:{{role}}",
+      phone: "手机号码:{{phone}}",
+      status: "用户状态:",
+    },
   },
   menu: {
     System: "系统管理",
@@ -69,11 +76,22 @@ const customChineseMessages = {
     "Admin-userConfig": "用户权限管理",
     "Admin-mediaConfig": "媒体文件管理",
     "Admin-bookConfig": "电子书 管理",
-    "Admin-shareConfig": "图书更新管理",
+    "Admin-shareConfig": "图书共享管理",
     Browse: "浏览图书",
     "Browse-public": "获取图书",
     "Browse-Read": "阅读图书",
     "Browse-Notes": "笔记复习",
+  },
+  role: {
+    SUPERADMIN: "超级管理员",
+    ADMIN: "管理员",
+    USER: "用户",
+    TEMP: "临时用户",
+  },
+  userStatus: {
+    EXPIRED: "失效",
+    ENABLED: "启用",
+    LOCKED: "锁定",
   },
 };
 

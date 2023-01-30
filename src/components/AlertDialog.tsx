@@ -45,6 +45,7 @@ class AlertDialog extends React.Component<any, any> {
         </DialogContent>
         <DialogActions>
           <Button
+            variant="outlined"
             onClick={() => {
               this.handleOpen(false, false);
             }}
@@ -53,6 +54,7 @@ class AlertDialog extends React.Component<any, any> {
             {disagree}
           </Button>
           <Button
+            variant="outlined"
             onClick={() => {
               this.handleOpen(false, true);
             }}
