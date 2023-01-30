@@ -29,6 +29,7 @@ import UserControl from "../pages/management/UserControl";
 import MediaControl from "../pages/management/MediaControl";
 import BookControl from "../pages/management/BookControl";
 import ShareControl from "../pages/management/ShareControl";
+import Forbidden from "../pages/exception/403";
 
 export interface route {
   path: string;
@@ -37,9 +38,6 @@ export interface route {
   children?: route[];
 }
 export const routes = (props: any): route[] => {
-  const { user } = props;
-  const r = user?.role || role.USER;
-  const token = get_refresh_token();
   return [
     {
       path: "/login",
@@ -51,9 +49,8 @@ export const routes = (props: any): route[] => {
     },
     {
       path: "/",
-      element:
-        token === "" ? <Navigate to="/login" /> : <Dashboard {...props} />,
-      redirect: token === "" ? undefined : "MyHome",
+      element: <Dashboard {...props} />,
+      redirect: "MyHome",
       //开头不能添加/,不然得从根目录写起'/dashboard/home'
       children: [
         {
@@ -103,10 +100,14 @@ export const routes = (props: any): route[] => {
           element: <MyHome {...props} />,
         },
         {
-          path: "/note",
+          path: "note",
           element: <MyHome {...props} />,
         },
       ],
+    },
+    {
+      path: "/exception/403",
+      element: <Forbidden />,
     },
     {
       path: "*",

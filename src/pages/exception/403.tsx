@@ -5,7 +5,7 @@ import { purple } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
 const primary = purple[500]; // #f44336
 
-export default function NotFound() {
+export default function Forbidden() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   return (

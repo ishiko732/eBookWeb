@@ -32,6 +32,7 @@ export default function Login(props: any) {
   React.useEffect(() => {
     onHealth.current = false;
     setHealth(false);
+    setUser(null);
     // if (get_access_token().length !== 0) {
     //   return <Navigate replace to="/dashboard" />;
     // } else
