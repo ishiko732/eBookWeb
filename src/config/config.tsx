@@ -2,6 +2,7 @@ import Login from "../pages/auth/Login";
 import SignUp from "../pages/auth/register";
 import Dashboard from "../pages/dashboard/Dashboard";
 import Home from "../pages/dashboard/Home/Home";
+import MyHome from "../pages/home";
 import Stile from "../components/OutletStile";
 import Hello from "../pages/dashboard/Hello";
 import NotFound from "../pages/exception/404";
@@ -22,6 +23,12 @@ import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import PublicIcon from "@mui/icons-material/Public";
 import { role } from "../api/entity/auth";
+import SystemControl from "../pages/system/SystemControl";
+import OnlineControl from "../pages/system/OnlineControl";
+import UserControl from "../pages/management/UserControl";
+import MediaControl from "../pages/management/MediaControl";
+import BookControl from "../pages/management/BookControl";
+import ShareControl from "../pages/management/ShareControl";
 
 export interface route {
   path: string;
@@ -30,6 +37,9 @@ export interface route {
   children?: route[];
 }
 export const routes = (props: any): route[] => {
+  const { user } = props;
+  const r = user?.role || role.USER;
+  const token = get_refresh_token();
   return [
     {
       path: "/login",
@@ -40,39 +50,63 @@ export const routes = (props: any): route[] => {
       element: <SignUp />,
     },
     {
-      path: "/dashboard",
-      element: <Dashboard {...props} />,
-      redirect: "home", //开头不能添加/,不然得从根目录写起'/dashboard/home'
+      path: "/",
+      element:
+        token === "" ? <Navigate to="/login" /> : <Dashboard {...props} />,
+      redirect: token === "" ? undefined : "MyHome",
+      //开头不能添加/,不然得从根目录写起'/dashboard/home'
       children: [
         {
-          path: "/home",
-          element: <Home {...props} />,
+          path: "system",
+          element: <SystemControl {...props} />,
         },
         {
-          path: "/test",
+          path: "online",
+          element: <OnlineControl {...props} />,
+        },
+        {
+          path: "control",
           element: <Stile />,
-          redirect: ".",
           children: [
             {
-              path: "/",
-              element: <Hello text="TEST" />,
+              path: "/users",
+              element: <UserControl {...props} />,
             },
             {
-              path: "/hello",
-              element: <Hello text="Hello" />,
+              path: "/medium",
+              element: <MediaControl {...props} />,
+            },
+            {
+              path: "/books",
+              element: <BookControl {...props} />,
+            },
+            {
+              path: "/share",
+              element: <ShareControl {...props} />,
             },
           ],
         },
+        {
+          path: "home",
+          element: <Home {...props} />,
+        },
+        {
+          path: "MyHome",
+          element: <MyHome {...props} />,
+        },
+        {
+          path: "browse",
+          element: <MyHome {...props} />,
+        },
+        {
+          path: "read",
+          element: <MyHome {...props} />,
+        },
+        {
+          path: "/note",
+          element: <MyHome {...props} />,
+        },
       ],
-    },
-    {
-      path: "/",
-      element:
-        get_refresh_token() === "" ? (
-          <Navigate to="/login" />
-        ) : (
-          <Navigate to="/dashboard" />
-        ),
     },
     {
       path: "*",
@@ -98,12 +132,12 @@ export const menus = (r: role): ListBarData[] => {
         {
           icon: <TerminalIcon color="primary" />,
           label: "menu.System-systemConfig",
-          link: "home",
+          link: "system",
         },
         {
           icon: <OnlinePredictionIcon color="primary" />,
           label: "menu.System-onlineConfig",
-          link: "test",
+          link: "online",
         },
       ],
     });
@@ -117,22 +151,22 @@ export const menus = (r: role): ListBarData[] => {
         {
           icon: <ManageAccountsIcon color="primary" />,
           label: "menu.Admin-userConfig",
-          link: "home",
+          link: "control/users",
         },
         {
           icon: <TheatersIcon color="primary" />,
           label: "menu.Admin-mediaConfig",
-          link: "test",
+          link: "control/medium",
         },
         {
           icon: <MenuBookIcon color="primary" />,
           label: "menu.Admin-bookConfig",
-          link: "test",
+          link: "control/books",
         },
         {
           icon: <ShareIcon color="primary" />,
           label: "menu.Admin-shareConfig",
-          link: "test",
+          link: "control/share",
         },
       ],
     });
@@ -140,22 +174,22 @@ export const menus = (r: role): ListBarData[] => {
   items.push({
     icon: <WebIcon sx={{ color: "#3f51b5" }} />,
     label: "menu.Browse",
-    link: "#",
+    link: "MyHome",
     children: [
       {
         icon: <PublicIcon sx={{ color: "#3f51b5" }} />,
         label: "menu.Browse-public",
-        link: "home",
+        link: "browse",
       },
       {
         icon: <LibraryBooksIcon sx={{ color: "#3f51b5" }} />,
         label: "menu.Browse-Read",
-        link: "#",
+        link: "read",
       },
       {
         icon: <EventNoteIcon sx={{ color: "#3f51b5" }} />,
         label: "menu.Browse-Notes",
-        link: "home",
+        link: "note",
       },
     ],
   });

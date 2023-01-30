@@ -46,6 +46,10 @@ const customChineseMessages = {
       "Not Found": "你要访问的页面不存在。",
       "Back Page": "返回上页",
     },
+    "403": {
+      forbidden: "您没有权限访问该网页",
+      "Back Page": "返回上页",
+    },
   },
   config: {
     logout: {

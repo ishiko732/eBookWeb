@@ -46,7 +46,7 @@ export default function Login(props: any) {
             submittingStatus.current = true;
             setUser(null);
             setLoading(false);
-            setUrl("/dashboard");
+            setUrl("/");
           })
           .catch(() => {
             setLoading(false);
@@ -77,7 +77,7 @@ export default function Login(props: any) {
         save_access_token(res.data.access_token);
         save_refresh_token(res.data.refresh_token);
         setLoading(false);
-        setUrl("/dashboard");
+        setUrl("/");
       })
       .catch((err) => {
         setAlert({
@@ -94,7 +94,7 @@ export default function Login(props: any) {
   }
   const { t } = useTranslation();
   return url ? (
-    <Navigate to="/dashboard" {...props} />
+    <Navigate to={url} {...props} />
   ) : (
     <ThemeProvider theme={theme}>
       {isloading ? <Loading /> : null}
