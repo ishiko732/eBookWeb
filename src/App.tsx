@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Loading } from "./components/Loading";
 import { info, health as healthApi } from "./api/auth";
 import { route, routes } from "./config/config";
+import { delete_token } from "./config/token";
 
 const rotuerViews = (routerItems: route[], parent?: string) => {
   return routerItems.map((item: route) => {
@@ -46,16 +47,17 @@ const App = () => {
   const submittingStatus = React.useRef(false);
   const first = React.useRef(true);
   React.useEffect(() => {
-    // console.log("user 请求更新:" + JSON.stringify(user));
+    console.log("user 请求更新:" + JSON.stringify(user));
     if (submittingStatus.current) {
       submittingStatus.current = false;
       setLoading(true);
       info()
-        .then((res: any) => {
+        .then((res) => {
           setUser(res.data);
           setLoading(false);
         })
-        .catch(() => {
+        .catch((err) => {
+          delete_token();
           setLoading(false);
         });
     }
