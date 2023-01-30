@@ -4,10 +4,14 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import Home from "../pages/dashboard/Home/Home";
 import MyHome from "../pages/home";
 import Stile from "../components/OutletStile";
-import Hello from "../pages/dashboard/Hello";
 import NotFound from "../pages/exception/404";
-import { get_refresh_token } from "./token";
-import { Navigate } from "react-router-dom";
+import SystemControl from "../pages/system/SystemControl";
+import OnlineControl from "../pages/system/OnlineControl";
+import UserControl from "../pages/management/UserControl";
+import MediaControl from "../pages/management/MediaControl";
+import BookControl from "../pages/management/BookControl";
+import ShareControl from "../pages/management/ShareControl";
+import Forbidden from "../pages/exception/403";
 
 //Icon
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
@@ -23,13 +27,6 @@ import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import PublicIcon from "@mui/icons-material/Public";
 import { role } from "../api/entity/auth";
-import SystemControl from "../pages/system/SystemControl";
-import OnlineControl from "../pages/system/OnlineControl";
-import UserControl from "../pages/management/UserControl";
-import MediaControl from "../pages/management/MediaControl";
-import BookControl from "../pages/management/BookControl";
-import ShareControl from "../pages/management/ShareControl";
-import Forbidden from "../pages/exception/403";
 
 export interface route {
   path: string;
@@ -198,5 +195,4 @@ export const menus = (r: role): ListBarData[] => {
 };
 
 export const defaultLanguage = "zh_CN";
-export const defaultRole = role.TEMP;
 export const default403URL = "/exception/403";

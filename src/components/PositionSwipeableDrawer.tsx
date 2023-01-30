@@ -1,7 +1,6 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
@@ -28,6 +27,7 @@ export default function PositionSwipeableDrawer({
     if (open && setAnchorEl !== undefined) {
       setAnchorEl(null);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
   const toggleDrawer =
     (_open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
