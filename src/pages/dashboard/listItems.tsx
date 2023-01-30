@@ -180,6 +180,7 @@ export default function NestedList({
   );
 }
 export function ListBar(props: any) {
+  console.log(props.health);
   return (
     <React.Fragment>
       <NestedList

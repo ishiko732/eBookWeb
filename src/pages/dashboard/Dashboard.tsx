@@ -15,7 +15,7 @@ import { ListBar } from "./listItems";
 import Copyright from "../../components/Copyright";
 import { Loading } from "../../components/Loading";
 
-const drawerWidth: number = 240;
+const drawerWidth: number = 300;
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -54,7 +54,6 @@ function DashboardContent(props: any) {
 
   React.useEffect(() => {
     onHealth.current = true;
-    setHealth(true);
     if (user == null) {
       submittingStatus.current = true;
       setUser(get_access_token());
@@ -64,7 +63,16 @@ function DashboardContent(props: any) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  React.useEffect(() => {
+    if (user !== null && user !== get_access_token()) {
+      onHealth.current = true;
+      setHealth(true);
+    } else {
+      onHealth.current = true;
+      setHealth(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
   const toggleDrawer = () => {
     setOpen(!open);
   };

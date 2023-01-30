@@ -53,7 +53,7 @@ export default function Login(props: any) {
           .catch(() => {
             setLoading(false);
           });
-      }else{
+      } else {
         delete_token();
       }
     }

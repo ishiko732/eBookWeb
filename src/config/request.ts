@@ -52,7 +52,10 @@ instance.interceptors.response.use(
   async function (error) {
     // 相应错误处理
     // 比如： token 过期， 无权限访问， 路径不存在， 服务器问题等
-    console.log(error.response.data.code);
+    if (error.code === "ERR_NETWORK") {
+      error.msg = "server not started"; //服务器未启动
+      return Promise.reject(error);
+    }
     switch (error.response.data.code) {
       case 401:
         const refresh_token = get_refresh_token();
