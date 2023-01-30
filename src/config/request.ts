@@ -8,11 +8,13 @@ import {
 } from "./token";
 import { logOut } from "./logOut";
 import { defaultLanguage } from "./config";
+import { language } from "../locales";
 // 这里取决于登录的时候将 token 存储在哪里
 const instance = axios.create({
   baseURL: "http://localhost:8080/",
   timeout: 5000,
 });
+const lang = language();
 
 // 设置post请求头
 instance.defaults.headers.post["Content-Type"] =
@@ -23,8 +25,7 @@ instance.interceptors.request.use(
     // 将 token 添加到请求头
     const token = localstorage.getItem("access_token");
     token && (config.headers.Authorization = `Bearer ${token}`);
-    config.headers["Accept-Language"] =
-      localStorage.language || defaultLanguage;
+    config.headers["Accept-Language"] = lang;
     return config;
   },
   (error) => {

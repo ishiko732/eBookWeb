@@ -19,9 +19,9 @@ const resources = {
 };
 
 export const languages = ["zh_CN", "ja_JP", "en_US"];
-const language = () => {
+export const language = () => {
   const parsed = queryString.parse(window.location.search);
-  const language = parsed["lang"];
+  const language = parsed["lang"] || parsed["lanuage"] || parsed["i18n"];
   if (language != null && languages.indexOf(language as string) !== -1) {
     return language as string;
   } else {
