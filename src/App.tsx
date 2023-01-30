@@ -46,7 +46,7 @@ const App = () => {
   const submittingStatus = React.useRef(false);
   const first = React.useRef(true);
   React.useEffect(() => {
-    console.log("user 请求更新:" + JSON.stringify(user));
+    // console.log("user 请求更新:" + JSON.stringify(user));
     if (submittingStatus.current) {
       submittingStatus.current = false;
       setLoading(true);
@@ -64,7 +64,7 @@ const App = () => {
   React.useEffect(() => {
     if (first.current) {
       first.current = false;
-      console.log("Health 请求更新:" + health);
+      // console.log("Health 请求更新:" + health);
       setInterval(() => {
         if (onHealth.current) {
           healthApi()
@@ -77,9 +77,7 @@ const App = () => {
               }
             })
             .catch((err) => {
-              if (health === true) {
-                setHealth(false);
-              }
+              setHealth(false);
             });
         }
       }, 60000);

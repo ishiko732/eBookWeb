@@ -17,18 +17,18 @@ import { Loading } from "../../components/Loading";
 import { defaultLanguage } from "../../config/config";
 import { useTranslation } from "react-i18next";
 
-export const languages_width:any = {
-  "zh_CN":240, 
-  "ja_JP":250, 
-  "en_US":320
-}
-interface DrawerProps{
-  open:boolean,
-  width:number
+export const languages_width: any = {
+  zh_CN: 240,
+  ja_JP: 250,
+  en_US: 320,
+};
+interface DrawerProps {
+  open: boolean;
+  width: number;
 }
 const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop!=='open'
-})<DrawerProps>(({ theme, open,width }) => ({
+  shouldForwardProp: (prop) => prop !== "open",
+})<DrawerProps>(({ theme, open, width }) => ({
   "& .MuiDrawer-paper": {
     position: "relative",
     whiteSpace: "nowrap",
@@ -73,12 +73,9 @@ function DashboardContent(props: any) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   React.useEffect(() => {
+    onHealth.current = true;
     if (user !== null && user !== get_access_token()) {
-      onHealth.current = true;
       setHealth(true);
-    } else {
-      onHealth.current = true;
-      setHealth(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
@@ -90,7 +87,11 @@ function DashboardContent(props: any) {
       {isloading ? <Loading /> : null}
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <Drawer variant="permanent" open={open} width={languages_width[i18n.language||defaultLanguage]}>
+        <Drawer
+          variant="permanent"
+          open={open}
+          width={languages_width[i18n.language || defaultLanguage]}
+        >
           <Toolbar
             sx={{
               display: "flex",

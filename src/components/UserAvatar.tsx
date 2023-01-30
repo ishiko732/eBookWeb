@@ -64,6 +64,10 @@ export default function UserAvatar({
   };
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
+  // const [status,setStatus]=React.useState(userStatus)
+  // React.useEffect(()=>{
+  //   setStatus(userStatus)
+  // },[userStatus])
   return (
     <Box
       component="center"
