@@ -6,10 +6,12 @@ import {
   IconButton,
   ButtonGroup,
   Popover,
+  Menu,
 } from "@mui/material";
 import React from "react";
 import UserMenu from "../pages/dashboard/UserMenu";
 import PositionSwipeableDrawer from "./PositionSwipeableDrawer";
+import ConfigBar from "../pages/dashboard/ConfigBar";
 
 const StyledBadge = styled(Badge)(({ theme }: any) => ({
   "& .MuiBadge-badge": {
@@ -41,11 +43,13 @@ const StyledBadge = styled(Badge)(({ theme }: any) => ({
 }));
 
 export default function UserAvatar({
+  user,
   userStatus,
   children,
 }: {
   userStatus: boolean;
   children?: JSX.Element;
+  user?: any;
 }) {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
@@ -80,7 +84,7 @@ export default function UserAvatar({
           <Avatar alt="User" sx={{ width: 48, height: 48 }} />
         </StyledBadge>
       </IconButton>
-      <Popover
+      <Menu
         id={id}
         open={open}
         anchorEl={anchorEl}
@@ -94,26 +98,22 @@ export default function UserAvatar({
           horizontal: "left",
         }}
       >
-        <ButtonGroup
-          orientation="vertical"
-          aria-label="vertical contained button group"
-          variant="contained"
-          color="primary"
-        >
-          <UserMenu
-            anchorEl={anchorEl}
-            setAnchorEl={setAnchorEl}
-            setOpenConfig={setOpenConfig}
-          />
-          {children}
-        </ButtonGroup>
-      </Popover>
+        <UserMenu
+          anchorEl={anchorEl}
+          setAnchorEl={setAnchorEl}
+          setOpenConfig={setOpenConfig}
+        />
+        {children}
+      </Menu>
       <PositionSwipeableDrawer
         position="right"
         open={openConfig}
         setOpen={setOpenConfig}
         setAnchorEl={setAnchorEl}
-      />
+        width={300}
+      >
+        <ConfigBar user={user} />
+      </PositionSwipeableDrawer>
     </Box>
   );
 }

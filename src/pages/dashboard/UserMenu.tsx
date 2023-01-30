@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import AlertDialog from "../../components/AlertDialog";
 import { logOut } from "../../config/logOut";
+import { Menu, MenuItem } from "@mui/material";
 export default function UserMenu(props: any): JSX.Element {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -38,24 +39,22 @@ export default function UserMenu(props: any): JSX.Element {
   };
   return (
     <React.Fragment>
-      <Button
+      <MenuItem
         key="menu.config"
         onClick={() => {
           setOpenConfig(true);
         }}
       >
-        {t("config.config")}
-      </Button>
-      <Button
+        {t("config.config.config")}
+      </MenuItem>
+      <MenuItem
         key="menu.logout"
-        fullWidth
-        variant="contained"
         onClick={() => {
           handleOpen(true);
         }}
       >
         {t("config.logout.logout")}
-      </Button>
+      </MenuItem>
       <AlertDialog
         open={open}
         onChange={handleOpen}
