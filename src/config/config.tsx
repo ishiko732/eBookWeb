@@ -198,3 +198,4 @@ export const menus = (r: role): ListBarData[] => {
 };
 
 export const defaultLanguage = "zh_CN";
+export const defaultRole=role.TEMP
