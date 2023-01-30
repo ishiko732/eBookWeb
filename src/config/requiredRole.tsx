@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { role } from "../api/entity/auth";
 import { Loading } from "../components/Loading";
-import { defaultRole,default403URL } from "./config";
+import { defaultRole, default403URL } from "./config";
 import React from "react";
 const RequiredRole = ({
   user,

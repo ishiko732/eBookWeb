@@ -9,11 +9,15 @@ export default function UserMenu(props: any): JSX.Element {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [open, setOpen] = React.useState(false);
+  const { setOpenConfig, setAnchorEl } = props;
 
   function handleOpen(isOpen: boolean, status?: boolean) {
     setOpen(isOpen);
-    if (status) {
-      Logout();
+    if (status !== undefined) {
+      if (status) {
+        Logout();
+      }
+      setAnchorEl(null);
     }
   }
 
@@ -34,8 +38,16 @@ export default function UserMenu(props: any): JSX.Element {
   };
   return (
     <React.Fragment>
-      <Button key="one">{t("config.config")}</Button>
       <Button
+        key="menu.config"
+        onClick={() => {
+          setOpenConfig(true);
+        }}
+      >
+        {t("config.config")}
+      </Button>
+      <Button
+        key="menu.logout"
         fullWidth
         variant="contained"
         onClick={() => {

@@ -8,6 +8,8 @@ import {
   Popover,
 } from "@mui/material";
 import React from "react";
+import UserMenu from "../pages/dashboard/UserMenu";
+import PositionSwipeableDrawer from "./PositionSwipeableDrawer";
 
 const StyledBadge = styled(Badge)(({ theme }: any) => ({
   "& .MuiBadge-badge": {
@@ -43,11 +45,13 @@ export default function UserAvatar({
   children,
 }: {
   userStatus: boolean;
-  children: JSX.Element;
+  children?: JSX.Element;
 }) {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
+  const [openConfig, setOpenConfig] = React.useState(false);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -96,9 +100,20 @@ export default function UserAvatar({
           variant="contained"
           color="primary"
         >
+          <UserMenu
+            anchorEl={anchorEl}
+            setAnchorEl={setAnchorEl}
+            setOpenConfig={setOpenConfig}
+          />
           {children}
         </ButtonGroup>
       </Popover>
+      <PositionSwipeableDrawer
+        position="right"
+        open={openConfig}
+        setOpen={setOpenConfig}
+        setAnchorEl={setAnchorEl}
+      />
     </Box>
   );
 }

@@ -198,5 +198,5 @@ export const menus = (r: role): ListBarData[] => {
 };
 
 export const defaultLanguage = "zh_CN";
-export const defaultRole=role.TEMP
-export const default403URL="/exception/403"
+export const defaultRole = role.TEMP;
+export const default403URL = "/exception/403";

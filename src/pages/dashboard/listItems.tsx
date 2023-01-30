@@ -7,11 +7,11 @@ import { Link as Rlink } from "react-router-dom";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import UserAvatar from "../../components/UserAvatar";
-import UserMenu from "./UserMenu";
 import { useTranslation } from "react-i18next";
 import Tooltip from "@mui/material/Tooltip";
 import { ListBarData, menus } from "../../config/config";
 import { role } from "../../api/entity/auth";
+
 export default function NestedList({
   data,
   userStatus,
@@ -175,9 +175,7 @@ export default function NestedList({
         );
       })}
       <Divider sx={{ my: 1, alignItems: "center" }} />
-      <UserAvatar userStatus={userStatus || false}>
-        <UserMenu {...props} />
-      </UserAvatar>
+      <UserAvatar userStatus={userStatus || false} />
     </List>
   );
 }
