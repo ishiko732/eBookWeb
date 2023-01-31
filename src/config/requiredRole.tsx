@@ -5,15 +5,18 @@ import { default403URL } from "./config";
 import React from "react";
 import { get_access_token } from "./token";
 const RequiredRole = ({
+  status,
+  setStatus,
   user,
   requireRole,
   children,
 }: {
+  status: boolean;
+  setStatus: React.Dispatch<React.SetStateAction<boolean>>;
   user: any;
   requireRole: role[];
   children: JSX.Element;
 }) => {
-  const [status, setStatus] = React.useState(false);
   const navigate = useNavigate();
   React.useEffect(() => {
     if (user !== null && user !== get_access_token()) {
