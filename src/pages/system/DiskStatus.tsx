@@ -1,4 +1,4 @@
-import { Chip, Divider, Grid, Tooltip, Typography } from "@mui/material";
+import { Chip, Grid, Tooltip, Typography } from "@mui/material";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -30,7 +30,6 @@ const DiskStatus = (props: any) => {
       color: "#ff0000",
     },
   ];
-  console.log(message);
   return (
     <React.Fragment>
       <Title>{t("system.diskSpace.run")}</Title>
