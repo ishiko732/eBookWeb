@@ -93,6 +93,28 @@ const customChineseMessages = {
     ENABLED: "启用",
     LOCKED: "锁定",
   },
+  system: {
+    message: "系统信息",
+    CPU: "CPU",
+    OS: "操作系统",
+    version: "版本",
+    status: "{{name}}状态 ",
+    UP: "正常运行",
+    DOWN: "服务停止",
+    details: {
+      version: "版本",
+    },
+    mongo: {
+      maxWireVersion: "连接限制",
+    },
+    diskSpace: {
+      run: "运行状态",
+      path: "运行路径",
+      threshold: "警告阈值",
+      free: "剩余空间",
+      use: "已用空间",
+    },
+  },
 };
 
 export default customChineseMessages;

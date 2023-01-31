@@ -171,7 +171,7 @@ export const menus = (r: role): ListBarData[] => {
   items.push({
     icon: <WebIcon sx={{ color: "#3f51b5" }} />,
     label: "menu.Browse",
-    link: "MyHome",
+    link: "home",
     children: [
       {
         icon: <PublicIcon sx={{ color: "#3f51b5" }} />,

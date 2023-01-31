@@ -1,7 +1,7 @@
 import request from "../config/request";
 
 // redis
-export const redis = () => request.get("system/cache/redis");
+export const redisCache = () => request.get("system/cache/redis");
 
 //health
 export const systemHealth = () => request.get("system/health");
