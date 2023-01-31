@@ -54,12 +54,16 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function DashboardContent(props: any) {
-  const { submittingStatus, user, setUser, isloading, onHealth, setHealth } =
-    props;
-  const list_data = localStorage.getItem("list_data");
-  const [open, setOpen] = React.useState(
-    list_data ? JSON.parse(list_data).mainOpen : true
-  );
+  const {
+    submittingStatus,
+    user,
+    setUser,
+    isloading,
+    onHealth,
+    setHealth,
+    mainOpen,
+    setMainOpen,
+  } = props;
   const { i18n } = useTranslation();
   React.useEffect(() => {
     onHealth.current = true;
@@ -80,7 +84,10 @@ function DashboardContent(props: any) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
   const toggleDrawer = () => {
-    setOpen(!open);
+    setMainOpen((open: boolean) => {
+      return !open;
+    });
+    // setOpen(!open);
   };
   return (
     <ThemeProvider theme={mdTheme}>
@@ -89,7 +96,7 @@ function DashboardContent(props: any) {
         <CssBaseline />
         <Drawer
           variant="permanent"
-          open={open}
+          open={mainOpen}
           width={languages_width[i18n.language || defaultLanguage]}
         >
           <Toolbar
@@ -102,11 +109,11 @@ function DashboardContent(props: any) {
             }}
           >
             <IconButton onClick={toggleDrawer}>
-              {open ? <ChevronLeftIcon /> : <MenuIcon />}
+              {mainOpen ? <ChevronLeftIcon /> : <MenuIcon />}
             </IconButton>
           </Toolbar>
           <Divider />
-          <ListBar {...props} open={open} />
+          <ListBar {...props} open={mainOpen} />
         </Drawer>
         <Box
           component="main"

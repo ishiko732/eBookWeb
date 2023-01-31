@@ -86,6 +86,10 @@ const App = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const list_data = localStorage.getItem("list_data");
+  const [mainOpen, setMainOpen] = React.useState<boolean>(
+    list_data ? JSON.parse(list_data).mainOpen : true
+  );
 
   return (
     <BrowserRouter>
@@ -100,6 +104,8 @@ const App = () => {
             onHealth,
             isloading,
             setLoading,
+            mainOpen,
+            setMainOpen,
           })
         )}
       </Routes>
