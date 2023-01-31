@@ -12,8 +12,9 @@ export const Login = (params: vo.loginVo) =>
   });
 
 // 刷新token
+export const refreshtokenURL="auth/regenerateToken"
 export const refreshtoken = (refreshToken: string) =>
-  request.post("auth/regenerateToken", { refreshToken: refreshToken });
+  request.post(refreshtokenURL, { refreshToken: refreshToken });
 
 // 注册
 export const register = (params: vo.registerVo) =>

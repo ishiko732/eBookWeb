@@ -8,6 +8,7 @@ import {
 } from "./token";
 import { logOut } from "./logOut";
 import { defaultLanguage } from "./config";
+import { refreshtokenURL } from "../api/auth";
 // 这里取决于登录的时候将 token 存储在哪里
 const instance = axios.create({
   baseURL: "http://localhost:8080/",
@@ -59,6 +60,7 @@ instance.interceptors.response.use(
     }
     switch (error.response.data.code) {
       case 401:
+        console.log("error401:"+error.response.data.msg)
         const refresh_token = get_refresh_token();
         if (refresh_token.length !== 0) {
           // 1. 请求新token
@@ -68,7 +70,7 @@ instance.interceptors.response.use(
           refresh = true;
           try {
             const res = await axios({
-              url: "http://localhost:8080/auth/regenerateToken",
+              url: error.config.baseURL+refreshtokenURL,
               method: "POST",
               headers: {
                 // Authorization: `Bearer ${refresh_token}`
