@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Box } from "@mui/system";
 import SelectLanguage from "../../components/Language";
 import { Card, CardContent, Chip } from "@mui/material";
-import { userStatus } from "../../api/entity/auth";
+import { userStatus, role } from "../../api/entity/auth";
 
 const statusColor = (active: userStatus) => {
   let color = null;
@@ -43,21 +43,26 @@ const ConfigBar = (props: any) => {
         <Card sx={{ minWidth: "250px" }} variant="outlined">
           <CardContent>
             <Typography gutterBottom>
-              {t("config.config.user", { uid: user.id, name: user.name })}
+              {t("config.config.user", {
+                uid: user?.id || "N/A",
+                name: user?.name || "N/A",
+              })}
             </Typography>
             <Typography variant="subtitle1" gutterBottom>
-              {t("config.config.role", { role: t(`role.${user.role}`) })}
+              {t("config.config.role", {
+                role: t(`role.${user?.role || role.TEMP}`),
+              })}
             </Typography>
             <Typography variant="subtitle1" gutterBottom>
               {t("config.config.status")}
               <Chip
                 sx={{ margin: "8px" }}
-                label={t(`userStatus.${user.active}`)}
-                color={statusColor(user.active) as any}
+                label={t(`userStatus.${user?.active || userStatus.EXPIRED}`)}
+                color={statusColor(user?.active || userStatus.EXPIRED) as any}
               />
             </Typography>
             <Typography variant="subtitle1" gutterBottom>
-              {t("config.config.phone", { phone: user.phone })}
+              {t("config.config.phone", { phone: user?.phone || "N/A" })}
             </Typography>
           </CardContent>
         </Card>
