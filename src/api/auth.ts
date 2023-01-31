@@ -12,7 +12,7 @@ export const Login = (params: vo.loginVo) =>
   });
 
 // 刷新token
-export const refreshtokenURL="auth/regenerateToken"
+export const refreshtokenURL = "auth/regenerateToken";
 export const refreshtoken = (refreshToken: string) =>
   request.post(refreshtokenURL, { refreshToken: refreshToken });
 
