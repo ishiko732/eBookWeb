@@ -18,13 +18,17 @@ const resources = {
   },
 };
 
-export const languages = ["zh_CN", "ja_JP", "en_US"];
+export const languages = Object.keys(resources).map((key) => {
+  return key.replace("_", "-");
+});
+
 export const language = () => {
   const parsed = queryString.parse(window.location.search);
   const language = parsed["lang"] || parsed["language"] || parsed["i18n"];
   if (language != null && languages.indexOf(language as string) !== -1) {
-    localStorage.language = language;
-    return language as string;
+    localStorage.language = (language as string).replace("-", "_");
+    console.log(localStorage.language);
+    return localStorage.language;
   } else {
     return localStorage.language || defaultLanguage;
   }
