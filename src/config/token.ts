@@ -1,10 +1,8 @@
 import localstorage from "../utils/localstorage";
-const access_token = "access_token";
-const refresh_token = "refresh_token";
-// const access_token_expire_length = 300000; //5分钟
-const access_token_expire_length = 6000000; //100分钟
-const refresh_token_expire_length = 6000000; //100分钟
-
+export const access_token = "access_token";
+export const refresh_token = "refresh_token";
+export const access_token_expire_length = 10 * 60 * 1000; //10分钟
+export const refresh_token_expire_length = 100 * 60 * 1000; //100分钟
 export function save_access_token(token: string): void {
   localstorage.setItem(access_token, token, access_token_expire_length);
 }

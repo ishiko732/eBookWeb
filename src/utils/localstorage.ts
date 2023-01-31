@@ -53,6 +53,16 @@ class LocalStorage {
       return null;
     }
   }
+  public getExpire(key: string): number | null {
+    const values: string | null = localStorage.getItem(key);
+    if (values) {
+      const value: storageValue = JSON.parse(values);
+      // 当前时间是否大于过期时间
+      return value.expire;
+    }
+    return null;
+  }
+
   public removeItem(key: string): void {
     localStorage.removeItem(key);
   }
