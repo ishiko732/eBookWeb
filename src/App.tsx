@@ -3,9 +3,9 @@ import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Loading } from "./components/Loading";
 import { info, health as healthApi } from "./api/auth";
-import { route, routes } from "./config/config";
+import { defaultSnackBarAnchorOrigin, defaultSnackBarNumber, route, routes } from "./config/config";
 import { delete_token } from "./config/token";
-
+import { SnackbarProvider } from 'notistack';
 const rotuerViews = (routerItems: route[], parent?: string) => {
   return routerItems.map((item: route) => {
     const path = parent ? `${parent}${item.path}` : `${item.path}`;
@@ -92,6 +92,7 @@ const App = () => {
   );
 
   return (
+    <SnackbarProvider maxSnack={defaultSnackBarNumber} anchorOrigin={defaultSnackBarAnchorOrigin}>
     <BrowserRouter>
       <Routes>
         {rotuerViews(
@@ -110,6 +111,7 @@ const App = () => {
         )}
       </Routes>
     </BrowserRouter>
+    </SnackbarProvider>
   );
 };
 export default App;
