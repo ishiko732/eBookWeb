@@ -21,7 +21,7 @@ const instance = axios.create({
 
 // 设置post请求头
 instance.defaults.headers.post["Content-Type"] =
-  "application/x-www-form-urlencoded";
+  "application/x-www-form-urlencoded;charset=utf-8";
 // 添加请求拦截器
 instance.interceptors.request.use(
   (config) => {
@@ -62,8 +62,12 @@ instance.interceptors.response.use(
       error.msg = "server not started"; //服务器未启动
       return Promise.reject(error);
     }
+    console.log(error);
     switch (error.response.data.code) {
       case 401:
+        if (error.response.data.msg === "401:用户认证失败") {
+          return Promise.reject(error);
+        }
         // console.log("error401:" + error.response.data.msg);
         const refresh_token = get_refresh_token();
         if (refresh_token.length !== 0) {
