@@ -29,7 +29,10 @@ const OnlineDataTable = ({
     {
       field: "role",
       headerName: t("config.config.role").replace(":{{role}}", "") as string,
-      renderCell(params: GridRenderCellParams<any, any, any>) {
+    //   renderCell(params: GridRenderCellParams<any, any, any>) {
+    //     return t(`role.${params.value || role.TEMP}`);
+    //   },
+      valueGetter(params) {
         return t(`role.${params.value || role.TEMP}`);
       },
     },
@@ -39,11 +42,15 @@ const OnlineDataTable = ({
       renderCell(params: GridRenderCellParams<any, any, any>) {
         return (
           <Chip
-            label={t(`userStatus.${params.value || userStatus.EXPIRED}`)}
-            color={userStatusColor(params.value || userStatus.EXPIRED) as any}
+            label={params.value}
+            color={userStatusColor(params.row.active || userStatus.EXPIRED) as any}
           />
         );
       },
+      valueGetter(params) {
+        return t(`userStatus.${params.value || userStatus.EXPIRED}`);
+      },
+      width: 150,
     },
     {
       field: "links",
@@ -69,6 +76,7 @@ const OnlineDataTable = ({
       },
       width: 200,
       sortable: false,
+      filterable:false
     },
   ];
   return (

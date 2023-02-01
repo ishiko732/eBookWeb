@@ -99,7 +99,7 @@ export const GRID_DEFAULT_LOCALE_TEXT_ZH_CN: GridLocaleText = {
 
   // Total visible row amount footer text
   footerTotalVisibleRows: (visibleCount, totalCount) =>
-    `${visibleCount.toLocaleString()} of ${totalCount.toLocaleString()}`,
+    `第${visibleCount.toLocaleString()}条数据, 总共${totalCount.toLocaleString()}数据`,
 
   // Checkbox selection text
   checkboxSelectionHeaderName: "复选框选择",
