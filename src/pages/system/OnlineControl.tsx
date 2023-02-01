@@ -9,15 +9,11 @@ import {
   Paper,
   Typography,
   Divider,
-  Button,
   Stack,
   IconButton,
   Tooltip,
 } from "@mui/material";
 import Title from "../../components/Title";
-import { GridColDef, GridRenderCellParams, DataGrid } from "@mui/x-data-grid";
-import localeTextConstants from "../../locales/DataGrid";
-import { userStatusColor } from "../../config/config";
 import request from "../../config/request";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useSnackbar } from "notistack";
@@ -93,7 +89,7 @@ const OnlineControl = (props: any) => {
         });
       });
   };
-  
+
   return (
     <RequiredRole
       user={props.user}
@@ -129,7 +125,7 @@ const OnlineControl = (props: any) => {
             </Tooltip>
           </Stack>
           <Divider light flexItem sx={{ margin: "8px" }} />
-          <OnlineDataTable ClickOp={ClickOp} message={message}/>
+          <OnlineDataTable ClickOp={ClickOp} message={message} />
         </Paper>
       </Box>
     </RequiredRole>
