@@ -6,25 +6,7 @@ import { Box } from "@mui/system";
 import SelectLanguage from "../../components/Language";
 import { Card, CardContent, Chip } from "@mui/material";
 import { userStatus, role } from "../../api/entity/auth";
-
-const statusColor = (active: userStatus) => {
-  let color = null;
-  switch (active) {
-    case userStatus.ENABLED:
-      color = "success";
-      break;
-    case userStatus.EXPIRED:
-      color = "error";
-      break;
-    case userStatus.LOCKED:
-      color = "warning";
-      break;
-    default:
-      color = "default";
-      break;
-  }
-  return color;
-};
+import { userStatusColor } from "../../config/config";
 
 const ConfigBar = (props: any) => {
   const { t } = useTranslation();
@@ -58,7 +40,9 @@ const ConfigBar = (props: any) => {
               <Chip
                 sx={{ margin: "8px" }}
                 label={t(`userStatus.${user?.active || userStatus.EXPIRED}`)}
-                color={statusColor(user?.active || userStatus.EXPIRED) as any}
+                color={
+                  userStatusColor(user?.active || userStatus.EXPIRED) as any
+                }
               />
             </Typography>
             <Typography variant="subtitle1" gutterBottom>

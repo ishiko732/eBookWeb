@@ -2,10 +2,7 @@ import { Chip, Grid, Typography } from "@mui/material";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import Title from "../../components/Title";
-type HealthStatus = "UP" | "DOWN";
-export const statusColor = (status: HealthStatus) => {
-  return status === "UP" ? "success" : "error";
-};
+import { healthStatusColor } from "../../config/config";
 
 const ServeStatus = ({ health }: { health: any }) => {
   const { t } = useTranslation();
@@ -33,7 +30,7 @@ const ServeStatus = ({ health }: { health: any }) => {
             <Grid item xs={6}>
               <Chip
                 label={t(`system.${health?.status || "DOWN"}`)}
-                color={statusColor(health?.status || "DOWN")}
+                color={healthStatusColor(health?.status || "DOWN")}
               />
             </Grid>
           </Grid>
@@ -53,7 +50,9 @@ const ServeStatus = ({ health }: { health: any }) => {
             <Grid item xs={6}>
               <Chip
                 label={t(`system.${health?.components?.db?.status || "DOWN"}`)}
-                color={statusColor(health?.components?.db?.status || "DOWN")}
+                color={healthStatusColor(
+                  health?.components?.db?.status || "DOWN"
+                )}
               />
             </Grid>
           </Grid>
@@ -75,7 +74,9 @@ const ServeStatus = ({ health }: { health: any }) => {
                 label={t(
                   `system.${health?.components?.redis?.status || "DOWN"}`
                 )}
-                color={statusColor(health?.components?.redis?.status || "DOWN")}
+                color={healthStatusColor(
+                  health?.components?.redis?.status || "DOWN"
+                )}
               />
             </Grid>
           </Grid>
@@ -97,7 +98,9 @@ const ServeStatus = ({ health }: { health: any }) => {
                 label={t(
                   `system.${health?.components?.mongo?.status || "DOWN"}`
                 )}
-                color={statusColor(health?.components?.mongo?.status || "DOWN")}
+                color={healthStatusColor(
+                  health?.components?.mongo?.status || "DOWN"
+                )}
               />
             </Grid>
           </Grid>

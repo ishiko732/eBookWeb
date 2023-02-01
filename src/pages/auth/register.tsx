@@ -16,19 +16,15 @@ import Copyright from "../../components/Copyright";
 import { useTranslation } from "react-i18next";
 import { Controller, useForm, FieldValues } from "react-hook-form";
 import { MuiTelInput, matchIsValidTel } from "mui-tel-input";
-import PostionSnackbar from "../../components/SnackBars";
+import { useSnackbar } from "notistack";
 import { register as registerApi } from "../../api/auth";
 import { Loading } from "../../components/Loading";
 const theme = createTheme();
 
 export default function SignUp() {
+  const { enqueueSnackbar } = useSnackbar();
   const [checked, setChecked] = React.useState(false);
   const [isloading, setLoading] = React.useState(false);
-  const [alert, setAlert] = React.useState({
-    open: false,
-    message: "",
-    severity: "info",
-  });
 
   const {
     control,
@@ -46,28 +42,15 @@ export default function SignUp() {
       phone: registerVo.phone.replaceAll(" ", ""),
     })
       .then((res) => {
-        setAlert({
-          ...alert,
-          open: true,
-          severity: "success",
-          message: res.data,
-        });
+        enqueueSnackbar(res.data, { variant: "success" });
         setLoading(false);
       })
       .catch((err) => {
-        setAlert({
-          ...alert,
-          severity: "error",
-          open: true,
-          message: err.msg,
-        });
+        enqueueSnackbar(err.msg, { variant: "error" });
         setLoading(false);
       });
   };
 
-  function handleClose() {
-    setAlert({ ...alert, open: false });
-  }
   return (
     <ThemeProvider theme={theme}>
       {isloading ? <Loading /> : null}
@@ -187,12 +170,6 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
-        <PostionSnackbar
-          open={alert.open}
-          message={alert.message}
-          severity={alert.severity}
-          onChange={handleClose}
-        />
         <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>

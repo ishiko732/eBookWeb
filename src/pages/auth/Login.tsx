@@ -25,9 +25,10 @@ import { Navigate } from "react-router-dom";
 import Copyright from "../../components/Copyright";
 import localstorage from "../../utils/localstorage";
 import { Loading } from "../../components/Loading";
-import PostionSnackbar from "../../components/SnackBars";
+import { useSnackbar } from "notistack";
 const theme = createTheme();
 export default function Login(props: any) {
+  const { enqueueSnackbar } = useSnackbar();
   const { setHealth, onHealth, submittingStatus, setUser } = props;
 
   React.useEffect(() => {
@@ -60,11 +61,6 @@ export default function Login(props: any) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [isloading, setLoading] = React.useState(false);
-  const [alert, setAlert] = React.useState({
-    open: false,
-    message: "",
-    severity: "info",
-  });
   const {
     register,
     handleSubmit,
@@ -84,18 +80,10 @@ export default function Login(props: any) {
         setUrl("/");
       })
       .catch((err) => {
-        setAlert({
-          ...alert,
-          severity: "error",
-          open: true,
-          message: err.msg,
-        });
+        enqueueSnackbar(err.msg, { variant: "error" });
         setLoading(false);
       });
   };
-  function handleClose() {
-    setAlert({ ...alert, open: false });
-  }
   const { t } = useTranslation();
   return url ? (
     <Navigate to={url} {...props} />
@@ -197,12 +185,6 @@ export default function Login(props: any) {
             </Grid>
           </Box>
         </Box>
-        <PostionSnackbar
-          open={alert.open}
-          message={alert.message}
-          severity={alert.severity}
-          onChange={handleClose}
-        />
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>

@@ -114,6 +114,15 @@ const customChineseMessages = {
       free: "剩余空间",
       use: "已用空间",
     },
+    online: {
+      online: "在线管理",
+      number: "当前在线人数",
+      restart: "刷新",
+      op: "操作",
+      links: {
+        underline: "下线处理",
+      },
+    },
   },
 };
 

@@ -26,7 +26,7 @@ import WebIcon from "@mui/icons-material/Web";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import PublicIcon from "@mui/icons-material/Public";
-import { role } from "../api/entity/auth";
+import { role, userStatus } from "../api/entity/auth";
 export interface route {
   path: string;
   element: JSX.Element;
@@ -195,3 +195,38 @@ export const menus = (r: role): ListBarData[] => {
 
 export const defaultLanguage = "zh_CN";
 export const default403URL = "/exception/403";
+export const defaultSnackBarNumber = 6;
+
+type horizontal = "left" | "center" | "right";
+type vertical = "top" | "bottom";
+export const defaultSnackBarAnchorOrigin: {
+  horizontal: horizontal;
+  vertical: vertical;
+} = {
+  horizontal: "right",
+  vertical: "top",
+};
+
+export const userStatusColor = (active: userStatus) => {
+  let color = null;
+  switch (active) {
+    case userStatus.ENABLED:
+      color = "success";
+      break;
+    case userStatus.EXPIRED:
+      color = "error";
+      break;
+    case userStatus.LOCKED:
+      color = "warning";
+      break;
+    default:
+      color = "default";
+      break;
+  }
+  return color;
+};
+
+export type HealthStatus = "UP" | "DOWN";
+export const healthStatusColor = (status: HealthStatus) => {
+  return status === "UP" ? "success" : "error";
+};

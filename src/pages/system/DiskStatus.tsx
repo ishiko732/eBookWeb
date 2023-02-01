@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 
 import { BasicPieChart, pieData } from "../../components/BasicPieChart";
 import Title from "../../components/Title";
+import { healthStatusColor } from "../../config/config";
 import getfilesize from "../../utils/getSize";
-import { statusColor } from "./ServeStatus";
 
 const DiskStatus = (props: any) => {
   const { message } = props;
@@ -46,7 +46,7 @@ const DiskStatus = (props: any) => {
           </Typography>
           <Chip
             label={t(`system.${message?.status || "DOWN"}`)}
-            color={statusColor(message?.status || "DOWN")}
+            color={healthStatusColor(message?.status || "DOWN")}
           />
           <Typography color="text.secondary" mt={2}>
             {t("system.diskSpace.path")}
