@@ -5,8 +5,10 @@ import { useNavigate } from "react-router-dom";
 import AlertDialog from "../../components/AlertDialog";
 import { logOut } from "../../config/logOut";
 import { MenuItem } from "@mui/material";
+import { useSnackbar } from "notistack";
 export default function UserMenu(props: any): JSX.Element {
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
   const { t } = useTranslation();
   const [open, setOpen] = React.useState(false);
   const { setOpenConfig, setAnchorEl } = props;
@@ -25,12 +27,18 @@ export default function UserMenu(props: any): JSX.Element {
     logout()
       .then((res) => {
         logOut();
+        enqueueSnackbar(`注销成功!`, {
+          variant: "success",
+        });
         setTimeout(() => {
           navigate("/login", { replace: true });
         }, 1000);
       })
       .catch((err) => {
         logOut();
+        enqueueSnackbar(`注销成功,但服务器数据未成功处理!`, {
+          variant: "warning",
+        });
         setTimeout(() => {
           navigate("/login", { replace: true });
         }, 1000);
