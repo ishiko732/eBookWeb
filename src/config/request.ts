@@ -62,7 +62,6 @@ instance.interceptors.response.use(
       error.msg = "server not started"; //服务器未启动
       return Promise.reject(error);
     }
-    console.log(error);
     switch (error.response.data.code) {
       case 401:
         if (error.response.data.msg === "401:用户认证失败") {
