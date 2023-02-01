@@ -18,22 +18,12 @@ import request from "../../config/request";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useSnackbar } from "notistack";
 import OnlineDataTable from "./OnlineDataTable";
+import { OnlineUsers } from "../../api/models";
 
-interface onlineUsers {
-  cnt: number | string;
-  users: {
-    name: string;
-    id: number;
-    phone: string;
-    role: role;
-    active: userStatus;
-    links: [];
-  }[];
-}
 const OnlineControl = (props: any) => {
   const { enqueueSnackbar } = useSnackbar();
   const [status, setStatus] = React.useState(false);
-  const [message, setMessage] = React.useState<onlineUsers>({
+  const [message, setMessage] = React.useState<OnlineUsers>({
     cnt: "N/A",
     users: [],
   });
@@ -44,9 +34,11 @@ const OnlineControl = (props: any) => {
       loginUser()
         .then((res) => {
           setMessage(res.data);
+          enqueueSnackbar(t("api.success"), { variant: "success" });
           console.log(res.data);
         })
         .catch((err) => {
+          enqueueSnackbar(t("api.error"), { variant: "error" });
           console.log(err);
         });
     }
@@ -56,9 +48,11 @@ const OnlineControl = (props: any) => {
       loginUser()
         .then((res) => {
           setMessage(res.data);
+          enqueueSnackbar(t("api.success"), { variant: "success" });
           console.log(res.data);
         })
         .catch((err) => {
+          enqueueSnackbar(t("api.error"), { variant: "error" });
           console.log(err);
         });
       setRestart(false);

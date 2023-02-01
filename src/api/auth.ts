@@ -1,5 +1,6 @@
 import request from "../config/request";
 import * as vo from "./entity/auth";
+import jsonBig from "json-bigint";
 
 // 登录
 export const Login = (params: vo.loginVo) =>
@@ -44,10 +45,10 @@ export const health = () => request.get("auth/health");
  * update 更新用户信息
  */
 export const updateRole = (params: vo.updateRoleVo) =>
-  request.put("auth/update/role", params);
+  request.put(`auth/update/role?uid=${params.uid}&role=${params.role}`);
 
 export const updateStatus = (params: vo.updateUserStatusVo) =>
-  request.put("auth/update/active", params);
+  request.put(`auth/update/active?uid=${params.uid}&status=${params.status}`);
 
 export const updatePassword = (params: vo.updatePasswordVo) =>
   request({
@@ -55,5 +56,5 @@ export const updatePassword = (params: vo.updatePasswordVo) =>
     url: "auth/update/password",
     data: params,
     headers: { "Content-Type": "application/json" },
-    transformRequest: [(data) => JSON.stringify(data)],
+    transformRequest: [(data) => jsonBig.stringify(data)],
   });

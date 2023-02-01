@@ -1,7 +1,7 @@
 import request from "../config/request";
 import * as vo from "./entity/user";
 
-export const getUsers = (params: vo.selectVo) =>
+export const getUsers = (params?: vo.selectVo) =>
   request({
     method: "get",
     url: "user/lists",

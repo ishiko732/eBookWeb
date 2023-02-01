@@ -124,6 +124,18 @@ const customChineseMessages = {
       },
     },
   },
+  api: {
+    success: "读取成功",
+    error: "读取失败",
+  },
+  management: {
+    user: {
+      title: "用户权限管理",
+      number: "当前已注册人数",
+      createDate: "创建时间",
+      updateDate: "更新时间",
+    },
+  },
 };
 
 export default customChineseMessages;

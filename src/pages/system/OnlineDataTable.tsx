@@ -89,7 +89,7 @@ const OnlineDataTable = ({
         columns={columns}
         pageSize={5}
         rowsPerPageOptions={[5]}
-        checkboxSelection
+        // checkboxSelection
         disableSelectionOnClick
         localeText={localeTextConstants(localStorage.language)}
         initialState={{
