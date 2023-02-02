@@ -60,7 +60,7 @@ function DashboardContent(props: any) {
     setUser,
     isloading,
     onHealth,
-    setHealth,
+    // setHealth,
     mainOpen,
     setMainOpen,
   } = props;
@@ -77,9 +77,9 @@ function DashboardContent(props: any) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   React.useEffect(() => {
-    onHealth.current = true;
+    // onHealth.current = true;
     if (user !== null && user !== get_access_token()) {
-      setHealth(true);
+      onHealth.current = true;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);

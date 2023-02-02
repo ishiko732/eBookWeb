@@ -29,11 +29,11 @@ import { useSnackbar } from "notistack";
 const theme = createTheme();
 export default function Login(props: any) {
   const { enqueueSnackbar } = useSnackbar();
-  const { setHealth, onHealth, submittingStatus, setUser } = props;
+  const { onHealth, submittingStatus, setUser } = props;
 
   React.useEffect(() => {
     onHealth.current = false;
-    setHealth(false);
+    // setHealth(false);
     setUser(null);
     // if (get_access_token().length !== 0) {
     //   return <Navigate replace to="/dashboard" />;

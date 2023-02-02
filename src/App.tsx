@@ -46,11 +46,11 @@ const rotuerViews = (routerItems: route[], parent?: string) => {
 
 const App = () => {
   const [user, setUser] = React.useState<any>(null);
-  const [health, setHealth] = React.useState<any>(false);
+  // const [health, setHealth] = React.useState<any>(false);
   const [isloading, setLoading] = React.useState(false);
   const onHealth = React.useRef(false);
   const submittingStatus = React.useRef(false);
-  const first = React.useRef(true);
+  // const first = React.useRef(true);
   React.useEffect(() => {
     console.log("user 请求更新:" + JSON.stringify(user));
     if (submittingStatus.current) {
@@ -68,29 +68,29 @@ const App = () => {
     }
   }, [user]);
 
-  React.useEffect(() => {
-    if (first.current) {
-      first.current = false;
-      // console.log("Health 请求更新:" + health);
-      setInterval(() => {
-        if (onHealth.current) {
-          healthApi()
-            .then((res) => {
-              console.log(res.data);
-              if ("OK" === res.data) {
-                if (health === false) {
-                  setHealth(true);
-                }
-              }
-            })
-            .catch((err) => {
-              setHealth(false);
-            });
-        }
-      }, 60000);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // React.useEffect(() => {
+  //   if (first.current) {
+  //     first.current = false;
+  //     // console.log("Health 请求更新:" + health);
+  //     setInterval(() => {
+  //       if (onHealth.current) {
+  //         healthApi()
+  //           .then((res) => {
+  //             console.log(res.data);
+  //             if ("OK" === res.data) {
+  //               if (health === false) {
+  //                 setHealth(true);
+  //               }
+  //             }
+  //           })
+  //           .catch((err) => {
+  //             setHealth(false);
+  //           });
+  //       }
+  //     }, 60000);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
   const list_data = localStorage.getItem("list_data");
   const [mainOpen, setMainOpen] = React.useState<boolean>(
     list_data ? JSON.parse(list_data).mainOpen : true
@@ -108,8 +108,8 @@ const App = () => {
               submittingStatus,
               user,
               setUser,
-              health,
-              setHealth,
+              // health,
+              // setHealth,
               onHealth,
               isloading,
               setLoading,

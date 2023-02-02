@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import Tooltip from "@mui/material/Tooltip";
 import { ListBarData, menus } from "../../config/config";
 import { role } from "../../api/entity/auth";
-
+import { health as healthApi } from "../../api/auth";
 export default function NestedList({
   data,
   userStatus,
@@ -180,11 +180,36 @@ export default function NestedList({
   );
 }
 export function ListBar(props: any) {
+  const [health, setHealth] = React.useState<boolean>(true);
+  const first = React.useRef(true);
+  React.useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      // console.log("Health 请求更新:" + health);
+      setInterval(() => {
+        if (props.onHealth.current) {
+          healthApi()
+            .then((res) => {
+              console.log(res.data);
+              if ("OK" === res.data) {
+                if (health === false) {
+                  setHealth(true);
+                }
+              }
+            })
+            .catch((err) => {
+              setHealth(false);
+            });
+        }
+      }, 60000);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <React.Fragment>
       <NestedList
         data={menus(props.user?.role || role.USER)}
-        userStatus={props.health}
+        userStatus={health}
         main_open={props.open}
         user={props.user}
       />
