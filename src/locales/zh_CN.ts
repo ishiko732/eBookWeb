@@ -1,4 +1,3 @@
-import { updatePassword } from "../api/auth";
 
 const customChineseMessages = {
   hello: "您好",
