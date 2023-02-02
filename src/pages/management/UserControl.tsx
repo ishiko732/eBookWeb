@@ -15,7 +15,6 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import Title from "../../components/Title";
-import request from "../../config/request";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useSnackbar } from "notistack";
 import UserDataTable from "./UserDataTable";
@@ -148,6 +147,8 @@ const UserControl = (props: any) => {
             ClickOp={ClickOp}
             message={message}
             isLoading={isLoading}
+            setMessage={setMessage}
+            loginUser={props.user}
           />
         </Paper>
       </Box>

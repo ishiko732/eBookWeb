@@ -1,23 +1,23 @@
-import { role, userStatus } from "../../api/entity/auth";
+import { role, updatePasswordVo, userStatus } from "../../api/entity/auth";
 import { userStatusColor } from "../../config/config";
 import localeTextConstants from "../../locales/DataGrid";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { useTranslation } from "react-i18next";
 import {
   Chip,
-  Stack,
-  Button,
   Box,
   IconButton,
-  Typography,
   Tooltip,
   MenuItem,
   Select,
   FormControl,
 } from "@mui/material";
+import * as React from "react";
 import { User } from "../../api/models";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
-import React from "react";
+import { updatePassword } from "../../api/auth";
+import { useSnackbar } from "notistack";
+import UpdatePassword from "./UpdatePassword";
 
 export const SelectUserStatus = () => {
   const { t } = useTranslation();
@@ -41,12 +41,50 @@ const UserDataTable = ({
   isLoading,
   message,
   ClickOp,
+  setMessage,
+  loginUser,
 }: {
   isLoading: boolean;
   message: User[];
   ClickOp: Function;
+  setMessage: React.Dispatch<React.SetStateAction<User[]>>;
+  loginUser: User;
 }) => {
   const { t } = useTranslation();
+  const { enqueueSnackbar } = useSnackbar();
+  const [open, setOpen] = React.useState(false);
+  const [selectUser, setSelectUser] = React.useState<User | null>(null);
+  const handleClickOpen = (row: User) => {
+    setSelectUser(row);
+    setOpen(true);
+  };
+
+  const handleClose = (
+    event: React.SyntheticEvent<unknown>,
+    reason?: string,
+    password?: updatePasswordVo
+  ) => {
+    if (reason !== "backdropClick") {
+      setOpen(false);
+      if (password && selectUser) {
+        updatePassword(password)
+          .then((res: any) => {
+            enqueueSnackbar(res?.msg, { variant: "success" });
+            setMessage((pre) => {
+              const index = pre.indexOf(selectUser as User);
+              pre[index].password = t("management.user.protected");
+              return [...pre];
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            enqueueSnackbar(err?.msg, { variant: "success" });
+          });
+      }
+      setSelectUser(null);
+    }
+  };
+
   const columns: GridColDef[] = [
     { field: "id", headerName: "id", width: 90, sortable: true },
     {
@@ -137,7 +175,7 @@ const UserDataTable = ({
       renderCell(params: GridRenderCellParams<any, any, any>) {
         return (
           <Tooltip title={params.value}>
-            <IconButton>
+            <IconButton onClick={() => handleClickOpen(params.row)}>
               <VerifiedUserIcon color="success" />
             </IconButton>
           </Tooltip>
@@ -165,12 +203,12 @@ const UserDataTable = ({
     },
   ];
   return (
-    <Box sx={{ height: 630, width: "100%" }}>
+    <Box sx={{ height: 500, width: "100%" }}>
       <DataGrid
         // autoHeight
         rows={message}
         columns={columns}
-        pageSize={10}
+        pageSize={5}
         rowsPerPageOptions={[5]}
         // checkboxSelection
         disableSelectionOnClick
@@ -185,6 +223,12 @@ const UserDataTable = ({
             ],
           },
         }}
+      />
+      <UpdatePassword
+        open={open}
+        handleClose={handleClose}
+        updateUid={selectUser?.id || -1}
+        loginUser={loginUser}
       />
     </Box>
   );

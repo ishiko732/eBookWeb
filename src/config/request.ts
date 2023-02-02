@@ -65,7 +65,7 @@ instance.interceptors.response.use(
     switch (error.response.data.code) {
       case 401:
         if (error.response.data.msg === "401:用户认证失败") {
-          return Promise.reject(error);
+          return Promise.reject(error.response.data);
         }
         // console.log("error401:" + error.response.data.msg);
         const refresh_token = get_refresh_token();

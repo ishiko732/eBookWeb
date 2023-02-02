@@ -1,3 +1,5 @@
+import { updatePassword } from "../api/auth";
+
 const customChineseMessages = {
   hello: "您好",
   transfer: {
@@ -134,6 +136,15 @@ const customChineseMessages = {
       number: "当前已注册人数",
       createDate: "创建时间",
       updateDate: "更新时间",
+      protected: "保护中",
+      updatePassword: "修改密码",
+      rawPassword: "原密码",
+      newPassword: "新密码",
+      repeatPassword: "再次输入密码",
+      updatePassword_Tip: "原密码将保持跟新密码一致",
+      update_ok: "确定修改",
+      update_no: "取消修改",
+      password_check: "新密码与再次输入密码不一致",
     },
   },
 };
