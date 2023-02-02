@@ -231,4 +231,4 @@ export const healthStatusColor = (status: HealthStatus) => {
   return status === "UP" ? "success" : "error";
 };
 
-export const defaultDateFormat = "yyyy-MM-dd HH:mm:ss";
+export const defaultDateFormat = "YYYY-MM-DD HH:mm:ss";
