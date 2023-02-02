@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Loading } from "./components/Loading";
-import { info, health as healthApi } from "./api/auth";
+import { info } from "./api/auth";
 import {
   defaultSnackBarAnchorOrigin,
   defaultSnackBarNumber,
@@ -11,6 +11,7 @@ import {
 } from "./config/config";
 import { delete_token } from "./config/token";
 import { SnackbarProvider } from "notistack";
+import { useTranslation } from "react-i18next";
 const rotuerViews = (routerItems: route[], parent?: string) => {
   return routerItems.map((item: route) => {
     const path = parent ? `${parent}${item.path}` : `${item.path}`;
@@ -95,13 +96,14 @@ const App = () => {
   const [mainOpen, setMainOpen] = React.useState<boolean>(
     list_data ? JSON.parse(list_data).mainOpen : true
   );
-
+  const { t } = useTranslation();
+  document.title = t("webTitle");
   return (
-    <SnackbarProvider
-      maxSnack={defaultSnackBarNumber}
-      anchorOrigin={defaultSnackBarAnchorOrigin}
-    >
-      <BrowserRouter>
+    <BrowserRouter>
+      <SnackbarProvider
+        maxSnack={defaultSnackBarNumber}
+        anchorOrigin={defaultSnackBarAnchorOrigin}
+      >
         <Routes>
           {rotuerViews(
             routes({
@@ -118,8 +120,8 @@ const App = () => {
             })
           )}
         </Routes>
-      </BrowserRouter>
-    </SnackbarProvider>
+      </SnackbarProvider>
+    </BrowserRouter>
   );
 };
 export default App;

@@ -1,14 +1,15 @@
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
 import { role } from "../../api/entity/auth";
 import React from "react";
 import RequiredRole from "../../config/requiredRole";
 import { redisCache, systemHealth, systemMessage } from "../../api/system";
-import { Box, Divider, Grid, Paper, Typography } from "@mui/material";
+import { Box, Divider, Grid, Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Information from "./Information";
 import ServeStatus from "./ServeStatus";
 import DiskStatus from "./DiskStatus";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -20,6 +21,7 @@ const Item = styled(Paper)(({ theme }) => ({
 const SystemControl = (props: any) => {
   const {
     mainOpen,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     setMainOpen,
   }: {
     mainOpen: boolean;
@@ -34,6 +36,7 @@ const SystemControl = (props: any) => {
     windows: false,
     linux: false,
   });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [redis, setRedis] = React.useState<any>(null);
   const [sHealth, setSHealth] = React.useState<any>(null);
 
@@ -65,7 +68,7 @@ const SystemControl = (props: any) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   console.log(mainOpen);
   return (
     <RequiredRole

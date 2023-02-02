@@ -1,5 +1,5 @@
-
 const customChineseMessages = {
+  webTitle: "电子书管理系统",
   hello: "您好",
   transfer: {
     language: "语言",

@@ -1,4 +1,4 @@
-import { role, updatePasswordVo} from "../../api/entity/auth";
+import { role, updatePasswordVo } from "../../api/entity/auth";
 import { useTranslation } from "react-i18next";
 import {
   Stack,

@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { role, userStatus } from "../../api/entity/auth";
+import { role } from "../../api/entity/auth";
 import React from "react";
 import RequiredRole from "../../config/requiredRole";
 import { loginUser } from "../../api/auth";
@@ -42,6 +42,7 @@ const OnlineControl = (props: any) => {
           console.log(err);
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
   React.useEffect(() => {
     if (restart) {
@@ -57,6 +58,7 @@ const OnlineControl = (props: any) => {
         });
       setRestart(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [restart]);
   const ClickOp = (
     e: { stopPropagation: () => void },
