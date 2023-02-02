@@ -27,6 +27,7 @@ import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import PublicIcon from "@mui/icons-material/Public";
 import { role, userStatus } from "../api/entity/auth";
+import ReadControl from "../pages/read";
 export interface route {
   path: string;
   element: JSX.Element;
@@ -46,7 +47,7 @@ export const routes = (props: any): route[] => {
     {
       path: "/",
       element: <Dashboard {...props} />,
-      // redirect: "MyHome",
+      redirect: "MyHome",
       //开头不能添加/,不然得从根目录写起'/dashboard/home'
       children: [
         {
@@ -93,7 +94,7 @@ export const routes = (props: any): route[] => {
         },
         {
           path: "read",
-          element: <MyHome {...props} />,
+          element: <ReadControl {...props} />,
         },
         {
           path: "note",

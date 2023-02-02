@@ -3,7 +3,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Divider, List, Collapse } from "@mui/material";
-import { Link as Rlink } from "react-router-dom";
+import { Link as Rlink, useNavigate } from "react-router-dom";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import UserAvatar from "../../components/UserAvatar";
@@ -12,6 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { ListBarData, menus } from "../../config/config";
 import { role } from "../../api/entity/auth";
 import { health as healthApi } from "../../api/auth";
+import { get_access_token } from "../../config/token";
 export default function NestedList({
   data,
   userStatus,
@@ -29,7 +30,7 @@ export default function NestedList({
   const [selected, setSelected] = React.useState<string | null>(null);
   const submittingStatus = React.useRef(true);
   const [tipOpen, setTipOpen] = React.useState<string>("");
-
+  const nagaivate = useNavigate();
   React.useEffect(() => {
     if (submittingStatus.current) {
       submittingStatus.current = false;
@@ -40,6 +41,26 @@ export default function NestedList({
       }
     }
   }, []);
+
+  React.useEffect(() => {
+    const list_data = localStorage.getItem("list_data");
+    if (list_data && user !== null && user !== get_access_token()) {
+      console.log(data);
+      setOpen(JSON.parse(list_data).open);
+      const index: string = JSON.parse(list_data).selected;
+      setSelected(JSON.parse(list_data).index);
+      const page = index.split("-").map((k) => {
+        return parseInt(k, 10);
+      });
+      if (page.length === 2) {
+        const children = data[page[0]].children as ListBarData[];
+        nagaivate(children[page[1]].link, { replace: true });
+      } else if (page.length === 1) {
+        nagaivate(data[page[0]].link, { replace: true });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const handleListItemClick = (index: string) => {
     setSelected(index);
