@@ -127,7 +127,7 @@ function DashboardContent(props: any) {
             overflow: "auto",
           }}
         >
-          <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
+          <Container maxWidth={false} sx={{ mt: 4, mb: 4 }}>
             <Outlet />
             <Copyright sx={{ pt: 4 }} />
           </Container>
