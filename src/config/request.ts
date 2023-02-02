@@ -131,6 +131,8 @@ instance.interceptors.response.use(
         break;
       case 500:
         break;
+      case 400:
+        return Promise.reject(error.response.data);
       default:
         console.log("其他错误信息");
     }

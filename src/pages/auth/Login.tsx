@@ -80,8 +80,13 @@ export default function Login(props: any) {
         setUrl("/");
       })
       .catch((err) => {
-        enqueueSnackbar(err.msg, { variant: "error" });
         setLoading(false);
+        console.log(err);
+        if (err?.data) {
+          enqueueSnackbar(`${err.msg}:${err.data}`, { variant: "error" });
+        } else {
+          enqueueSnackbar(`${err.msg}`, { variant: "error" });
+        }
       });
   };
   const { t } = useTranslation();
