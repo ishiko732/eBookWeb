@@ -46,9 +46,13 @@ export const routes = (props: any): route[] => {
     {
       path: "/",
       element: <Dashboard {...props} />,
-      redirect: "MyHome",
+      // redirect: "MyHome",
       //开头不能添加/,不然得从根目录写起'/dashboard/home'
       children: [
+        {
+          path: "MyHome",
+          element: <MyHome {...props} />,
+        },
         {
           path: "system",
           element: <SystemControl {...props} />,
@@ -82,10 +86,6 @@ export const routes = (props: any): route[] => {
         {
           path: "home",
           element: <Home {...props} />,
-        },
-        {
-          path: "MyHome",
-          element: <MyHome {...props} />,
         },
         {
           path: "browse",
