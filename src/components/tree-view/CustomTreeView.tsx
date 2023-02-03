@@ -87,13 +87,6 @@ const CustomTreeView = ({
           defaultEndIcon={<InsertDriveFile />}
           onNodeToggle={handleToggle}
           onNodeSelect={handleNodeSelect}
-          // sx={{
-          //   ".MuiTreeItem-root": {
-          //     ".Mui-focused:not(.Mui-selected)": classes.focused,
-          //     ".Mui-selected, .Mui-focused.Mui-selected, .Mui-selected:hover":
-          //       classes.selected
-          //   }
-          // }}
         >
           {renderTreeData(data, expanded)}
         </TreeView>
@@ -104,10 +97,11 @@ const CustomTreeView = ({
 
 export default CustomTreeView;
 
+export type TreeType = "File" | "Folder" | "PDF" | "Topic" | "Note";
 export type TreeData = {
   id: string;
   name: string;
   disabledButton: boolean;
   children?: TreeData[];
-  type: "file" | "folder" | "PDF" | "Topic" | "Note";
+  type: TreeType;
 };

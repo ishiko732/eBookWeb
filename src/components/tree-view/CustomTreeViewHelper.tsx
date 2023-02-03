@@ -8,7 +8,8 @@ import {
 import React from "react";
 import CustomTreeItem from "./tree-item/CustomTreeItem";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
-import { TreeData } from "./CustomTreeView";
+import TopicIcon from "@mui/icons-material/Topic";
+import { TreeData, TreeType } from "./CustomTreeView";
 const getFileIcon = (filename: string) => {
   if (filename.toLowerCase().endsWith(".pdf")) {
     return <PictureAsPdfOutlined />;
@@ -23,15 +24,27 @@ const getFileIcon = (filename: string) => {
   }
 };
 
+const getFolderIcon = (type: TreeType) => {
+  if (type === "Folder") {
+    return <FolderOutlined />;
+  } else if (type === "PDF") {
+    return <PictureAsPdfOutlined />;
+  } else if (type === "Topic") {
+    return <TopicIcon />;
+  } else {
+    return <FolderOutlined />;
+  }
+};
+
 export const renderTreeData = (data: TreeData[], expanded: string[]) => {
   return data.map((item) => (
     <React.Fragment key={item.id}>
-      {["folder", "PDF", "Topic"].indexOf(item.type) !== -1 ? (
+      {["Folder", "PDF", "Topic"].indexOf(item.type) !== -1 ? (
         <CustomTreeItem
           nodeId={item.id}
           label={item.name}
           disabled={item.disabledButton}
-          icon={<FolderOutlined />}
+          icon={getFolderIcon(item.type)}
         >
           {expanded.indexOf(item.id) === -1 ? (
             <CustomTreeItem
