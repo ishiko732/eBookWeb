@@ -1,40 +1,12 @@
 import { Menu, MenuItem, Stack, ThemeProvider } from "@mui/material";
 import CustomTreeView, { TreeData } from "./tree-view/CustomTreeView";
-import { useState, MouseEvent, useEffect } from "react";
+import { useState, MouseEvent, useEffect, MouseEventHandler } from "react";
 import { getMuiTheme } from "./tree-view/Styles";
-import { search } from "../algorithm/findItem";
 import Search from "./search-bar/search";
-import { folder } from "../api/models";
-
-export const toTreeData = (folders: folder[]): TreeData[] => {
-  const tree: TreeData[] = [];
-  Array.isArray(folders) &&
-    // eslint-disable-next-line array-callback-return
-    folders.map((folder) => {
-      tree.push({
-        id: `Folder_${folder.id}`,
-        name: folder.name,
-        disabledButton: false,
-        type: "Folder",
-        children: folder.files.map((file) => {
-          const filenameLower = file.filename.toLowerCase();
-          const isPdf = filenameLower.endsWith(".pdf");
-          const isTopic = filenameLower.endsWith(".topic");
-          const fileType = isPdf ? "PDF" : isTopic ? "Topic" : "File";
-          return {
-            id: `${fileType}_${file.id}`,
-            name:
-              fileType === "File"
-                ? file.filename
-                : file.filename.substring(0, file.filename.lastIndexOf(".")),
-            disabledButton: false,
-            type: fileType,
-          };
-        }),
-      });
-    });
-  return tree;
-};
+import copy from "../utils/clip";
+import { DFS_path, search } from "../algorithm/graph";
+import { useTranslation } from "react-i18next";
+import InputDialog, { DialogMessage } from "./InputDialog";
 
 export default function FileTreeView({
   data,
@@ -45,47 +17,25 @@ export default function FileTreeView({
   operation: any;
   ram?: string;
 }) {
-  const [selectedNodeId, setSelectedNodeId] = useState<
-    string[] | string | null
-  >(null);
-  const [selectedText, setSelectText] = useState<string | null>(null);
+  const { t } = useTranslation();
   const [contextMenu, setContextMenu] = useState<{
     mouseX: number;
     mouseY: number;
   } | null>(null);
-
-  const handleContextMenu = (event: React.MouseEvent) => {
-    (event.target as HTMLInputElement).click();
-    event.preventDefault();
-    setContextMenu(
-      contextMenu === null
-        ? {
-            mouseX: event.clientX + 2,
-            mouseY: event.clientY - 6,
-          }
-        : // repeated contextmenu when it is already open closes it with Chrome 84 on Ubuntu
-          // Other native context menus might behave different.
-          // With this behavior we prevent contextmenu from the backdrop to re-locale existing context menus.
-          null
-    );
-  };
-  const handleClose = () => {
-    setContextMenu(null);
-  };
-
   const [message, setMessage] = useState<TreeData[]>([]);
+  const [selectedNode, setSelectNode] = useState<TreeData[] | null>(null);
   const [filter, setFilter] = useState<TreeData[] | null>(null);
   const [loads, setLoads] = useState<string[]>([]);
   const [expanded, setExpanded] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const handleNodeSelect = (
-    event: React.SyntheticEvent,
-    ids: string[] | string
-  ) => {
-    setSelectedNodeId(ids);
-    setSelectText(event.currentTarget.textContent);
-    console.log(ids + ":" + event.currentTarget.textContent);
-  };
+  const [openDialog, setOpenDialog] = useState<DialogMessage>({
+    open: false,
+    title: "",
+    context: "",
+    type: null,
+    yes: "",
+    no: "",
+  });
   useEffect(() => {
     if (searchQuery.length > 0) {
       const { filter, loaded } = search(
@@ -114,6 +64,90 @@ export default function FileTreeView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [message]);
 
+  const handleNodeSelect = (
+    event: React.SyntheticEvent,
+    ids: string[] | string
+  ) => {
+    // setSelectText(event.currentTarget.textContent);
+    // const path=DFS_path(message, ids as string, "id", "children")
+    // console.log(path)
+    setSelectNode(DFS_path(message, ids as string, "id", "children"));
+  };
+
+  const handleContextMenu = (event: React.MouseEvent) => {
+    (event.target as HTMLInputElement).click();
+    event.preventDefault();
+    setContextMenu(
+      contextMenu === null
+        ? {
+            mouseX: event.clientX + 2,
+            mouseY: event.clientY - 6,
+          }
+        : null
+    );
+  };
+  const handleClose = (
+    type: FileMenu,
+    event?: MouseEvent<HTMLLIElement, globalThis.MouseEvent>
+  ) => {
+    event?.preventDefault();
+    // console.log((event?.target as HTMLInputElement).innerText);
+    const title = (event?.target as HTMLInputElement).innerText;
+    const fileType = selectedNode?.at(-1)?.type;
+    const context = t("TreeView.Input", { type: t(`TreeView.${fileType}`) });
+    const DialogMessage: DialogMessage = {
+      open: true,
+      title: title,
+      context: context,
+      type: type,
+      yes: t("TreeView.YES", { opt: t(`TreeView.opt.${type}`) }),
+      no: t("TreeView.NO"),
+    };
+    console.log(type);
+    switch (type) {
+      case "Copy":
+        copy(selectedNode?.at(-1)?.name || "");
+        break;
+      case "Add":
+      case "Delete":
+      case "Move":
+        setOpenDialog(DialogMessage);
+        break;
+      case "Rename":
+        setOpenDialog({
+          ...DialogMessage,
+          preValue: selectedNode?.at(-1)?.name,
+        });
+        break;
+      case "Upload":
+        setOpenDialog(DialogMessage);
+        break;
+      default:
+        break;
+    }
+  };
+  window.addEventListener("click", () => {
+    if (contextMenu) {
+      setContextMenu(null);
+    }
+  });
+
+  const handleDialogClose = (
+    event: React.SyntheticEvent<unknown>,
+    reason?: string,
+    dialogMessage?: DialogMessage,
+    text?: string
+  ) => {
+    if (reason !== "backdropClick") {
+      console.log(dialogMessage);
+      console.log(selectedNode);
+      console.log(text);
+      setOpenDialog((pre) => {
+        return { ...pre, open: false };
+      });
+    }
+  };
+
   return (
     <Stack spacing={2}>
       <Search value={searchQuery} setValue={setSearchQuery} />
@@ -131,7 +165,7 @@ export default function FileTreeView({
           />
           <Menu
             open={contextMenu !== null}
-            onClose={handleClose}
+            onClose={() => handleClose}
             anchorReference="anchorPosition"
             anchorPosition={
               contextMenu !== null
@@ -139,13 +173,71 @@ export default function FileTreeView({
                 : undefined
             }
           >
-            <MenuItem onClick={handleClose}>Copy Ctrl+C</MenuItem>
-            <MenuItem onClick={handleClose}>Delete {selectedText}</MenuItem>
-            <MenuItem onClick={handleClose}>Move</MenuItem>
-            <MenuItem onClick={handleClose}>Email</MenuItem>
+            <MenuItem
+              onClick={(event) => {
+                handleClose("Copy", event);
+              }}
+            >
+              {t("TreeView.Copy", { name: selectedNode?.at(-1)?.name })}
+            </MenuItem>
+            <MenuItem
+              onClick={(event) => {
+                handleClose("Upload", event);
+              }}
+            >
+              {t("TreeView.Upload", { type: t(`TreeView.File`) })}
+            </MenuItem>
+            {selectedNode?.at(-1)?.type === "File" ? null : (
+              <MenuItem
+                onClick={(event) => {
+                  handleClose("Add", event);
+                }}
+              >
+                {t("TreeView.Add", {
+                  type: t(`TreeView.${selectedNode?.at(-1)?.type}`),
+                })}
+              </MenuItem>
+            )}
+            <MenuItem
+              onClick={(event) => {
+                handleClose("Rename", event);
+              }}
+            >
+              {t("TreeView.Rename", {
+                type: t(`TreeView.${selectedNode?.at(-1)?.type}`),
+              })}
+            </MenuItem>
+            <MenuItem
+              onClick={(event) => {
+                handleClose("Move", event);
+              }}
+            >
+              {t("TreeView.Move", {
+                type: t(`TreeView.${selectedNode?.at(-1)?.type}`),
+              })}
+            </MenuItem>
+            <MenuItem
+              onClick={(event) => {
+                handleClose("Delete", event);
+              }}
+            >
+              {t("TreeView.Delete", {
+                type: t(`TreeView.${selectedNode?.at(-1)?.type}`),
+              })}
+            </MenuItem>
           </Menu>
         </ThemeProvider>
       </div>
+      <InputDialog dialogMessage={openDialog} handleClose={handleDialogClose} />
     </Stack>
   );
 }
+
+export type FileMenu =
+  | "Copy"
+  | "Add"
+  | "Delete"
+  | "Move"
+  | "Rename"
+  | "Upload"
+  | null;

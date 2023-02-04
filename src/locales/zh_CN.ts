@@ -146,6 +146,29 @@ const customChineseMessages = {
       password_check: "新密码与再次输入密码不一致",
     },
   },
+  TreeView: {
+    Folder: "文件夹",
+    File: "文件",
+    PDF: "电子书",
+    Topic: "主题",
+    Note: "笔记",
+    Copy: "复制名称:{{name}}",
+    Add: "创建{{type}}",
+    Delete: "删除{{type}}",
+    Move: "移动{{type}}",
+    Rename: "命名{{type}}",
+    Upload: "上传{{type}}",
+    Input: "请输入{{type}}名称",
+    YES: "确定{{opt}}",
+    NO: "取消",
+    opt: {
+      Add: "创建",
+      Delete: "删除",
+      Move: "移动",
+      Rename: "重命名",
+      Upload: "上传",
+    },
+  },
 };
 
 export default customChineseMessages;

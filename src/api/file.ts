@@ -42,6 +42,10 @@ export const deleteFolder = (folderId: number) =>
 export const updateFolder = (folderId: number, folderName: string) =>
   request.put(`folder/update?id=${folderId}&name=${folderName}`);
 
+// 移动文件夹
+export const moveFolder = (folderId: number, parentId: number) =>
+  request.put(`folder/update?id=${folderId}&parent_id=${parentId}`);
+
 // 上传文件
 export const uploadFile = (
   file: File,

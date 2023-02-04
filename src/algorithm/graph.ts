@@ -109,3 +109,43 @@ export function search(
     }),
   };
 }
+
+export function DFS_path(
+  nodes: any[],
+  findValue: string,
+  attribute: string,
+  nextAttribute: string
+) {
+  const collected: any[] = [];
+  let isMathc = false;
+  nodes.forEach((node, index) => {
+    isMathc ||= _DFS_path(node, findValue, attribute, nextAttribute, collected);
+  });
+  return collected;
+}
+
+function _DFS_path(
+  node: any,
+  findValue: string,
+  attribute: string,
+  nextAttribute: string,
+  collected: any[]
+) {
+  let isMathc = node[attribute] && node[attribute] === findValue;
+  if (node[nextAttribute]?.length > 0) {
+    node[nextAttribute].forEach((child: any, index: number) => {
+      isMathc ||= _DFS_path(
+        child,
+        findValue,
+        attribute,
+        nextAttribute,
+        collected
+      );
+    });
+  }
+  if (isMathc) {
+    collected.unshift(node);
+    // console.log(node.id+':'+node.name)
+  }
+  return isMathc;
+}

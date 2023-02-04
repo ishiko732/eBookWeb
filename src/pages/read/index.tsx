@@ -21,10 +21,11 @@ import Title from "../../components/Title";
 import request from "../../config/request";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useSnackbar } from "notistack";
-import FileTreeView, { toTreeData } from "../../components/FileTreeView";
+import FileTreeView from "../../components/FileTreeView";
 import { getChildByParentId, getTopFolder } from "../../api/file";
 import { folder } from "../../api/models";
 import { TreeData, TreeType } from "../../components/tree-view/CustomTreeView";
+import { toTreeData } from "../../algorithm/tree";
 
 async function operation(type_id: string) {
   let ret: { status: boolean; data: any } = { status: false, data: null };
@@ -38,13 +39,6 @@ async function operation(type_id: string) {
         ret = { status: false, data: err };
       });
   }
-  await getChildByParentId(id)
-    .then((res) => {
-      ret = { status: true, data: toTreeData(res.data as folder[]) };
-    })
-    .catch((err) => {
-      ret = { status: false, data: err };
-    });
   return ret;
 }
 

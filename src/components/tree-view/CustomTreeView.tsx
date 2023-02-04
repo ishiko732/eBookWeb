@@ -6,7 +6,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { renderTreeData } from "./CustomTreeViewHelper";
 import { useEffect, useState } from "react";
-import { findItem } from "../../algorithm/findItem";
+import { findItem } from "../../algorithm/graph";
 
 const classes = {
   focused: {
