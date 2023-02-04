@@ -1,7 +1,6 @@
 import { ThemeProvider } from "@emotion/react";
 import { InsertDriveFile } from "@mui/icons-material";
 import { TreeView } from "@mui/lab";
-import { Box } from "@mui/material";
 import { getMuiTheme } from "./Styles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -80,7 +79,7 @@ const CustomTreeView = ({
       }
       setLoads((Ids) => {
         // console.log([...Ids, nodeId]);
-        return [nodeId,...Ids];
+        return [nodeId, ...Ids];
       });
     }
   };
@@ -90,18 +89,18 @@ const CustomTreeView = ({
 
   return (
     // <Box mt={2} ml={2} bgcolor="white" width="300px">
-      <ThemeProvider theme={getMuiTheme()}>
-        <TreeView
-          defaultCollapseIcon={<ExpandMoreIcon />}
-          defaultExpandIcon={<ChevronRightIcon />}
-          defaultEndIcon={<InsertDriveFile />}
-          expanded={expanded}
-          onNodeToggle={handleToggle}
-          onNodeSelect={handleNodeSelect}
-        >
-          {renderTreeData(data, loads, isSearch)}
-        </TreeView>
-      </ThemeProvider>
+    <ThemeProvider theme={getMuiTheme()}>
+      <TreeView
+        defaultCollapseIcon={<ExpandMoreIcon />}
+        defaultExpandIcon={<ChevronRightIcon />}
+        defaultEndIcon={<InsertDriveFile />}
+        expanded={expanded}
+        onNodeToggle={handleToggle}
+        onNodeSelect={handleNodeSelect}
+      >
+        {renderTreeData(data, loads, isSearch)}
+      </TreeView>
+    </ThemeProvider>
     // </Box>
   );
 };
