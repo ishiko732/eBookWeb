@@ -6,7 +6,7 @@ import { getMuiTheme } from "./Styles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { renderTreeData } from "./CustomTreeViewHelper";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { findItem } from "../../algorithm/findItem";
 
 const classes = {
@@ -46,18 +46,24 @@ const CustomTreeView = ({
   setData,
   operation,
   loads,
+  setLoads,
+  expands,
   handleNodeSelect,
+  isSearch,
 }: {
   data: TreeData[];
   setData: React.Dispatch<React.SetStateAction<TreeData[]>>;
   loads: string[];
+  setLoads: React.Dispatch<React.SetStateAction<string[]>>;
+  expands: string[];
   operation: any;
   handleNodeSelect: (
     event: React.SyntheticEvent,
     ids: string[] | string
   ) => void;
+  isSearch: boolean;
 }) => {
-  const [expanded, setExpanded] = useState<string[]>(loads);
+  const [expanded, setExpanded] = useState<string[]>([]);
   const DatatoTree = (parentId: string, childNode: TreeData[]) => {
     setData((dates) => {
       return toTree(dates, parentId, childNode);
@@ -65,18 +71,22 @@ const CustomTreeView = ({
   };
   const handleToggle = async (event: React.SyntheticEvent, nodes: string[]) => {
     event.preventDefault();
-    const [nodeId] = nodes.filter((x) => !expanded.includes(x));
+    setExpanded(nodes);
+    const [nodeId] = nodes.filter((x) => !loads.includes(x));
     if (nodeId) {
       const { status, data } = await operation(nodeId);
       if (status) {
         DatatoTree(nodeId, data);
-        setExpanded((Ids) => {
-          console.log([...Ids, nodeId]);
-          return [...Ids, nodeId];
-        });
       }
+      setLoads((Ids) => {
+        // console.log([...Ids, nodeId]);
+        return [nodeId,...Ids];
+      });
     }
   };
+  useEffect(() => {
+    setExpanded(expands);
+  }, [expands]);
 
   return (
     <Box mt={2} ml={2} bgcolor="white" width="300px">
@@ -85,10 +95,11 @@ const CustomTreeView = ({
           defaultCollapseIcon={<ExpandMoreIcon />}
           defaultExpandIcon={<ChevronRightIcon />}
           defaultEndIcon={<InsertDriveFile />}
+          expanded={expanded}
           onNodeToggle={handleToggle}
           onNodeSelect={handleNodeSelect}
         >
-          {renderTreeData(data, expanded)}
+          {renderTreeData(data, loads, isSearch)}
         </TreeView>
       </ThemeProvider>
     </Box>

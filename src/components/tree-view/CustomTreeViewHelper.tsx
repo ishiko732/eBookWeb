@@ -36,7 +36,11 @@ const getFolderIcon = (type: TreeType) => {
   }
 };
 
-export const renderTreeData = (data: TreeData[], expanded: string[]) => {
+export const renderTreeData = (
+  data: TreeData[],
+  expanded: string[],
+  isSearch: boolean
+) => {
   return data.map((item) => (
     <React.Fragment key={item.id}>
       {["Folder", "PDF", "Topic"].indexOf(item.type) !== -1 ? (
@@ -46,7 +50,7 @@ export const renderTreeData = (data: TreeData[], expanded: string[]) => {
           disabled={item.disabledButton}
           icon={getFolderIcon(item.type)}
         >
-          {expanded.indexOf(item.id) === -1 ? (
+          {!isSearch && expanded.indexOf(item.id) === -1 ? (
             <CustomTreeItem
               nodeId={`loading.${item.id}`}
               label={"loading"}
@@ -56,7 +60,7 @@ export const renderTreeData = (data: TreeData[], expanded: string[]) => {
           ) : null}
 
           {item.children?.length ? (
-            renderTreeData(item.children, expanded)
+            renderTreeData(item.children, expanded, isSearch)
           ) : (
             <div key="stub" />
           )}

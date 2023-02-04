@@ -76,7 +76,7 @@ export function DFS(
     node[nextAttribute].forEach((child: any, index: number) => {
       // console.log("遍历DFS:"+child.name+':'+index)
       if (!visit.children[index].visited) {
-        const Mathing=DFS(
+        const Mathing = DFS(
           child,
           findValue,
           attribute,
@@ -84,7 +84,7 @@ export function DFS(
           visit.children[index],
           collected
         );
-        isMathc=isMathc||Mathing
+        isMathc = isMathc || Mathing;
         // console.log("DFS结束:"+child.name+':'+index+" find:"+Mathing)
       }
     });
