@@ -31,7 +31,7 @@ const toTree = (
     if (parent.children) {
       // eslint-disable-next-line array-callback-return
       childNode.map((node) => {
-        parent.children?.unshift(node);
+        parent.children?.indexOf(node) === -1 && parent.children?.unshift(node);
       });
     } else {
       parent.children = childNode;

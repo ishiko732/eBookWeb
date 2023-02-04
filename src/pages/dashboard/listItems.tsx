@@ -45,7 +45,7 @@ export default function NestedList({
   React.useEffect(() => {
     const list_data = localStorage.getItem("list_data");
     if (list_data && user !== null && user !== get_access_token()) {
-      console.log(data);
+      // console.log(data);
       setOpen(JSON.parse(list_data).open);
       const index: string = JSON.parse(list_data).selected;
       setSelected(JSON.parse(list_data).index);
