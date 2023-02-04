@@ -60,20 +60,21 @@ const ReadControl = (props: any) => {
   React.useEffect(() => {
     if (status) {
       const json = localStorage.getItem("read_tree");
-      if (json && JSON.parse(json).length === 3) {
-        setMessage(JSON.parse(json));
-      } else {
-        getTopFolder(user.id)
-          .then((res) => {
-            console.log(res.data);
-            setMessage(toTreeData(res.data));
-            enqueueSnackbar(t("api.success"), { variant: "success" });
-          })
-          .catch((err) => {
-            enqueueSnackbar(t("api.error"), { variant: "error" });
-            console.log(err);
-          });
-      }
+      getTopFolder(user.id)
+        .then((res) => {
+          console.log(res.data);
+          const data = toTreeData(res.data);
+          if (json && JSON.parse(json).length === data.length) {
+            setMessage(JSON.parse(json));
+          } else {
+            setMessage(data);
+          }
+          enqueueSnackbar(t("api.success"), { variant: "success" });
+        })
+        .catch((err) => {
+          enqueueSnackbar(t("api.error"), { variant: "error" });
+          console.log(err);
+        });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
