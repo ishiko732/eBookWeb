@@ -89,7 +89,7 @@ const CustomTreeView = ({
   }, [expands]);
 
   return (
-    <Box mt={2} ml={2} bgcolor="white" width="300px">
+    // <Box mt={2} ml={2} bgcolor="white" width="300px">
       <ThemeProvider theme={getMuiTheme()}>
         <TreeView
           defaultCollapseIcon={<ExpandMoreIcon />}
@@ -102,7 +102,7 @@ const CustomTreeView = ({
           {renderTreeData(data, loads, isSearch)}
         </TreeView>
       </ThemeProvider>
-    </Box>
+    // </Box>
   );
 };
 
