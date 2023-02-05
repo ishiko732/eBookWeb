@@ -117,10 +117,12 @@ export function DFS_path(
   nextAttribute: string
 ) {
   const collected: any[] = [];
-  let isMathc = false;
-  nodes.forEach((node, index) => {
-    isMathc ||= _DFS_path(node, findValue, attribute, nextAttribute, collected);
-  });
+  for (let index = 0; index < nodes.length; index++) {
+    const node = nodes[index];
+    if (_DFS_path(node, findValue, attribute, nextAttribute, collected)) {
+      break;
+    }
+  }
   return collected;
 }
 
@@ -133,7 +135,8 @@ function _DFS_path(
 ) {
   let isMathc = node[attribute] && node[attribute] === findValue;
   if (node[nextAttribute]?.length > 0) {
-    node[nextAttribute].forEach((child: any, index: number) => {
+    for (let index = 0; index < node[nextAttribute].length; index++) {
+      const child = node[nextAttribute][index];
       isMathc ||= _DFS_path(
         child,
         findValue,
@@ -141,11 +144,50 @@ function _DFS_path(
         nextAttribute,
         collected
       );
-    });
+      if (isMathc) {
+        break;
+      }
+    }
   }
   if (isMathc) {
     collected.unshift(node);
     // console.log(node.id+':'+node.name)
   }
   return isMathc;
+}
+
+export function DFS_Delete(
+  nodes: any[],
+  attribute: string,
+  nextAttribute: string,
+  path: any[],
+  path_index?: number
+): boolean {
+  let ret = false;
+  const cnt = path_index || 0;
+  for (let index = 0; index < nodes.length; index++) {
+    const node = nodes[index];
+    console.log(
+      node.name + " " + path[cnt].name + " (" + cnt + ")length:" + path.length
+    );
+    if (node[attribute] === path[cnt][attribute]) {
+      if (path.length - 1 === cnt) {
+        delete nodes[index];
+        return true;
+      } else if (node[nextAttribute]?.length > 0) {
+        ret = DFS_Delete(
+          node[nextAttribute],
+          attribute,
+          nextAttribute,
+          path,
+          cnt + 1
+        );
+        console.log(ret);
+        if (ret) {
+          break;
+        }
+      }
+    }
+  }
+  return ret;
 }
