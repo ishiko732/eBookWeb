@@ -167,12 +167,13 @@ export function DFS_Delete(
   const cnt = path_index || 0;
   for (let index = 0; index < nodes.length; index++) {
     const node = nodes[index];
-    console.log(
-      node.name + " " + path[cnt].name + " (" + cnt + ")length:" + path.length
-    );
+    if (!node) {
+      return false;
+    }
     if (node[attribute] === path[cnt][attribute]) {
       if (path.length - 1 === cnt) {
-        delete nodes[index];
+        nodes.splice(index, index + 1);
+        // delete nodes[index];
         return true;
       } else if (node[nextAttribute]?.length > 0) {
         ret = DFS_Delete(
