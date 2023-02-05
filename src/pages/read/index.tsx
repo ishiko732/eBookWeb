@@ -23,9 +23,9 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useSnackbar } from "notistack";
 import FileTreeView from "../../components/file-tree/FileTreeView";
 import { getChildByParentId, getTopFolder } from "../../api/file";
-import { folder } from "../../api/models";
+import { folder, User } from "../../api/models";
 import { TreeData, TreeType } from "../../components/tree-view/CustomTreeView";
-import { toTreeData, treeUnique } from "../../algorithm/tree";
+import { filesToTreeData, toTreeData, treeUnique } from "../../algorithm/tree";
 
 async function operation(type_id: string) {
   let ret: { status: boolean; data: any } = { status: false, data: null };
@@ -47,19 +47,30 @@ const ReadControl = (props: any) => {
   const [status, setStatus] = React.useState(false);
   const [message, setMessage] = React.useState<TreeData[]>([]);
   const { t } = useTranslation();
-  const user = props.user;
-
-  //   const classes = useStyles();
+  const user: User = props.user;
 
   React.useEffect(() => {
     if (status) {
       const json = localStorage.getItem("read_tree");
       getTopFolder(user.id)
         .then((res) => {
-          console.log(res.data);
-          const data = toTreeData(res.data);
-          if (json && JSON.parse(json).length === data.length) {
-            setMessage(JSON.parse(json));
+          // console.log(res.data);
+          const data: TreeData[] = toTreeData(res.data);
+          if (json) {
+            const obj: TreeData[] = JSON.parse(json);
+            if (obj.length === data.length) {
+              (res.data as folder[]).forEach((folder, index) => {
+                if (folder.files) {
+                  const filesData = filesToTreeData(folder.files);
+                  if (obj[index].children) {
+                    obj[index].children?.push(...filesData);
+                  } else {
+                    obj[index].children = filesData;
+                  }
+                }
+                setMessage(obj);
+              });
+            }
           } else {
             setMessage(data);
           }
@@ -93,6 +104,7 @@ const ReadControl = (props: any) => {
                 data={message}
                 operation={operation}
                 ram="read_tree"
+                loginUser={user}
               />
             </Paper>
           </Box>

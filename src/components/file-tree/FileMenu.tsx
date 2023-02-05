@@ -60,7 +60,7 @@ export const FileMenu = ({
           type: t(`TreeView.${node?.at(-1)?.type}`),
         })}
       </MenuItem>
-      <MenuItem
+      {/* <MenuItem
         onClick={(event) => {
           handleClose("Move", event);
         }}
@@ -68,7 +68,7 @@ export const FileMenu = ({
         {t("TreeView.Move", {
           type: t(`TreeView.${node?.at(-1)?.type}`),
         })}
-      </MenuItem>
+      </MenuItem> */}
       <MenuItem
         onClick={(event) => {
           handleClose("Delete", event);

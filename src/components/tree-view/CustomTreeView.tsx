@@ -6,8 +6,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { renderTreeData } from "./CustomTreeViewHelper";
 import { useEffect, useState } from "react";
-import { findItem } from "../../algorithm/graph";
-
+import { toTree } from "../../algorithm/tree";
 const classes = {
   focused: {
     bgcolor: "transparent",
@@ -19,31 +18,6 @@ const classes = {
     bgcolor: getMuiTheme().palette.primary.main,
     color: "white",
   },
-};
-
-const toTree = (
-  dates: TreeData[],
-  parentId: string,
-  childNode: TreeData[]
-): any => {
-  const parent: TreeData | null = findItem(dates, parentId, "id", "children");
-  if (parent) {
-    if (parent.children) {
-      // eslint-disable-next-line array-callback-return
-      childNode.map((node) => {
-        let add = true;
-        parent.children?.forEach((item) => {
-          if (item.id === node.id) {
-            add = false;
-          }
-        });
-        add && parent.children?.unshift(node);
-      });
-    } else {
-      parent.children = childNode;
-    }
-  }
-  return dates;
 };
 
 const CustomTreeView = ({

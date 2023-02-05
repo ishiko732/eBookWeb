@@ -128,6 +128,8 @@ const customChineseMessages = {
   api: {
     success: "读取成功",
     error: "读取失败",
+    opt_success: "操作成功",
+    opt_error: "操作失败:{{data}}",
   },
   management: {
     user: {
@@ -159,6 +161,7 @@ const customChineseMessages = {
     Rename: "命名{{type}}",
     Upload: "上传{{type}}",
     Input: "请输入{{type}}名称",
+    Tip: "请谨慎操作,一旦{{type}}就无法恢复!",
     YES: "确定{{opt}}",
     NO: "取消",
     opt: {

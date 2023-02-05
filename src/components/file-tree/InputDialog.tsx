@@ -41,30 +41,47 @@ const InputDialog = ({
   const { t } = useTranslation();
   const [value, setValue] = React.useState<string>("");
 
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter" && value !== "") {
+      handleClose(e, "escapeKeyDown", dialogMessage, value);
+    }
+  };
+
   React.useEffect(() => {
     setValue(dialogMessage.preValue || "");
   }, [dialogMessage]);
   return (
     <Dialog
-      disableEscapeKeyDown
+      // disableEscapeKeyDown
       open={dialogMessage.open}
       onClose={handleClose}
       TransitionComponent={Transition}
+      onKeyUp={handleKeyUp}
     >
       <DialogTitle>{dialogMessage.title}</DialogTitle>
       <DialogContent>
-        <Stack component="form" spacing={2}>
-          <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
-            <InputLabel htmlFor="input_value">
-              {dialogMessage.context}
-            </InputLabel>
-            <Input
-              id="input_value"
-              type={"text"}
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-            />
-          </FormControl>
+        <Stack spacing={2}>
+          {dialogMessage.type === "Delete" ? (
+            <Typography>
+              {t("TreeView.Tip", { type: t(`TreeView.opt.Delete`) })}
+            </Typography>
+          ) : (
+            <FormControl
+              sx={{ m: 1, width: "25ch" }}
+              variant="outlined"
+              onKeyUp={handleKeyUp}
+            >
+              <InputLabel htmlFor="input_value">
+                {dialogMessage.context}
+              </InputLabel>
+              <Input
+                id="input_value"
+                type={"text"}
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+              />
+            </FormControl>
+          )}
         </Stack>
       </DialogContent>
       <DialogActions>
@@ -82,7 +99,7 @@ const InputDialog = ({
             handleClose(e, "escapeKeyDown", dialogMessage, value);
           }}
           variant="contained"
-          color="success"
+          color={dialogMessage.type === "Delete" ? "error" : "success"}
         >
           {dialogMessage.yes}
         </Button>

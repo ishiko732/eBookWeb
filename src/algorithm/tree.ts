@@ -1,4 +1,4 @@
-import { folder } from "../api/models";
+import { file, folder } from "../api/models";
 import { TreeData } from "../components/tree-view/CustomTreeView";
 import { findItem } from "./graph";
 
@@ -12,29 +12,28 @@ export const toTreeData = (folders: folder[]): TreeData[] => {
         name: folder.name,
         disabledButton: false,
         type: "Folder",
-        children: folder.files
-          ? folder.files.map((file) => {
-              const filenameLower = file.filename.toLowerCase();
-              const isPdf = filenameLower.endsWith(".pdf");
-              const isTopic = filenameLower.endsWith(".topic");
-              const fileType = isPdf ? "PDF" : isTopic ? "Topic" : "File";
-              return {
-                id: `${fileType}_${file.id}`,
-                name:
-                  fileType === "File"
-                    ? file.filename
-                    : file.filename.substring(
-                        0,
-                        file.filename.lastIndexOf(".")
-                      ),
-                disabledButton: false,
-                type: fileType,
-              };
-            })
-          : [],
+        children: folder.files ? filesToTreeData(folder.files) : [],
       });
     });
   return tree;
+};
+
+export const filesToTreeData = (files: file[]): TreeData[] => {
+  return files?.map((file) => {
+    const filenameLower = file.filename.toLowerCase();
+    const isPdf = filenameLower.endsWith(".pdf");
+    const isTopic = filenameLower.endsWith(".topic");
+    const fileType = isPdf ? "PDF" : isTopic ? "Topic" : "File";
+    return {
+      id: `${fileType}_${file.id}`,
+      name:
+        fileType === "File"
+          ? file.filename
+          : file.filename.substring(0, file.filename.lastIndexOf(".")),
+      disabledButton: false,
+      type: fileType,
+    };
+  });
 };
 
 export const treeUnique = (trees: TreeData[]): TreeData[] => {
