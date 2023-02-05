@@ -95,7 +95,7 @@ export default function FileTreeView({
   };
 
   const handleContextMenu = (event: React.MouseEvent) => {
-    (event.target as HTMLInputElement).click();
+    event.target instanceof HTMLElement &&(event.target as HTMLElement).click()
     event.preventDefault();
     setContextMenu(
       contextMenu === null
