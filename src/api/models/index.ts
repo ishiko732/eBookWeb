@@ -22,7 +22,7 @@ export interface OnlineUsers {
 
 export interface folder {
   id: number;
-  uid: number;
+  uid?: number;
   name: string;
   parentId: number | null;
   files: file[];
