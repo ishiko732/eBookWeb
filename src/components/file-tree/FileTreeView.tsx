@@ -1,13 +1,14 @@
 import { Menu, MenuItem, Stack, ThemeProvider } from "@mui/material";
-import CustomTreeView, { TreeData } from "./tree-view/CustomTreeView";
+import CustomTreeView, { TreeData } from "../tree-view/CustomTreeView";
 import { useState, MouseEvent, useEffect, MouseEventHandler } from "react";
-import { getMuiTheme } from "./tree-view/Styles";
-import Search from "./search-bar/search";
-import copy from "../utils/clip";
-import { DFS_path, search } from "../algorithm/graph";
+import { getMuiTheme } from "../tree-view/Styles";
+import Search from "../search-bar/search";
+import copy from "../../utils/clip";
+import { DFS_path, search } from "../../algorithm/graph";
 import { useTranslation } from "react-i18next";
 import InputDialog, { DialogMessage } from "./InputDialog";
-import { treeUnique } from "../algorithm/tree";
+import { treeUnique } from "../../algorithm/tree";
+import { FileMenu, FileMenuType } from "./FileMenu";
 
 export default function FileTreeView({
   data,
@@ -73,6 +74,7 @@ export default function FileTreeView({
     // const path=DFS_path(message, ids as string, "id", "children")
     // console.log(path)
     setSelectNode(DFS_path(message, ids as string, "id", "children"));
+    console.log(DFS_path(message, ids as string, "id", "children"));
   };
 
   const handleContextMenu = (event: React.MouseEvent) => {
@@ -88,7 +90,7 @@ export default function FileTreeView({
     );
   };
   const handleClose = (
-    type: FileMenu,
+    type: FileMenuType,
     event?: MouseEvent<HTMLLIElement, globalThis.MouseEvent>
   ) => {
     event?.preventDefault();
@@ -164,81 +166,19 @@ export default function FileTreeView({
             handleNodeSelect={handleNodeSelect}
             isSearch={searchQuery.length > 0}
           />
-          <Menu
+          <FileMenu
             open={contextMenu !== null}
-            onClose={() => handleClose}
-            anchorReference="anchorPosition"
-            anchorPosition={
+            position={
               contextMenu !== null
                 ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
                 : undefined
             }
-          >
-            <MenuItem
-              onClick={(event) => {
-                handleClose("Copy", event);
-              }}
-            >
-              {t("TreeView.Copy", { name: selectedNode?.at(-1)?.name })}
-            </MenuItem>
-            <MenuItem
-              onClick={(event) => {
-                handleClose("Upload", event);
-              }}
-            >
-              {t("TreeView.Upload", { type: t(`TreeView.File`) })}
-            </MenuItem>
-            {selectedNode?.at(-1)?.type === "File" ? null : (
-              <MenuItem
-                onClick={(event) => {
-                  handleClose("Add", event);
-                }}
-              >
-                {t("TreeView.Add", {
-                  type: t(`TreeView.${selectedNode?.at(-1)?.type}`),
-                })}
-              </MenuItem>
-            )}
-            <MenuItem
-              onClick={(event) => {
-                handleClose("Rename", event);
-              }}
-            >
-              {t("TreeView.Rename", {
-                type: t(`TreeView.${selectedNode?.at(-1)?.type}`),
-              })}
-            </MenuItem>
-            <MenuItem
-              onClick={(event) => {
-                handleClose("Move", event);
-              }}
-            >
-              {t("TreeView.Move", {
-                type: t(`TreeView.${selectedNode?.at(-1)?.type}`),
-              })}
-            </MenuItem>
-            <MenuItem
-              onClick={(event) => {
-                handleClose("Delete", event);
-              }}
-            >
-              {t("TreeView.Delete", {
-                type: t(`TreeView.${selectedNode?.at(-1)?.type}`),
-              })}
-            </MenuItem>
-          </Menu>
+            handleClose={handleClose}
+            selectedNode={selectedNode}
+          />
         </ThemeProvider>
       </div>
       <InputDialog dialogMessage={openDialog} handleClose={handleDialogClose} />
     </Stack>
   );
 }
-
-export type FileMenu =
-  | "Copy"
-  | "Add"
-  | "Delete"
-  | "Move"
-  | "Rename"
-  | "Upload"
-  | null;

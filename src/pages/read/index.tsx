@@ -21,7 +21,7 @@ import Title from "../../components/Title";
 import request from "../../config/request";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useSnackbar } from "notistack";
-import FileTreeView from "../../components/FileTreeView";
+import FileTreeView from "../../components/file-tree/FileTreeView";
 import { getChildByParentId, getTopFolder } from "../../api/file";
 import { folder } from "../../api/models";
 import { TreeData, TreeType } from "../../components/tree-view/CustomTreeView";

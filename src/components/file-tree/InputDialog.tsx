@@ -14,14 +14,14 @@ import {
   InputAdornment,
 } from "@mui/material";
 import * as React from "react";
-import { Transition } from "./AlertDialog";
-import { FileMenu } from "./FileTreeView";
+import { Transition } from "../AlertDialog";
+import { FileMenuType } from "./FileMenu";
 
 export interface DialogMessage {
   open: boolean;
   title: string;
   context: string;
-  type: FileMenu;
+  type: FileMenuType;
   yes: string;
   no: string;
   preValue?: string;
