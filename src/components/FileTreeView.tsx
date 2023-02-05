@@ -7,6 +7,7 @@ import copy from "../utils/clip";
 import { DFS_path, search } from "../algorithm/graph";
 import { useTranslation } from "react-i18next";
 import InputDialog, { DialogMessage } from "./InputDialog";
+import { treeUnique } from "../algorithm/tree";
 
 export default function FileTreeView({
   data,
@@ -54,7 +55,7 @@ export default function FileTreeView({
   }, [searchQuery]);
 
   useEffect(() => {
-    setMessage(data);
+    setMessage(treeUnique(data));
   }, [data]);
 
   useEffect(() => {

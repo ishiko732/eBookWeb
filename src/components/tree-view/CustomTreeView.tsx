@@ -31,7 +31,13 @@ const toTree = (
     if (parent.children) {
       // eslint-disable-next-line array-callback-return
       childNode.map((node) => {
-        parent.children?.indexOf(node) === -1 && parent.children?.unshift(node);
+        let add = true;
+        parent.children?.forEach((item) => {
+          if (item.id === node.id) {
+            add = false;
+          }
+        });
+        add && parent.children?.unshift(node);
       });
     } else {
       parent.children = childNode;

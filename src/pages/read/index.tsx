@@ -25,7 +25,7 @@ import FileTreeView from "../../components/FileTreeView";
 import { getChildByParentId, getTopFolder } from "../../api/file";
 import { folder } from "../../api/models";
 import { TreeData, TreeType } from "../../components/tree-view/CustomTreeView";
-import { toTreeData } from "../../algorithm/tree";
+import { toTreeData, treeUnique } from "../../algorithm/tree";
 
 async function operation(type_id: string) {
   let ret: { status: boolean; data: any } = { status: false, data: null };
