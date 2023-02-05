@@ -182,7 +182,6 @@ export function DFS_Delete(
           path,
           cnt + 1
         );
-        console.log(ret);
         if (ret) {
           break;
         }
