@@ -194,6 +194,7 @@ export function DFS_Delete(
 
 export function DFS_Rename(
   nodes: any[],
+  uniqueId: string,
   attribute: string,
   nextAttribute: string,
   newValue: string,
@@ -207,7 +208,7 @@ export function DFS_Rename(
     if (!node) {
       return false;
     }
-    if (node[attribute] === path[cnt][attribute]) {
+    if (node[uniqueId] === path[cnt][uniqueId]) {
       if (path.length - 1 === cnt) {
         nodes[index][attribute] = newValue;
         // delete nodes[index];
@@ -215,6 +216,7 @@ export function DFS_Rename(
       } else if (node[nextAttribute]?.length > 0) {
         ret = DFS_Rename(
           node[nextAttribute],
+          uniqueId,
           attribute,
           nextAttribute,
           newValue,
