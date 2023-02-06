@@ -61,7 +61,13 @@ export const toTree = (
   if (parent) {
     if (parent.children && parent.children.length > 0) {
       // eslint-disable-next-line array-callback-return
-      parent.children.unshift(...childNode);
+      childNode.forEach((node) => {
+        if (node.type === "Folder") {
+          parent?.children?.unshift(node);
+        } else {
+          parent?.children?.push(node);
+        }
+      });
     } else {
       parent.children = childNode;
     }

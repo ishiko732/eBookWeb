@@ -49,17 +49,19 @@ export const moveFolder = (folderId: number, parentId: number) =>
 // 上传文件
 export const uploadFile = (
   file: File,
+  parent_id: number,
   onUpload?: (progressEvent: AxiosProgressEvent) => void
 ) =>
   request({
     method: "post",
-    url: "file/upload",
+    url: `file/upload/${parent_id}`,
     data: file,
     headers: { "Content-Type": "multipart/form-data" },
     transformRequest: [
       (data) => {
         let formData = new FormData();
-        formData.append("files", data);
+        formData.append("file", data);
+        return formData;
       },
     ],
     timeout: 0,

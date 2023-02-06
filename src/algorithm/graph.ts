@@ -191,3 +191,41 @@ export function DFS_Delete(
   }
   return ret;
 }
+
+export function DFS_Rename(
+  nodes: any[],
+  attribute: string,
+  nextAttribute: string,
+  newValue: string,
+  path: any[],
+  path_index?: number
+): boolean {
+  let ret = false;
+  const cnt = path_index || 0;
+  for (let index = 0; index < nodes.length; index++) {
+    const node = nodes[index];
+    if (!node) {
+      return false;
+    }
+    if (node[attribute] === path[cnt][attribute]) {
+      if (path.length - 1 === cnt) {
+        nodes[index][attribute] = newValue;
+        // delete nodes[index];
+        return true;
+      } else if (node[nextAttribute]?.length > 0) {
+        ret = DFS_Rename(
+          node[nextAttribute],
+          attribute,
+          nextAttribute,
+          newValue,
+          path,
+          cnt + 1
+        );
+        if (ret) {
+          break;
+        }
+      }
+    }
+  }
+  return ret;
+}
