@@ -157,7 +157,13 @@ const customChineseMessages = {
       fileName: "文件名",
       fsId: "资源ID",
       fid: "文件夹ID",
-      upload: "添加文件给用户",
+      upload: "添加文件到用户的缓冲目录",
+      links: {
+        file: "文件信息",
+        download: "下载",
+        delete: "删除",
+        update: "重命名",
+      },
     },
   },
   TreeView: {

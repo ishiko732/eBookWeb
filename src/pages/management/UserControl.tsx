@@ -124,7 +124,7 @@ const UserControl = (props: any) => {
             height: "630",
           }}
         >
-          <Title>{t("system.online.online")}</Title>
+          <Title>{t("management.user.title")}</Title>
           <Stack
             direction="row"
             spacing={2}
