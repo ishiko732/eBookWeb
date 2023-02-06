@@ -10,14 +10,26 @@ import { useState, MouseEvent, useEffect, MouseEventHandler } from "react";
 import { getMuiTheme } from "../tree-view/Styles";
 import Search from "../search-bar/search";
 import copy from "../../utils/clip";
-import { DFS_Delete, DFS_path, search } from "../../algorithm/graph";
+import {
+  DFS_Delete,
+  DFS_path,
+  DFS_Rename,
+  search,
+} from "../../algorithm/graph";
 import { useTranslation } from "react-i18next";
 import InputDialog, { DialogMessage } from "./InputDialog";
 import { toTree, toTreeData, treeUnique } from "../../algorithm/tree";
 import { FileMenu, FileMenuType } from "./FileMenu";
-import { addFolder, deleteFolder } from "../../api/file";
+import {
+  addFolder,
+  deleteFile,
+  deleteFolder,
+  updateFile,
+  updateFolder,
+} from "../../api/file";
 import { useSnackbar } from "notistack";
 import { folder } from "../../api/models";
+import UploadFile from "./UploadFile";
 
 export default function FileTreeView({
   data,
@@ -43,6 +55,8 @@ export default function FileTreeView({
   const [expanded, setExpanded] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [file, setFile] = useState<File | null>();
+  const [parentId, setParentId] = useState<number | null>(null);
   const [openDialog, setOpenDialog] = useState<DialogMessage>({
     open: false,
     title: "",
@@ -95,7 +109,8 @@ export default function FileTreeView({
   };
 
   const handleContextMenu = (event: React.MouseEvent) => {
-    event.target instanceof HTMLElement &&(event.target as HTMLElement).click()
+    event.target instanceof HTMLElement &&
+      (event.target as HTMLElement).click();
     event.preventDefault();
     setContextMenu(
       contextMenu === null
@@ -108,7 +123,9 @@ export default function FileTreeView({
   };
   const handleClose = (
     type: FileMenuType,
-    event?: MouseEvent<HTMLLIElement, globalThis.MouseEvent>
+    event?:
+      | MouseEvent<HTMLLIElement, globalThis.MouseEvent>
+      | React.ChangeEvent<HTMLInputElement>
   ) => {
     event?.preventDefault();
     // console.log((event?.target as HTMLInputElement).innerText);
@@ -129,8 +146,6 @@ export default function FileTreeView({
         copy(selectedNode?.at(-1)?.name || "");
         break;
       case "Add":
-        setOpenDialog(DialogMessage);
-        break;
       case "Delete":
       case "Move":
         setOpenDialog(DialogMessage);
@@ -142,7 +157,18 @@ export default function FileTreeView({
         });
         break;
       case "Upload":
-        setOpenDialog(DialogMessage);
+        const file: File | null | undefined = (
+          event?.target as HTMLInputElement
+        ).files?.item(0);
+        const nodesForPath: TreeData[] = (selectedNode as TreeData[]) || [];
+        for (let index = nodesForPath?.length - 1; index >= 0; index--) {
+          if (nodesForPath[index].type === "Folder") {
+            setParentId(Number(nodesForPath[index].id.split("_").at(-1)));
+            break;
+          }
+        }
+        setFile(file);
+        // setOpenDialog(DialogMessage);
         break;
       default:
         break;
@@ -180,11 +206,13 @@ export default function FileTreeView({
                     const data: folder = res.data;
                     // 从folder转换为TreeData[] 再利用toTree合并到tree
                     setMessage((dates) => {
-                      return toTree(
+                      const newData = toTree(
                         dates,
                         `Folder_${data.parentId}`,
                         toTreeData([data])
                       );
+                      ram && localStorage.setItem(ram, JSON.stringify(newData));
+                      return newData;
                     });
                     enqueueSnackbar(t("api.opt_success"), {
                       variant: "success",
@@ -200,48 +228,113 @@ export default function FileTreeView({
             break;
           case "Delete":
             if (currentNode.type === "Folder") {
-              if (currentNode.type === "Folder") {
-                await deleteFolder(Number(currentNode.id.split("_").at(-1)))
-                  .then((res) => {
+              await deleteFolder(Number(currentNode.id.split("_").at(-1)))
+                .then((res) => {
+                  setMessage((dates) => {
+                    DFS_Delete(dates, "id", "children", selectedNode);
+                    ram && localStorage.setItem(ram, JSON.stringify(dates));
+                    return dates;
+                  });
+                  enqueueSnackbar(t("api.opt_success"), {
+                    variant: "success",
+                  });
+                })
+                .catch((err) => {
+                  //TODO 硬编码
+                  if (err.msg === "未找到目录") {
                     setMessage((dates) => {
                       DFS_Delete(dates, "id", "children", selectedNode);
+                      ram && localStorage.setItem(ram, JSON.stringify(dates));
                       return dates;
                     });
                     enqueueSnackbar(t("api.opt_success"), {
                       variant: "success",
                     });
-                  })
-                  .catch((err) => {
-                    //TODO 硬编码
-                    if (err.msg === "未找到目录") {
-                      setMessage((dates) => {
-                        DFS_Delete(dates, "id", "children", selectedNode);
-                        return dates;
-                      });
-                      enqueueSnackbar(t("api.opt_success"), {
-                        variant: "success",
-                      });
-                    } else {
-                      enqueueSnackbar(t("api.opt_error", { data: err.msg }), {
-                        variant: "error",
-                      });
-                    }
+                  } else {
+                    enqueueSnackbar(t("api.opt_error", { data: err.msg }), {
+                      variant: "error",
+                    });
+                  }
+                });
+            } else if (["File", "PDF"].indexOf(currentNode.type) !== -1) {
+              await deleteFile(Number(currentNode.id.split("_").at(-1)))
+                .then((res) => {
+                  setMessage((dates) => {
+                    DFS_Delete(dates, "id", "children", selectedNode);
+                    ram && localStorage.setItem(ram, JSON.stringify(dates));
+                    return dates;
                   });
-              }
+                  enqueueSnackbar(t("api.opt_success"), {
+                    variant: "success",
+                  });
+                })
+                .catch((err) => {
+                  enqueueSnackbar(t("api.opt_error", { data: err.msg }), {
+                    variant: "error",
+                  });
+                });
             }
             break;
           // case "Move":
           //   setOpenDialog(DialogMessage);
           //   break;
-          // case "Rename":
-          //   setOpenDialog({
-          //     ...DialogMessage,
-          //     preValue: selectedNode?.at(-1)?.name,
-          //   });
-          //   break;
-          // case "Upload":
-          //   setOpenDialog(DialogMessage);
-          //   break;
+          case "Rename":
+            console.log(text, currentNode);
+            if (text && currentNode.type === "Folder") {
+              await updateFolder(Number(currentNode.id.split("_").at(-1)), text)
+                .then((res) => {
+                  setMessage((dates) => {
+                    DFS_Rename(
+                      dates,
+                      "id",
+                      "name",
+                      "children",
+                      text,
+                      selectedNode
+                    );
+                    ram && localStorage.setItem(ram, JSON.stringify(dates));
+                    console.log(dates);
+                    return dates;
+                  });
+                  enqueueSnackbar(t("api.opt_success"), {
+                    variant: "success",
+                  });
+                })
+                .catch((err) => {
+                  enqueueSnackbar(t("api.opt_error", { data: err.msg }), {
+                    variant: "error",
+                  });
+                });
+            } else if (
+              text &&
+              ["File", "PDF"].indexOf(currentNode.type) !== -1
+            ) {
+              await updateFile(Number(currentNode.id.split("_").at(-1)), text)
+                .then((res) => {
+                  setMessage((dates) => {
+                    DFS_Rename(
+                      dates,
+                      "id",
+                      "name",
+                      "children",
+                      text,
+                      selectedNode
+                    );
+                    ram && localStorage.setItem(ram, JSON.stringify(dates));
+                    console.log(dates);
+                    return dates;
+                  });
+                  enqueueSnackbar(t("api.opt_success"), {
+                    variant: "success",
+                  });
+                })
+                .catch((err) => {
+                  enqueueSnackbar(t("api.opt_error", { data: err.msg }), {
+                    variant: "error",
+                  });
+                });
+            }
+            break;
           default:
             break;
         }
@@ -256,6 +349,12 @@ export default function FileTreeView({
   return (
     <Stack spacing={2}>
       {isLoading ? <LinearProgress color="info" /> : null}
+      <UploadFile
+        file={file}
+        setFile={setFile}
+        setData={setMessage}
+        fid={parentId}
+      />
       <Search value={searchQuery} setValue={setSearchQuery} />
       <div onContextMenu={handleContextMenu} style={{ cursor: "context-menu" }}>
         <ThemeProvider theme={getMuiTheme()}>

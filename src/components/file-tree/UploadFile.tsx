@@ -41,7 +41,6 @@ const UploadFile = (props: any) => {
   const { enqueueSnackbar } = useSnackbar();
   const { t } = useTranslation();
   const [progress, setProgress] = React.useState(0);
-  const [file, setFile] = useState<File | null>();
 
   const uploadProgress = (progressEvent: AxiosProgressEvent) => {
     if (progressEvent.total) {
@@ -60,18 +59,15 @@ const UploadFile = (props: any) => {
       });
   };
   useEffect(() => {
-    setFile(props.files);
-  }, [props.files]);
-  useEffect(() => {
-    if (file) {
-      uploadFile(file, props.fid, uploadProgress)
+    if (props.file) {
+      uploadFile(props.file, props.fid, uploadProgress)
         .then((res) => {
           console.log(res.data);
           setData(res.data.mediaFile);
           enqueueSnackbar(t("api.opt_success"), {
             variant: "success",
           });
-          setFile(null);
+          props.setFile(null);
           setProgress(0);
         })
         .catch((err) => {
@@ -81,10 +77,10 @@ const UploadFile = (props: any) => {
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [file]);
+  }, [props.file]);
   return (
     <React.Fragment>
-      {file && progress !== 0 ? (
+      {props.files && progress !== 0 ? (
         <LinearProgressWithLabel value={progress} />
       ) : null}
     </React.Fragment>

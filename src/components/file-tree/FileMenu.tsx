@@ -31,6 +31,7 @@ export const FileMenu = ({
         }}
         style={{ display: "none" }}
         ref={fileInput}
+        accept="application/pdf,image/*"
       />
       <Menu
         open={open}

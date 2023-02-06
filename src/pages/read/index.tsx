@@ -103,7 +103,7 @@ const ReadControl = (props: any) => {
               <FileTreeView
                 data={message}
                 operation={operation}
-                ram="read_tree"
+                // ram="read_tree"
                 loginUser={user}
               />
             </Paper>

@@ -80,7 +80,6 @@ export const downloadFile = (
     onDownloadProgress: onDownload,
   });
 
-
 // 查询文件信息
 export const getFile = (fileId: number) => request.get(`file/${fileId}`);
 
