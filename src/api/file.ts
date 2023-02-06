@@ -80,13 +80,20 @@ export const downloadFile = (
     onDownloadProgress: onDownload,
   });
 
+
+// 查询文件信息
+export const getFile = (fileId: number) => request.get(`file/${fileId}`);
+
 // 移动文件到指定文件夹
 export const moveFile = (fileId: number, folderId: number) =>
-  request.put(`folder/file?id=${fileId}&fid=${folderId}`);
+  request.put(`folder/${fileId}?fid=${folderId}`);
 
 // 更新文件信息
 export const updateFile = (fileId: number, filename: string) =>
-  request.put(`folder/file?id=${fileId}&name=${filename}`);
+  request.put(`file/${fileId}?name=${filename}`);
+
+// 删除文件信息
+export const deleteFile = (fileId: number) => request.delete(`file/${fileId}`);
 
 // 获取指定用户的所有媒体文件
 export const filesByUid = (uid: number) => request.get(`file/files?id=${uid}`);
