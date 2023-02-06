@@ -66,11 +66,7 @@ const InputDialog = ({
               {t("TreeView.Tip", { type: t(`TreeView.opt.Delete`) })}
             </Typography>
           ) : (
-            <FormControl
-              sx={{ m: 1, width: "25ch" }}
-              variant="outlined"
-              onKeyUp={handleKeyUp}
-            >
+            <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
               <InputLabel htmlFor="input_value">
                 {dialogMessage.context}
               </InputLabel>
