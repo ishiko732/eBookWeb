@@ -59,7 +59,7 @@ export const uploadFile = (
     headers: { "Content-Type": "multipart/form-data" },
     transformRequest: [
       (data) => {
-        let formData = new FormData();
+        const formData = new FormData();
         formData.append("file", data);
         return formData;
       },
