@@ -147,6 +147,18 @@ const customChineseMessages = {
       update_no: "取消修改",
       password_check: "新密码与再次输入密码不一致",
     },
+    media: {
+      title: "媒体文件管理",
+      number: "该用户资源数目",
+      search: "查询",
+      username: "用户名",
+      helperTextUsername: "请输入用户名",
+      fileId: "文件ID",
+      fileName: "文件名",
+      fsId: "资源ID",
+      fid: "文件夹ID",
+      upload: "添加文件给用户",
+    },
   },
   TreeView: {
     Folder: "文件夹",

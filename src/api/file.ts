@@ -102,3 +102,8 @@ export const mediesList = (option?: selectVo) =>
   request.get(
     option ? `file/lists?page=${option.page}&size=${option.size}` : `file/lists`
   );
+// 获取媒体文件列表 通过uid
+export const mediesByUid = (uid: number, type?: 1 | null) =>
+  request.get(
+    type ? `file/files?id=${uid}&type=${type}` : `file/files?id=${uid}`
+  );

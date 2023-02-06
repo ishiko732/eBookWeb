@@ -9,10 +9,6 @@ export const getUsers = (params?: selectVo) =>
     transformRequest: [(data) => JSON.stringify(data)],
   });
 
-export const userById = (id: number) =>
-  request({
-    method: "get",
-    url: "user/user",
-    data: { uid: id },
-    transformRequest: [(data) => JSON.stringify(data)],
-  });
+export const userById = (id: number) => request.get(`user/user?uid=${id}`);
+
+export const userByName = (name: string) => request.get(`user/${name}`);
