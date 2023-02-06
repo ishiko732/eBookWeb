@@ -309,7 +309,7 @@ export default function FileTreeView({
               text &&
               ["File", "PDF"].indexOf(currentNode.type) !== -1
             ) {
-              await updateFile(Number(currentNode.id.split("_").at(-1)), text)
+              await updateFile(Number(currentNode.id.split("_").at(-1)), currentNode.type==='PDF'?text+'.pdf':text)
                 .then((res) => {
                   setMessage((dates) => {
                     DFS_Rename(
