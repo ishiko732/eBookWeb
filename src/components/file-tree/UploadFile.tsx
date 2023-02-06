@@ -1,5 +1,4 @@
 import {
-  Box,
   LinearProgress,
   LinearProgressProps,
   Stack,
@@ -7,11 +6,11 @@ import {
 } from "@mui/material";
 import { AxiosProgressEvent } from "axios";
 import { useSnackbar } from "notistack";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { filesToTreeData, toTree, toTreeData } from "../../algorithm/tree";
+import { filesToTreeData, toTree } from "../../algorithm/tree";
 import { uploadFile } from "../../api/file";
-import { file as fileModel } from "../../api/models";
+import { file, file as fileModel } from "../../api/models";
 import { TreeData } from "../tree-view/CustomTreeView";
 function LinearProgressWithLabel(
   props: LinearProgressProps & { value: number }
@@ -58,19 +57,32 @@ const UploadFile = (props: any) => {
         return newData;
       });
   };
+  const setTableData = (data: file) => {
+    props.setTableData &&
+      props.setTableData((dates: file[]) => {
+        const newData = [...dates];
+        newData.push(data);
+        return newData;
+      });
+  };
   useEffect(() => {
-    if (props.file) {
+    if (props.file && props.fid) {
+      props.setLoading && props.setLoading(true);
       uploadFile(props.file, props.fid, uploadProgress)
         .then((res) => {
           console.log(res.data);
           setData(res.data.mediaFile);
+          setTableData(res.data.mediaFile);
           enqueueSnackbar(t("api.opt_success"), {
             variant: "success",
           });
           props.setFile(null);
           setProgress(0);
+          props.setLoading && props.setLoading(false);
         })
         .catch((err) => {
+          props.setFile(null);
+          props.setLoading && props.setLoading(false);
           enqueueSnackbar(t("api.opt_error", { data: err.msg }), {
             variant: "error",
           });
