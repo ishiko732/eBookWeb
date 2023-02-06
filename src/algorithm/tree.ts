@@ -59,20 +59,12 @@ export const toTree = (
 ): any => {
   const parent: TreeData | null = findItem(dates, parentId, "id", "children");
   if (parent) {
-    if (parent.children) {
+    if (parent.children && parent.children.length > 0) {
       // eslint-disable-next-line array-callback-return
-      childNode.map((node) => {
-        let add = true;
-        parent.children?.forEach((item) => {
-          if (item.id === node.id) {
-            add = false;
-          }
-        });
-        add && parent.children?.unshift(node);
-      });
+      parent.children.unshift(...childNode);
     } else {
       parent.children = childNode;
     }
   }
-  return dates;
+  return treeUnique(dates);
 };

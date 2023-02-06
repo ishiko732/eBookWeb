@@ -45,7 +45,8 @@ const CustomTreeView = ({
   const [expanded, setExpanded] = useState<string[]>([]);
   const DatatoTree = (parentId: string, childNode: TreeData[]) => {
     setData((dates) => {
-      return toTree(dates, parentId, childNode);
+      const data = toTree(dates, parentId, childNode);
+      return data;
     });
   };
   const handleToggle = async (event: React.SyntheticEvent, nodes: string[]) => {
