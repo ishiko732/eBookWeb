@@ -68,8 +68,8 @@ export const uploadFile = (
     onUploadProgress: onUpload,
   });
 
-// 下载文件
-export const downloadFile = (
+// 查看文件
+export const viewFile = (
   fsId: string,
   onDownload?: (progressEvent: AxiosProgressEvent) => void
 ) =>
@@ -79,6 +79,41 @@ export const downloadFile = (
     timeout: 0,
     onDownloadProgress: onDownload,
   });
+
+export const downloadFile = (
+  fsId: string,
+  onDownload?: (progressEvent: AxiosProgressEvent) => void
+) =>
+  request({
+    method: "get",
+    url: `file/download/${fsId}`,
+    responseType: "blob", // important
+    timeout: 0,
+    onDownloadProgress: onDownload,
+  })
+    .then((response) => {
+      // create file link in browser's memory
+      const href = URL.createObjectURL(
+        new Blob([response.data], { type: "application/octet-stream" })
+      );
+      const fileName =
+        response?.headers["content-disposition"]?.split("; filename=")[1] ||
+        "file." + response?.headers["content-type"]?.split("/")[1];
+      // create "a" HTML element with href to file & click
+      const link = document.createElement("a");
+      link.style.display = "none";
+      link.href = href;
+      link.setAttribute("download", decodeURI(fileName)); //or any other extension
+      document.body.appendChild(link);
+      link.click();
+
+      // clean up "a" element & remove ObjectURL
+      document.body.removeChild(link);
+      URL.revokeObjectURL(href);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 
 // 查询文件信息
 export const getFile = (fileId: number) => request.get(`file/${fileId}`);
