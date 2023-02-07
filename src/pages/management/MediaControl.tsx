@@ -103,6 +103,9 @@ const MediaControl = (props: any) => {
       event?.target as HTMLInputElement
     ).files?.item(0);
     searchUid && parentId && setFile(file);
+    if (!file) {
+      setLoading(false);
+    }
   };
 
   const ClickOp = (
@@ -273,6 +276,7 @@ const MediaControl = (props: any) => {
                   accept="application/pdf,image/*"
                   type="file"
                   onChange={(event) => {
+                    setLoading(true);
                     handleUpload(event);
                   }}
                 />

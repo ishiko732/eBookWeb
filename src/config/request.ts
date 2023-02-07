@@ -130,7 +130,8 @@ instance.interceptors.response.use(
       case 404:
         break;
       case 500:
-        break;
+        error.msg = error.response.data.message;
+        return Promise.reject(error.response.data);
       case 400:
         return Promise.reject(error.response.data);
       default:
