@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import {
   Stack,
   Button,
-  IconButton,
   Typography,
   FormControl,
   Dialog,
@@ -11,7 +10,6 @@ import {
   DialogTitle,
   InputLabel,
   Input,
-  InputAdornment,
 } from "@mui/material";
 import * as React from "react";
 import { Transition } from "../AlertDialog";
@@ -66,7 +64,7 @@ const InputDialog = ({
               {t("TreeView.Tip", { type: t(`TreeView.opt.Delete`) })}
             </Typography>
           ) : (
-            <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
+            <FormControl sx={{ m: 1, width: "50ch" }} variant="outlined">
               <InputLabel htmlFor="input_value">
                 {dialogMessage.context}
               </InputLabel>
@@ -75,6 +73,7 @@ const InputDialog = ({
                 type={"text"}
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
+                fullWidth
               />
             </FormControl>
           )}

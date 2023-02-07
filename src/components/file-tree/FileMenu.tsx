@@ -2,7 +2,6 @@ import { Menu, MenuItem } from "@mui/material";
 import { t } from "i18next";
 import React from "react";
 import { TreeData } from "../tree-view/CustomTreeView";
-import UploadFile from "./UploadFile";
 
 export const FileMenu = ({
   open,
@@ -106,4 +105,6 @@ export type FileMenuType =
   | "Move"
   | "Rename"
   | "Upload"
+  | "Download"
+  | "Update"
   | null;

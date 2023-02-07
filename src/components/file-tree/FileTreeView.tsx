@@ -1,12 +1,6 @@
-import {
-  LinearProgress,
-  Menu,
-  MenuItem,
-  Stack,
-  ThemeProvider,
-} from "@mui/material";
+import { LinearProgress, Stack, ThemeProvider } from "@mui/material";
 import CustomTreeView, { TreeData } from "../tree-view/CustomTreeView";
-import { useState, MouseEvent, useEffect, MouseEventHandler } from "react";
+import { useState, MouseEvent, useEffect } from "react";
 import { getMuiTheme } from "../tree-view/Styles";
 import Search from "../search-bar/search";
 import copy from "../../utils/clip";

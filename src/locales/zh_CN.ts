@@ -188,6 +188,7 @@ const customChineseMessages = {
       Move: "移动",
       Rename: "重命名",
       Upload: "上传",
+      Update: "更新",
     },
   },
 };
