@@ -68,7 +68,7 @@ const UploadFile = (props: any) => {
   useEffect(() => {
     if (props.file && props.fid) {
       props.setLoading && props.setLoading(true);
-      uploadFile(props.file, props.fid, uploadProgress)
+        uploadFile(props.file, props.fid, uploadProgress)
         .then((res) => {
           console.log(res.data);
           setData(res.data.mediaFile);
@@ -76,23 +76,24 @@ const UploadFile = (props: any) => {
           enqueueSnackbar(t("api.opt_success"), {
             variant: "success",
           });
-          props.setFile(null);
           setProgress(0);
+          props.setFile(null);
           props.setLoading && props.setLoading(false);
         })
         .catch((err) => {
-          props.setFile(null);
-          props.setLoading && props.setLoading(false);
           enqueueSnackbar(t("api.opt_error", { data: err.msg }), {
             variant: "error",
           });
+          setProgress(0);
+          props.setFile(null);
+          props.setLoading && props.setLoading(false);
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.file]);
   return (
     <React.Fragment>
-      {props.files && progress !== 0 ? (
+      {props.file ? (
         <LinearProgressWithLabel value={progress} />
       ) : null}
     </React.Fragment>
