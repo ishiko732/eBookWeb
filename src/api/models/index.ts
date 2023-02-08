@@ -38,3 +38,15 @@ export interface file {
   filename: string;
   md5: string;
 }
+
+export interface book {
+  id: number;
+  mid: string;
+  author: string | null;
+  title: string | null;
+  subject: string | null;
+  creator: string | null;
+  creationDate: string | null;
+  keywords: string[];
+  types: string[];
+}

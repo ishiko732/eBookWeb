@@ -115,8 +115,12 @@ export const downloadFile = (
       console.log(err);
     });
 
-// 查询文件信息
+// 查询文件信息通过文件Id
 export const getFile = (fileId: number) => request.get(`file/${fileId}`);
+
+// 查询文件信息通过资源Id
+export const getFileByResourceId = (fsId: string) =>
+  request.get(`file/resource/${fsId}`);
 
 // 移动文件到指定文件夹
 export const moveFile = (fileId: number, folderId: number) =>
