@@ -158,6 +158,7 @@ const customChineseMessages = {
       fsId: "资源ID",
       fid: "文件夹ID",
       upload: "添加文件到用户的缓冲目录",
+      error_upload: "您还没进行查询用户呢~",
       links: {
         file: "文件信息",
         download: "下载",

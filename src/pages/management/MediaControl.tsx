@@ -278,7 +278,18 @@ const MediaControl = (props: any) => {
                 component="label"
                 onClick={(event) => {
                   event.preventDefault();
-                  fileInput.current?.click();
+                  if (searchName && searchUid) {
+                    fileInput.current?.click();
+                  } else {
+                    enqueueSnackbar(
+                      t("api.opt_error", {
+                        data: t("management.media.error_upload"),
+                      }),
+                      {
+                        variant: "error",
+                      }
+                    );
+                  }
                 }}
               >
                 <UploadFileIcon />
