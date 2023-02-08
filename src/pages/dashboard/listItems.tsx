@@ -48,7 +48,7 @@ export default function NestedList({
       // console.log(data);
       setOpen(JSON.parse(list_data).open);
       const index: string = JSON.parse(list_data).selected;
-      setSelected(JSON.parse(list_data).index);
+      setSelected(index);
       const page = index.split("-").map((k) => {
         return parseInt(k, 10);
       });
