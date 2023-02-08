@@ -24,6 +24,7 @@ import {
 import { useSnackbar } from "notistack";
 import { folder } from "../../api/models";
 import UploadFile from "./UploadFile";
+import React from "react";
 
 export default function FileTreeView({
   data,
@@ -162,6 +163,7 @@ export default function FileTreeView({
           }
         }
         setFile(file);
+        (event?.target as HTMLInputElement).value = "";
         // setOpenDialog(DialogMessage);
         break;
       default:

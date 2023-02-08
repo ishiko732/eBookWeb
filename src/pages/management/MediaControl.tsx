@@ -54,7 +54,8 @@ const MediaControl = (props: any) => {
     yes: "",
     no: "",
   });
-  const fileInput: React.RefObject<HTMLInputElement> = React.createRef<HTMLInputElement>();
+  const fileInput: React.RefObject<HTMLInputElement> =
+    React.createRef<HTMLInputElement>();
 
   const handleSearch = (
     event:
@@ -103,6 +104,7 @@ const MediaControl = (props: any) => {
     const file: File | null | undefined = (
       event?.target as HTMLInputElement
     ).files?.item(0);
+    event.target.value = "";
     searchUid && parentId && setFile(file);
     if (!file) {
       setLoading(false);
@@ -222,23 +224,16 @@ const MediaControl = (props: any) => {
           }}
         >
           <Title>{t("management.media.title")}</Title>
-          <UploadFile
-            file={file}
-            setFile={setFile}
-            fid={parentId}
-            setTableData={setMessage}
-            setLoading={setLoading}
+          <input
+            hidden
+            accept="application/pdf,image/*"
+            type="file"
+            ref={fileInput}
+            onChange={(event) => {
+              setLoading(true);
+              handleUpload(event);
+            }}
           />
-                          <input
-                  hidden
-                  accept="application/pdf,image/*"
-                  type="file"
-                  ref={fileInput}
-                  onChange={(event) => {
-                    setLoading(true);
-                    handleUpload(event);
-                  }}
-                />
           <Stack
             direction="row"
             spacing={2}
@@ -281,8 +276,8 @@ const MediaControl = (props: any) => {
                 color="primary"
                 aria-label="upload picture"
                 component="label"
-                onClick={(event)=>{
-                  event.preventDefault()
+                onClick={(event) => {
+                  event.preventDefault();
                   fileInput.current?.click();
                 }}
               >
@@ -291,6 +286,13 @@ const MediaControl = (props: any) => {
             </Tooltip>
           </Stack>
           <Divider light flexItem sx={{ margin: "8px" }} />
+          <UploadFile
+            file={file}
+            setFile={setFile}
+            fid={parentId}
+            setTableData={setMessage}
+            setLoading={setLoading}
+          />
           <MediaDataTable
             ClickOp={ClickOp}
             message={message}

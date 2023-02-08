@@ -68,7 +68,7 @@ const UploadFile = (props: any) => {
   useEffect(() => {
     if (props.file && props.fid) {
       props.setLoading && props.setLoading(true);
-        uploadFile(props.file, props.fid, uploadProgress)
+      uploadFile(props.file, props.fid, uploadProgress)
         .then((res) => {
           console.log(res.data);
           setData(res.data.mediaFile);
@@ -93,9 +93,7 @@ const UploadFile = (props: any) => {
   }, [props.file]);
   return (
     <React.Fragment>
-      {props.file ? (
-        <LinearProgressWithLabel value={progress} />
-      ) : null}
+      {props.file ? <LinearProgressWithLabel value={progress} /> : null}
     </React.Fragment>
   );
 };
