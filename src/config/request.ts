@@ -61,7 +61,7 @@ instance.interceptors.response.use(
     if (error.code === "ERR_NETWORK") {
       error.msg = "server not started"; //服务器未启动
       return Promise.reject(error);
-    }else if(error.response.status===Status.InternalServerError){
+    } else if (error.response.status === Status.InternalServerError) {
       error.response.data.msg = error.response.data.message;
       return Promise.reject(error.response.data);
     }
