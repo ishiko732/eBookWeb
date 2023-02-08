@@ -54,6 +54,7 @@ const MediaControl = (props: any) => {
     yes: "",
     no: "",
   });
+  const fileInput: React.RefObject<HTMLInputElement> = React.createRef<HTMLInputElement>();
 
   const handleSearch = (
     event:
@@ -228,6 +229,16 @@ const MediaControl = (props: any) => {
             setTableData={setMessage}
             setLoading={setLoading}
           />
+                          <input
+                  hidden
+                  accept="application/pdf,image/*"
+                  type="file"
+                  ref={fileInput}
+                  onChange={(event) => {
+                    setLoading(true);
+                    handleUpload(event);
+                  }}
+                />
           <Stack
             direction="row"
             spacing={2}
@@ -270,16 +281,11 @@ const MediaControl = (props: any) => {
                 color="primary"
                 aria-label="upload picture"
                 component="label"
+                onClick={(event)=>{
+                  event.preventDefault()
+                  fileInput.current?.click();
+                }}
               >
-                <input
-                  hidden
-                  accept="application/pdf,image/*"
-                  type="file"
-                  onChange={(event) => {
-                    setLoading(true);
-                    handleUpload(event);
-                  }}
-                />
                 <UploadFileIcon />
               </IconButton>
             </Tooltip>
