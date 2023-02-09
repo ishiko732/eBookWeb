@@ -1,11 +1,7 @@
 import { role, updatePasswordVo, userStatus } from "../../api/entity/auth";
 import { userStatusColor } from "../../config/config";
 import localeTextConstants from "../../locales/DataGrid";
-import {
-  DataGrid,
-  GridColDef,
-  GridRenderCellParams,
-} from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { useTranslation } from "react-i18next";
 import {
   Chip,
@@ -210,7 +206,7 @@ const UserDataTable = ({
     },
   ];
   const processRowUpdate = async (newRow: User, oldRow: User) => {
-    if (oldRow.phone !== newRow.phone) {
+    if (oldRow.phone === newRow.phone) {
       return { ...newRow, isNew: false };
     }
 

@@ -166,6 +166,27 @@ const customChineseMessages = {
         update: "重命名",
       },
     },
+    book: {
+      title: "电子书管理",
+      number: "当前已登记的电子书数目",
+      restart: "刷新",
+      bookField: {
+        id: "图书ID",
+        mid: "资源ID",
+        author: "作者",
+        title: "标题",
+        subject: "概要",
+        types: "图书类型",
+        keywords: "图书关键词",
+        creator: "来源程序",
+        creationDate: "创建时间",
+      },
+      op: {
+        file: "查看持有者",
+        comment: "查看评论",
+        share: "查看共享",
+      },
+    },
   },
   TreeView: {
     Folder: "文件夹",
