@@ -12,3 +12,6 @@ export const getUsers = (params?: selectVo) =>
 export const userById = (id: number) => request.get(`user/user?uid=${id}`);
 
 export const userByName = (name: string) => request.get(`user/${name}`);
+
+export const updatePhone = (name: string, newphone: string) =>
+  request.put(`user/${name}?phone=${newphone}`.replaceAll("+", "%2B"));

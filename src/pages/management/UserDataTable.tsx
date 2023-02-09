@@ -1,7 +1,11 @@
 import { role, updatePasswordVo, userStatus } from "../../api/entity/auth";
 import { userStatusColor } from "../../config/config";
 import localeTextConstants from "../../locales/DataGrid";
-import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColDef,
+  GridRenderCellParams,
+} from "@mui/x-data-grid";
 import { useTranslation } from "react-i18next";
 import {
   Chip,
@@ -18,6 +22,8 @@ import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import { updatePassword } from "../../api/auth";
 import { useSnackbar } from "notistack";
 import UpdatePassword from "./UpdatePassword";
+import { matchIsValidTel } from "mui-tel-input";
+import { updatePhone } from "../../api/user";
 
 export const SelectUserStatus = () => {
   const { t } = useTranslation();
@@ -50,7 +56,7 @@ const UserDataTable = ({
   setMessage: React.Dispatch<React.SetStateAction<User[]>>;
   loginUser: User;
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = React.useState(false);
   const [selectUser, setSelectUser] = React.useState<User | null>(null);
@@ -97,6 +103,7 @@ const UserDataTable = ({
       headerName: t("auth.register.phone") as string,
       width: 150,
       sortable: false,
+      editable: true,
     },
     {
       field: "role",
@@ -202,6 +209,35 @@ const UserDataTable = ({
       width: 180,
     },
   ];
+  const processRowUpdate = async (newRow: User, oldRow: User) => {
+    if (oldRow.phone !== newRow.phone) {
+      return { ...newRow, isNew: false };
+    }
+
+    const phone =
+      (newRow.phone as string)[0] === "+"
+        ? newRow.phone
+        : t(`auth.register.${i18n.language}`) + newRow.phone;
+    const invalid = !matchIsValidTel(phone);
+    let success = false;
+    if (invalid) {
+      enqueueSnackbar(t("auth.valid.phone"), { variant: "error" });
+    } else {
+      await updatePhone(newRow.name, phone)
+        .then((res) => {
+          enqueueSnackbar(t("api.opt_success"), {
+            variant: "success",
+          });
+          success = true;
+        })
+        .catch((err) => {
+          enqueueSnackbar(t("api.opt_error", { data: err.msg }), {
+            variant: "error",
+          });
+        });
+    }
+    return { ...newRow, isNew: success, phone: success ? phone : oldRow.phone };
+  };
   return (
     <Box sx={{ height: 500, width: "100%" }}>
       <DataGrid
@@ -214,6 +250,7 @@ const UserDataTable = ({
         disableSelectionOnClick
         loading={isLoading}
         localeText={localeTextConstants(localStorage.language)}
+        processRowUpdate={processRowUpdate}
         initialState={{
           sorting: {
             sortModel: [
@@ -223,6 +260,7 @@ const UserDataTable = ({
             ],
           },
         }}
+        experimentalFeatures={{ newEditingApi: true }}
       />
       <UpdatePassword
         open={open}
