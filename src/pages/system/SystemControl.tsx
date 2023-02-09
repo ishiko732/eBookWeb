@@ -58,18 +58,15 @@ const SystemControl = (props: any) => {
         });
       systemHealth()
         .then((res) => {
-          setSHealth(res);
+          setSHealth(res.data);
         })
         .catch((err) => {
           console.log(err.data);
         });
-      // setMainOpen(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
-  // const { t } = useTranslation();
-  console.log(mainOpen);
   return (
     <RequiredRole
       user={props.user}
