@@ -47,6 +47,20 @@ export interface book {
   subject: string | null;
   creator: string | null;
   creationDate: string | null;
-  keywords: string[];
-  types: string[];
+  keywords: bookKeyword[];
+  types: bookType[];
+}
+
+export interface bookKeyword {
+  id: number;
+  createdAt: string;
+  updateAt: string;
+  keyword: string;
+}
+
+export interface bookType {
+  id: number;
+  createdAt: string;
+  updateAt: string;
+  type: string;
 }

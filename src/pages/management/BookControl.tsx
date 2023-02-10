@@ -19,6 +19,16 @@ import RequiredRole from "../../config/requiredRole";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { getBookList } from "../../api/book";
 import BookDataTable from "./BookDataTable";
+import PositionSwipeableDrawer from "../../components/PositionSwipeableDrawer";
+import BookBar from "./book-bar/BookBar";
+export type bookOpType =
+  | "viewFile"
+  | "viewComment"
+  | "viewShare"
+  | "editType"
+  | "editKeyword"
+  | "viewPDF"
+  | undefined;
 
 const BookControl = (props: any) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -28,11 +38,17 @@ const BookControl = (props: any) => {
   const [isLoading, setLoading] = React.useState(false);
   const [restart, setRestart] = React.useState(false);
   const [selectedId, setSelectedId] = React.useState<number | null>(null);
+  const [open, setOpen] = React.useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
+    null
+  );
+  const [type, setType] = React.useState<bookOpType>();
   const getBook = async () => {
     setLoading(true);
     await getBookList()
       .then((res) => {
         setMessage(res.data);
+        console.log(res.data);
         enqueueSnackbar(t("api.success"), { variant: "success" });
       })
       .catch((err) => {
@@ -56,9 +72,20 @@ const BookControl = (props: any) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [restart]);
 
-  React.useEffect(() => {
-    console.log(selectedId);
-  }, [selectedId]);
+  const handleClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    op: bookOpType
+  ) => {
+    event.preventDefault();
+    if (selectedId === null) {
+      enqueueSnackbar(t("management.book.notSelect"), { variant: "error" });
+      return;
+    }
+    setType(op);
+    setAnchorEl(event.currentTarget);
+    setOpen(true);
+  };
+
   return (
     <RequiredRole
       user={props.user}
@@ -96,29 +123,39 @@ const BookControl = (props: any) => {
             <Button
               variant="contained"
               color="info"
-              // onClick={(e) => {
-              //   ClickOp(e, params.row, "file");
-              // }}
+              onClick={(e) => {
+                handleClick(e, "viewPDF");
+              }}
+            >
+              {t("management.book.op.view")}
+            </Button>
+            <Button
+              variant="contained"
+              color="info"
+              onClick={(e) => {
+                handleClick(e, "viewFile");
+              }}
             >
               {t("management.book.op.file")}
             </Button>
+            <Divider orientation="vertical" flexItem />
             <Button
               variant="contained"
               color="info"
-              // onClick={(e) => {
-              //   ClickOp(e, params.row, "comment");
-              // }}
+              onClick={(e) => {
+                handleClick(e, "editType");
+              }}
             >
-              {t("management.book.op.comment")}
+              {t("management.book.op.edit_type")}
             </Button>
             <Button
               variant="contained"
               color="info"
-              // onClick={(e) => {
-              //   ClickOp(e, params.row, "share");
-              // }}
+              onClick={(e) => {
+                handleClick(e, "editKeyword");
+              }}
             >
-              {t("management.book.op.share")}
+              {t("management.book.op.edit_keyword")}
             </Button>
           </Stack>
           <Divider light flexItem sx={{ margin: "8px" }} />
@@ -130,6 +167,26 @@ const BookControl = (props: any) => {
             setSelectedId={setSelectedId}
           />
         </Paper>
+        <PositionSwipeableDrawer
+          position="bottom"
+          open={open}
+          setOpen={setOpen}
+          setAnchorEl={setAnchorEl}
+          // width={300}
+        >
+          <BookBar
+            op={type}
+            bookId={type ? (selectedId as unknown as number[])[0] : null}
+            book={
+              type
+                ? message.filter(
+                    (book) => book.id === (selectedId as unknown as number[])[0]
+                  )[0]
+                : null
+            }
+            setData={setMessage}
+          />
+        </PositionSwipeableDrawer>
       </Box>
     </RequiredRole>
   );

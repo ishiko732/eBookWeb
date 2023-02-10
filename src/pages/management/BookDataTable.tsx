@@ -1,12 +1,19 @@
 import localeTextConstants from "../../locales/DataGrid";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useTranslation } from "react-i18next";
-import { Box, Tooltip } from "@mui/material";
+import { Box, Chip, Tooltip } from "@mui/material";
 import * as React from "react";
-import { book } from "../../api/models";
+import { book, bookKeyword, bookType } from "../../api/models";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import { updateBook } from "../../api/book";
 import { useSnackbar } from "notistack";
+// const keywordsToString = (keywords: bookKeyword[]) => {
+//   let ret = "";
+//   keywords.forEach((keyword) => {
+//     ret += "," + keyword;
+//   });
+//   return ret.substring(1);
+// };
 
 const BookDataTable = ({
   isLoading,
@@ -44,6 +51,20 @@ const BookDataTable = ({
       },
     },
     {
+      field: "types",
+      headerName: t("management.book.bookField.types") as string,
+      width: 300,
+      renderCell(params) {
+        return (
+          <React.Fragment>
+            {(params.row.types as bookType[]).map((type) => {
+              return <Chip label={type.type} />;
+            })}
+          </React.Fragment>
+        );
+      },
+    },
+    {
       field: "author",
       headerName: t("management.book.bookField.author") as string,
       width: 250,
@@ -60,6 +81,23 @@ const BookDataTable = ({
       headerName: t("management.book.bookField.subject") as string,
       width: 250,
       editable: true,
+    },
+    {
+      field: "keywords",
+      headerName: t("management.book.bookField.keywords") as string,
+      width: 300,
+      renderCell(params) {
+        return (
+          <React.Fragment>
+            {(params.row.keywords as bookKeyword[]).map((keyword) => {
+              return <Chip label={keyword.keyword} />;
+            })}
+          </React.Fragment>
+        );
+      },
+      // renderEditCell(params) {
+      //   return params.row.keywords
+      // },
     },
     {
       field: "creator",
