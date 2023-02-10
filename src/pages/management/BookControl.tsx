@@ -39,6 +39,7 @@ const BookControl = (props: any) => {
   const [restart, setRestart] = React.useState(false);
   const [selectedId, setSelectedId] = React.useState<number | null>(null);
   const [open, setOpen] = React.useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );

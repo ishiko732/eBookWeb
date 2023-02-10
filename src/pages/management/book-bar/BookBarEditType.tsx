@@ -65,6 +65,13 @@ const BookBarEditType = ({
   };
 
   const handleAddChip = (chipValue: string, chipIndex: number) => {
+    if (message.indexOf(chipValue) !== -1) {
+      enqueueSnackbar(
+        t("api.opt_error", { data: t("management.book.edit_repeat") }),
+        { variant: "error" }
+      );
+      return;
+    }
     if (book?.id) {
       addBookTypeById(book.id as number, [chipValue])
         .then((res) => {
@@ -98,7 +105,9 @@ const BookBarEditType = ({
     }
   };
   const handleChange = (newValue: MuiChipsInputChip[]) => {
-    setMessage(newValue);
+    const setData: Set<string> = new Set();
+    newValue.forEach((value) => setData.add(value));
+    setMessage(Array.from(setData));
   };
 
   return (

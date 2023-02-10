@@ -185,6 +185,7 @@ const customChineseMessages = {
       user_name: "持有者",
       user_number: "持有者人数",
       edit_text: "请输入并按下回车键",
+      edit_repeat: "输入的信息已存在",
       op: {
         view: "浏览文件",
         file: "查看持有者",

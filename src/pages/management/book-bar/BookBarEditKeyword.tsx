@@ -5,10 +5,7 @@ import { book, bookKeyword } from "../../../api/models";
 import { Paper } from "@mui/material";
 import { Loading } from "../../../components/Loading";
 import { MuiChipsInput, MuiChipsInputChip } from "mui-chips-input";
-import {
-  addBookKeyWordById,
-  deleteBookKeyWordById,
-} from "../../../api/book";
+import { addBookKeyWordById, deleteBookKeyWordById } from "../../../api/book";
 import { v4 } from "uuid";
 
 const BookBarEditKeyword = ({
@@ -70,6 +67,13 @@ const BookBarEditKeyword = ({
   };
 
   const handleAddChip = (chipValue: string, chipIndex: number) => {
+    if (message.indexOf(chipValue) !== -1) {
+      enqueueSnackbar(
+        t("api.opt_error", { data: t("management.book.edit_repeat") }),
+        { variant: "error" }
+      );
+      return;
+    }
     if (book?.id) {
       addBookKeyWordById(book.id as number, [chipValue])
         .then((res) => {
@@ -103,7 +107,9 @@ const BookBarEditKeyword = ({
     }
   };
   const handleChange = (newValue: MuiChipsInputChip[]) => {
-    setMessage(newValue);
+    const setData: Set<string> = new Set();
+    newValue.forEach((value) => setData.add(value));
+    setMessage(Array.from(setData));
   };
 
   return (
