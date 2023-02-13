@@ -28,6 +28,9 @@ import EventNoteIcon from "@mui/icons-material/EventNote";
 import PublicIcon from "@mui/icons-material/Public";
 import { role, userStatus } from "../api/entity/auth";
 import ReadControl from "../pages/read";
+import PDFBrowse from "../pages/viewer/PDFBrowse";
+
+// import PDFViewRangeBorwse from "../pages/pdf/PDFViewRangeBorwse";
 export interface route {
   path: string;
   element: JSX.Element;
@@ -101,6 +104,10 @@ export const routes = (props: any): route[] => {
           element: <MyHome {...props} />,
         },
       ],
+    },
+    {
+      path: "/views",
+      element: <PDFBrowse />,
     },
     {
       path: "/exception/403",
@@ -194,6 +201,7 @@ export const menus = (r: role): ListBarData[] => {
   return items;
 };
 
+export const BaseURL = "http://localhost:8080/";
 export const defaultLanguage = "zh_CN";
 export const default403URL = "/exception/403";
 export const defaultSnackBarNumber = 6;
