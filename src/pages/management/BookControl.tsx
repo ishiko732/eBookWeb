@@ -82,9 +82,26 @@ const BookControl = (props: any) => {
       enqueueSnackbar(t("management.book.notSelect"), { variant: "error" });
       return;
     }
-    setType(op);
-    setAnchorEl(event.currentTarget);
-    setOpen(true);
+    if (op === "viewPDF") {
+      console.log(
+        message.filter(
+          (data) => data.id === (selectedId as unknown as number[])[0]
+        )
+      );
+      const win = window.open(
+        `/views?resoure=${
+          message.filter(
+            (data) => data.id === (selectedId as unknown as number[])[0]
+          )[0].mid
+        }`,
+        "_blank"
+      );
+      win?.focus();
+    } else {
+      setType(op);
+      setAnchorEl(event.currentTarget);
+      setOpen(true);
+    }
   };
 
   return (
