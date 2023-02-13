@@ -1,4 +1,5 @@
 import { AxiosProgressEvent } from "axios";
+import { BaseURL } from "../config/config";
 import request from "../config/request";
 import * as vo from "./entity/file";
 import { selectVo } from "./models";
@@ -69,13 +70,18 @@ export const uploadFile = (
   });
 
 // 查看文件
+export const viewFileURL = (fsId: string) => {
+  return `${BaseURL}file/views/${fsId}`;
+};
+
 export const viewFile = (
   fsId: string,
   onDownload?: (progressEvent: AxiosProgressEvent) => void
 ) =>
   request({
     method: "get",
-    url: `file/download/${fsId}`,
+    url: `file/views/${fsId}`,
+    responseType: "blob", // important
     timeout: 0,
     onDownloadProgress: onDownload,
   });

@@ -10,12 +10,12 @@ import {
   refresh_token_expire_length,
 } from "./token";
 import { logOut } from "./logOut";
-import { defaultLanguage } from "./config";
+import { BaseURL, defaultLanguage } from "./config";
 import { refreshtokenURL } from "../api/auth";
 import { timer } from "../utils/sleep";
 // 这里取决于登录的时候将 token 存储在哪里
 const instance = axios.create({
-  baseURL: "http://localhost:8080/",
+  baseURL: BaseURL,
   timeout: 5000,
 });
 
