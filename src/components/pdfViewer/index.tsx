@@ -1,20 +1,8 @@
-import { memo, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import usePDFDocument from "./Document";
-import { loadPage, Page } from "./Page";
+import { Page } from "./Page";
 import { v4 } from "uuid";
-import styled from "@emotion/styled";
-import {
-  Box,
-  Fab,
-  LinearProgress,
-  makeStyles,
-  SpeedDial,
-  SpeedDialAction,
-  SpeedDialIcon,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { Loading } from "../Loading";
+import { Box, Fab, LinearProgress, TextField, Typography } from "@mui/material";
 // import DocumentInitParameters from 'pdfjs-dist/types/src/display/api';
 
 document.addEventListener("selectionchange", () => {
@@ -105,7 +93,7 @@ const PDFViewer: React.FC<{
       io.current?.disconnect();
     };
   });
-  const viewerRect = document.getElementById("viewer")?.getBoundingClientRect();
+  // const viewerRect = document.getElementById("viewer")?.getBoundingClientRect();
   return loading ? (
     <LinearProgress />
   ) : (
@@ -122,8 +110,9 @@ const PDFViewer: React.FC<{
         variant="extended"
         sx={{
           position: "fixed",
+          left: "50%",
           bottom: 16,
-          right: viewerRect ? viewerRect.left - 70 : 16,
+          // right: viewerRect ? viewerRect.left - 70 : 16,
         }}
       >
         <TextField
