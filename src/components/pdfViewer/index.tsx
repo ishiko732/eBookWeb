@@ -3,7 +3,18 @@ import usePDFDocument from "./Document";
 import { loadPage, Page } from "./Page";
 import { v4 } from "uuid";
 import styled from "@emotion/styled";
-import { LinearProgress } from "@mui/material";
+import {
+  Box,
+  Fab,
+  LinearProgress,
+  makeStyles,
+  SpeedDial,
+  SpeedDialAction,
+  SpeedDialIcon,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { Loading } from "../Loading";
 // import DocumentInitParameters from 'pdfjs-dist/types/src/display/api';
 
 document.addEventListener("selectionchange", () => {
@@ -21,16 +32,14 @@ const PDFViewer: React.FC<{
   const { loading, pdf } = usePDFDocument({
     option: props.documentInitParameters,
   });
-  let currentPage = 0;
   const [pages, setPage] = useState<JSX.Element[]>([]);
-  // const firstSubmitStatus = useRef(false);
+  const currentPageRef = useRef<HTMLInputElement>();
   const goPage = (i: number) => {
     // setCurrentPage(i);
-    currentPage = i;
     const targetPage = document.getElementById(
       `pageContainer${i}`
     ) as HTMLDivElement;
-    targetPage.scrollIntoView({ behavior: "smooth" });
+    targetPage.scrollIntoView({ behavior: "auto" });
   };
 
   useEffect(() => {
@@ -40,29 +49,28 @@ const PDFViewer: React.FC<{
     createPages();
     // firstSubmitStatus.current=true
   }, [pdf]);
+
   const createPages = async () => {
     const pages = [];
     const loadingObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((item) => {
-          const index = parseInt(
-            item.target.getAttribute("data-page-number") || "0"
-          );
-          if (item.intersectionRatio >= 0.5) {
-            currentPage = index;
-            // console.log(index);
+          if (item.intersectionRatio > 0.5) {
+            (item.target as HTMLDivElement).setAttribute("checked", "");
+            // (document.getElementById('currentPage') as HTMLDivElement).innerText=item.target.getAttribute("data-page-number")!
+            if (currentPageRef.current) {
+              currentPageRef.current!.value =
+                item.target.getAttribute("data-page-number")!;
+            }
+            // console.log(item.target.getAttribute("data-page-number"));
+          } else {
+            (item.target as HTMLDivElement).removeAttribute("checked");
           }
-          // if (item.intersectionRatio > 0) {
-          //     const _target = item.target as HTMLDivElement
-          //     if(_target.getAttribute("data-loaded") === "false"){
-          //       console.log("尝试加载数据",index);
-          //       loadPage(pdf!,index, props.scale);
-          //     }
-          //   }
+          // item.intersectionRatio >0 && console.log(index,item.intersectionRatio)
         });
       },
       {
-        threshold: [0.5],
+        threshold: 0.5,
       }
     );
     io.current = loadingObserver;
@@ -97,18 +105,67 @@ const PDFViewer: React.FC<{
       io.current?.disconnect();
     };
   });
-
+  const viewerRect = document.getElementById("viewer")?.getBoundingClientRect();
   return loading ? (
     <LinearProgress />
   ) : (
-    <div
-      id="viewer"
-      className="pdfViewer"
-      key={v4()}
-      style={{ margin: "0 auto", ...props.style }}
-    >
-      {pdf && pages}
-    </div>
+    <Box>
+      <div
+        id="viewer"
+        className="pdfViewer"
+        key={v4()}
+        style={{ margin: "0 auto", ...props.style }}
+      >
+        {pdf && pages}
+      </div>
+      <Fab
+        variant="extended"
+        sx={{
+          position: "fixed",
+          bottom: 16,
+          right: viewerRect ? viewerRect.left - 70 : 16,
+        }}
+      >
+        <TextField
+          id="currentPage"
+          variant="standard"
+          inputProps={{ style: { textAlign: "center" } }}
+          inputRef={currentPageRef}
+          onKeyUp={(event) => {
+            const page = Number(currentPageRef.current?.value);
+            if (event.key === "Enter") {
+              if (page > 0 && page <= pages.length) {
+                goPage(page);
+              } else {
+                currentPageRef.current!.blur();
+                Array.from(document.getElementsByClassName("page")).forEach(
+                  (page) => {
+                    if (page.getAttribute("checked") === "") {
+                      currentPageRef.current!.value = page.getAttribute(
+                        "data-page-number"
+                      ) as string;
+                    }
+                  }
+                );
+              }
+            }
+          }}
+          type="number"
+          sx={{
+            width: "36px",
+            "input::-webkit-outer-spin-button, input::-webkit-inner-spin-button":
+              {
+                WebkitAppearance: "none",
+                margin: 0,
+              },
+            "input[type=number]": {
+              MozAppearance: "textfield",
+            },
+          }}
+        />
+        <Typography>/{pages.length}</Typography>
+      </Fab>
+    </Box>
   );
 };
 export default PDFViewer;
