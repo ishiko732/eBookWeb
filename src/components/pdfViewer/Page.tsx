@@ -43,7 +43,8 @@ export const loadPage = async (
   };
   await loadText(textContainer, pdfPage, viewport);
   await loadAnnotation(annotationContainer, pdfPage, viewport);
-  pdfPage.render(renderContext);
+  await pdfPage.render(renderContext).promise;
+  canvas.setAttribute('data-img',canvas.toDataURL('image/jpeg',0.4))
   page_div.style.opacity = "1";
   return {
     page: pdfPage,
