@@ -6,7 +6,7 @@ import {
   useLayoutEffect,
   useRef,
 } from "react";
-import { createEmptyPage, pdfLinkService } from "./base";
+import { pdfLinkService } from "./base";
 import "pdfjs-dist/web/pdf_viewer.css";
 import { v4 } from "uuid";
 
@@ -95,51 +95,53 @@ export const Page: React.FC<{
   pageNumber: number;
   defaultWidth?: number | undefined;
   defaultHeight?: number | undefined;
-  observer: IntersectionObserver;
+  // observer: IntersectionObserver;
   scale: number;
   loadContent?: boolean;
 }> = (props) => {
-  const { pageNumber, defaultHeight, defaultWidth, observer } = props;
+  const { pageNumber, defaultHeight, defaultWidth /*observer*/ } = props;
   const ref = useRef<HTMLDivElement | null>(null);
   const firstSubmitStatus = useRef(true);
-  // const loadingRef=useRef<IntersectionObserver>(
-  // new IntersectionObserver((entries) => {
-  //   entries.forEach((entry) => {
-  //     const { target, intersectionRatio } = entry
-  //     console.log(target,intersectionRatio)
-  //     if (intersectionRatio > 0) {
-  //       const _target = target as HTMLDivElement
-  //       console.log(_target,intersectionRatio)
-  //       if(_target.getAttribute("data-loaded") !== "false"){
-  //         console.log("尝试加载数据",props.pageNumber);
-  //         loadPage(props.pdf, props.pageNumber, props.scale);
-  //       }
-  //       loadingRef.current.unobserve(_target)
-  //     }
-  //   })
-  // }));
-  // useEffect(() => {
-  //   const page=document.getElementById(`pageContainer${pageNumber}`) as HTMLDivElement
-  //   if(!page){
-  //     return ()=>{}
-  //   }
-  //   loadingRef.current.observe(page);
-  //   return () => {
-  //     loadingRef.current.disconnect()
-  //   }
-  // }, [pageNumber])
+  const loadingRef = useRef<IntersectionObserver>(
+    new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const { target, intersectionRatio } = entry;
+        console.log(target, intersectionRatio);
+        if (intersectionRatio > 0) {
+          const _target = target as HTMLDivElement;
+          console.log(_target, intersectionRatio);
+          if (_target.getAttribute("data-loaded") === "false") {
+            console.log("尝试加载数据", props.pageNumber);
+            loadPage(props.pdf, props.pageNumber, props.scale);
+          }
+          loadingRef.current.unobserve(_target);
+        }
+      });
+    })
+  );
 
   useLayoutEffect(() => {
     if (!ref.current) {
       return;
     }
-    observer.observe(ref.current);
+    // observer.observe(ref.current);
     if (firstSubmitStatus.current) {
-      props.loadContent && loadPage(props.pdf, props.pageNumber, props.scale);
+      firstSubmitStatus.current = false;
+      if (props.loadContent) {
+        loadPage(props.pdf, props.pageNumber, props.scale);
+      } else {
+        const page = document.getElementById(
+          `pageContainer${pageNumber}`
+        ) as HTMLDivElement;
+        if (page) {
+          loadingRef.current.observe(page);
+        }
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     return () => {
-      observer.unobserve(ref.current as HTMLDivElement);
+      props.loadContent && loadingRef.current.disconnect();
+      // observer.unobserve(ref.current as HTMLDivElement);
     };
   });
   const defaultStyle =
