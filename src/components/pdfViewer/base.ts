@@ -64,3 +64,26 @@ export const createEmptyPage = (
   wrapper.appendChild(canvas);
   return page;
 };
+
+export const getBeforeAfter = (x: number, max: number, range: number) => {
+  let lowerBound = Math.max(1, x - range); // 下界
+  let upperBound = Math.min(max, x + range); // 上界
+  if (range * 2 + 1 > max) {
+    return Array.from({ length: max }, (_, i) => 1 + i); // 获取前后共max个数
+  }
+  while (upperBound - lowerBound + 1 < range * 2 + 1) {
+    if (lowerBound === 1) {
+      upperBound = Math.min(max, upperBound + 1);
+    } else if (upperBound === max) {
+      lowerBound = Math.max(1, lowerBound - 1);
+    } else if (x - lowerBound <= upperBound - x) {
+      upperBound = Math.min(max, upperBound + 1);
+    } else {
+      lowerBound = Math.max(1, lowerBound - 1);
+    }
+  }
+  return Array.from(
+    { length: upperBound - lowerBound + 1 },
+    (_, i) => lowerBound + i
+  ); // 获取前后共2*range+1个数
+};

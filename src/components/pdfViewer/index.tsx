@@ -50,7 +50,7 @@ const PDFViewer: React.FC<{
           );
           if (item.intersectionRatio >= 0.5) {
             currentPage = index;
-            console.log(index);
+            // console.log(index);
           }
           // if (item.intersectionRatio > 0) {
           //     const _target = item.target as HTMLDivElement

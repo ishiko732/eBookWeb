@@ -1,12 +1,6 @@
 import * as pdfJS from "pdfjs-dist";
-import {
-  memo,
-  MutableRefObject,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-} from "react";
-import { pdfLinkService } from "./base";
+import { useLayoutEffect, useRef } from "react";
+import { getBeforeAfter, pdfLinkService } from "./base";
 import "pdfjs-dist/web/pdf_viewer.css";
 import { v4 } from "uuid";
 
@@ -90,6 +84,23 @@ export const loadAnnotation = async (
   return annotation;
 };
 const outputScale = window.devicePixelRatio || 1;
+
+export const loadBeforeAfterPage = (
+  pages: number[],
+  pdf: pdfJS.PDFDocumentProxy,
+  scale: number
+) => {
+  pages.map((pageNumber) => {
+    const page = document.getElementById(
+      `pageContainer${pageNumber}`
+    ) as HTMLDivElement | null;
+    if (page && page.getAttribute("data-loaded") === "false") {
+      // console.log("尝试加载数据", pageNumber);
+      loadPage(pdf, pageNumber, scale);
+    }
+  });
+};
+
 export const Page: React.FC<{
   pdf: pdfJS.PDFDocumentProxy;
   pageNumber: number;
@@ -100,24 +111,31 @@ export const Page: React.FC<{
   loadContent?: boolean;
 }> = (props) => {
   const { pageNumber, defaultHeight, defaultWidth /*observer*/ } = props;
+  const totalPage = props.pdf._pdfInfo.numPages;
   const ref = useRef<HTMLDivElement | null>(null);
   const firstSubmitStatus = useRef(true);
+  const firstLoadingStatus = useRef(true);
   const loadingRef = useRef<IntersectionObserver>(
-    new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        const { target, intersectionRatio } = entry;
-        console.log(target, intersectionRatio);
-        if (intersectionRatio > 0) {
-          const _target = target as HTMLDivElement;
-          console.log(_target, intersectionRatio);
-          if (_target.getAttribute("data-loaded") === "false") {
-            console.log("尝试加载数据", props.pageNumber);
-            loadPage(props.pdf, props.pageNumber, props.scale);
+    new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const { target, intersectionRatio } = entry;
+          if (intersectionRatio > 0.5) {
+            const _target = target as HTMLDivElement;
+            const index = Number(_target.getAttribute("data-page-number"));
+            const pages = getBeforeAfter(index, totalPage, 2);
+            if (firstLoadingStatus.current) {
+              firstLoadingStatus.current = false;
+              loadBeforeAfterPage(pages, props.pdf, props.scale);
+            }
+            loadingRef.current.unobserve(_target);
           }
-          loadingRef.current.unobserve(_target);
-        }
-      });
-    })
+        });
+      },
+      {
+        threshold: [0.5],
+      }
+    )
   );
 
   useLayoutEffect(() => {
