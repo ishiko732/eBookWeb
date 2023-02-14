@@ -120,7 +120,7 @@ export const Page: React.FC<{
       (entries) => {
         entries.forEach((entry) => {
           const { target, intersectionRatio } = entry;
-          if (intersectionRatio > 0.5) {
+          if (intersectionRatio >= 0.13) {
             const _target = target as HTMLDivElement;
             const index = Number(_target.getAttribute("data-page-number"));
             const pages = getBeforeAfter(index, totalPage, 2);
