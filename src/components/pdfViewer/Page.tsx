@@ -44,7 +44,7 @@ export const loadPage = async (
   await loadText(textContainer, pdfPage, viewport);
   await loadAnnotation(annotationContainer, pdfPage, viewport);
   await pdfPage.render(renderContext).promise;
-  canvas.setAttribute('data-img',canvas.toDataURL('image/jpeg',0.4))
+  canvas.setAttribute("data-img", canvas.toDataURL("image/jpeg", 0.4));
   page_div.style.opacity = "1";
   return {
     page: pdfPage,
@@ -81,6 +81,11 @@ export const loadAnnotation = async (
     linkService: pdfLinkService,
     downloadManager: null,
     enableScripting: true,
+  });
+  Array.from(annotationContainer.getElementsByClassName("popupDate")).map((date_time) => {
+    const _target=date_time as HTMLSpanElement
+    const message=JSON.parse(_target.getAttribute("data-l10n-args")!)
+    _target.innerText=`${message.date} ${message.time}`
   });
   return annotation;
 };
