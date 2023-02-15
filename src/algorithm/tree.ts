@@ -40,7 +40,8 @@ export const treeUnique = (trees: TreeData[]): TreeData[] => {
   const resTree: TreeData[] = [];
   // eslint-disable-next-line array-callback-return
   trees.forEach((tree: TreeData, index: number) => {
-    if (index === 0 || trees[index]?.id !== trees[index - 1]?.id) {
+    const cnt=resTree.filter(tree=>tree.id===trees[index].id).length;
+    if (cnt===0) {
       const _index = resTree.push(tree) - 1;
       if (resTree[_index].children) {
         resTree[_index].children = treeUnique(
