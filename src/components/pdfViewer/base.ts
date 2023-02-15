@@ -115,7 +115,7 @@ export const clickHandler = (
   const annotation_filter = annotations.filter(
     (annotation) => annotation.id === id
   );
-  if (annotation_filter.length === 1) {
+  if (annotation_filter.length > 0) {
     const annotation = annotation_filter[0];
     pdf.getDestination(annotation.dest).then((dest) => {
       dest &&

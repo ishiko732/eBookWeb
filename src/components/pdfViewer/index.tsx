@@ -93,7 +93,7 @@ const PDFViewer: React.FC<{
     <LinearProgress />
   ) : (
     <Box>
-      <div
+      {/* <div
         id="viewerContainer"
         style={{
           position: "absolute",
@@ -103,16 +103,16 @@ const PDFViewer: React.FC<{
           bottom: "0",
           margin: "auto",
         }}
+      > */}
+      <div
+        id="viewer"
+        className="pdfViewer"
+        key={v4()}
+        style={{ margin: "0 auto", ...props.style }}
       >
-        <div
-          id="viewer"
-          className="pdfViewer"
-          key={v4()}
-          style={{ margin: "0 auto", ...props.style }}
-        >
-          {pdf && pages}
-        </div>
+        {pdf && pages}
       </div>
+      {/* </div> */}
       <Fab
         variant="extended"
         sx={{

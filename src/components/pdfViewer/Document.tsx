@@ -1,6 +1,11 @@
 import * as pdfJS from "pdfjs-dist";
 import { useEffect, useState } from "react";
-import { pdfLinkService } from "./base";
+// import {
+//   createPDFViewer,
+//   pdfFindController,
+//   pdfLinkService,
+//   pdfScriptingManager,
+// } from "./base";
 pdfJS.GlobalWorkerOptions.workerSrc = require("pdfjs-dist/build/pdf.worker.entry.js");
 
 const usePDFDocument = (props: { option: any }) => {
@@ -11,9 +16,15 @@ const usePDFDocument = (props: { option: any }) => {
       setLoading(true);
       (async () => {
         const pdf = await pdfJS.getDocument(props.option).promise;
-        const viewer = document.getElementById("viewer") as HTMLDivElement;
-        pdfLinkService.setViewer(viewer);
-        pdfLinkService.setDocument(pdf);
+        // const viewer = document.getElementById(
+        //   "viewerContainer"
+        // ) as HTMLDivElement;
+        // const pdfViewer = createPDFViewer(viewer);
+        // pdfLinkService.setViewer(pdfViewer);
+        // pdfLinkService.setDocument(pdf);
+        // pdfFindController.setDocument(pdf);
+        // pdfScriptingManager.setViewer(pdfViewer);
+        // pdfScriptingManager.setDocument(pdf);
         setPDF(pdf);
       })();
       setLoading(false);
