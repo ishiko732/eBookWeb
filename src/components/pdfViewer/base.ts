@@ -4,9 +4,9 @@ import {
   PDFLinkService,
   PDFFindController,
   PDFScriptingManager,
+  PDFHistory,
+  NullL10n,
 } from "pdfjs-dist/web/pdf_viewer";
-import React, { useLayoutEffect, useRef } from "react";
-import * as pdfJS from "pdfjs-dist";
 
 export const eventBus = new EventBus();
 export const pdfLinkService = new PDFLinkService({
@@ -21,6 +21,21 @@ export const pdfScriptingManager = new PDFScriptingManager({
   eventBus,
   sandboxBundleSrc: "pdfjs-dist/build/pdf.sandbox",
 });
+
+export function createPDFViewer(container: HTMLDivElement) {
+  return new PDFViewer({
+    container: container,
+    linkService: pdfLinkService,
+    eventBus: eventBus,
+    l10n: NullL10n,
+  });
+}
+
+export const pdfHistory = new PDFHistory({
+  eventBus,
+  linkService: pdfLinkService,
+});
+pdfLinkService.setHistory(pdfHistory);
 
 //https://github.com/mzabriskie/pdf-textlayer-example/blob/master/index.js
 export const createEmptyPage = (
@@ -57,7 +72,6 @@ export const createEmptyPage = (
     wrapper.style.width = canvas.style.width;
     wrapper.style.height = canvas.style.height;
   }
-
   page.appendChild(wrapper);
   page.appendChild(textLayer);
   page.appendChild(annotationLayer);
