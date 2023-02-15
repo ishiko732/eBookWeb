@@ -82,11 +82,13 @@ export const loadAnnotation = async (
     downloadManager: null,
     enableScripting: true,
   });
-  Array.from(annotationContainer.getElementsByClassName("popupDate")).map((date_time) => {
-    const _target=date_time as HTMLSpanElement
-    const message=JSON.parse(_target.getAttribute("data-l10n-args")!)
-    _target.innerText=`${message.date} ${message.time}`
-  });
+  Array.from(annotationContainer.getElementsByClassName("popupDate")).map(
+    (date_time) => {
+      const _target = date_time as HTMLSpanElement;
+      const message = JSON.parse(_target.getAttribute("data-l10n-args")!);
+      _target.innerText = `${message.date} ${message.time}`;
+    }
+  );
   return annotation;
 };
 const outputScale = window.devicePixelRatio || 1;
