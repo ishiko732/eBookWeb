@@ -7,6 +7,7 @@ import {
   PDFHistory,
   NullL10n,
 } from "pdfjs-dist/web/pdf_viewer";
+import * as pdfJS from "pdfjs-dist";
 
 export const eventBus = new EventBus();
 export const pdfLinkService = new PDFLinkService({
@@ -100,4 +101,34 @@ export const getBeforeAfter = (x: number, max: number, range: number) => {
     { length: upperBound - lowerBound + 1 },
     (_, i) => lowerBound + i
   ); // 获取前后共2*range+1个数
+};
+
+export const annotations: any[] = [];
+
+export const clickHandler = (
+  event: MouseEvent,
+  pdf: pdfJS.PDFDocumentProxy
+) => {
+  event.preventDefault(); // 阻止 a 标签点击事件的默认行为
+  const _target = event.target as HTMLLinkElement;
+  const id = _target.getAttribute("data-element-id")!;
+  const annotation_filter = annotations.filter(
+    (annotation) => annotation.id === id
+  );
+  if (annotation_filter.length === 1) {
+    const annotation = annotation_filter[0];
+    pdf.getDestination(annotation.dest).then((dest) => {
+      dest &&
+        pdf.getPageIndex(dest[0]).then((page) => {
+          goPage(page + 1);
+        });
+    });
+  }
+};
+
+export const goPage = (i: number) => {
+  const targetPage = document.getElementById(
+    `pageContainer${i}`
+  ) as HTMLDivElement;
+  targetPage.scrollIntoView({ behavior: "auto" });
 };

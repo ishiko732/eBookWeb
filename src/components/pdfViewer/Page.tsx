@@ -1,6 +1,11 @@
 import * as pdfJS from "pdfjs-dist";
 import { useLayoutEffect, useRef } from "react";
-import { getBeforeAfter, pdfLinkService } from "./base";
+import {
+  annotations,
+  clickHandler,
+  getBeforeAfter,
+  pdfLinkService,
+} from "./base";
 import "pdfjs-dist/web/pdf_viewer.css";
 import { v4 } from "uuid";
 
@@ -42,7 +47,7 @@ export const loadPage = async (
     transform: transform,
   };
   await loadText(textContainer, pdfPage, viewport);
-  await loadAnnotation(annotationContainer, pdfPage, viewport);
+  await loadAnnotation(annotationContainer, pdf, pdfPage, viewport);
   await pdfPage.render(renderContext).promise;
   canvas.setAttribute("data-img", canvas.toDataURL("image/jpeg", 0.4));
   page_div.style.opacity = "1";
@@ -68,6 +73,7 @@ export const loadText = async (
 };
 export const loadAnnotation = async (
   annotationContainer: HTMLDivElement,
+  pdf: pdfJS.PDFDocumentProxy,
   page: pdfJS.PDFPageProxy,
   viewport: pdfJS.PageViewport
 ) => {
@@ -89,6 +95,14 @@ export const loadAnnotation = async (
       _target.innerText = `${message.date} ${message.time}`;
     }
   );
+  annotation.forEach((ann) => {
+    annotations.push(ann);
+  });
+  Array.from(annotationContainer.getElementsByTagName("a")).map((a) => {
+    a.addEventListener("click", (event) => {
+      clickHandler(event, pdf);
+    });
+  });
   return annotation;
 };
 const outputScale = window.devicePixelRatio || 1;

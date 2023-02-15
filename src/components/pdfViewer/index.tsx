@@ -3,6 +3,7 @@ import usePDFDocument from "./Document";
 import { Page } from "./Page";
 import { v4 } from "uuid";
 import { Box, Fab, LinearProgress, TextField, Typography } from "@mui/material";
+import { goPage } from "./base";
 // import DocumentInitParameters from 'pdfjs-dist/types/src/display/api';
 
 document.addEventListener("selectionchange", () => {
@@ -22,13 +23,6 @@ const PDFViewer: React.FC<{
   });
   const [pages, setPage] = useState<JSX.Element[]>([]);
   const currentPageRef = useRef<HTMLInputElement>();
-  const goPage = (i: number) => {
-    // setCurrentPage(i);
-    const targetPage = document.getElementById(
-      `pageContainer${i}`
-    ) as HTMLDivElement;
-    targetPage.scrollIntoView({ behavior: "auto" });
-  };
 
   useEffect(() => {
     if (pdf === undefined) {
@@ -93,18 +87,31 @@ const PDFViewer: React.FC<{
       io.current?.disconnect();
     };
   });
+
   // const viewerRect = document.getElementById("viewer")?.getBoundingClientRect();
   return loading ? (
     <LinearProgress />
   ) : (
     <Box>
       <div
-        id="viewer"
-        className="pdfViewer"
-        key={v4()}
-        style={{ margin: "0 auto", ...props.style }}
+        id="viewerContainer"
+        style={{
+          position: "absolute",
+          left: "0",
+          top: "0",
+          right: "0",
+          bottom: "0",
+          margin: "auto",
+        }}
       >
-        {pdf && pages}
+        <div
+          id="viewer"
+          className="pdfViewer"
+          key={v4()}
+          style={{ margin: "0 auto", ...props.style }}
+        >
+          {pdf && pages}
+        </div>
       </div>
       <Fab
         variant="extended"
@@ -123,10 +130,10 @@ const PDFViewer: React.FC<{
           onKeyUp={(event) => {
             const page = Number(currentPageRef.current?.value);
             if (event.key === "Enter") {
+              currentPageRef.current!.blur();
               if (page > 0 && page <= pages.length) {
                 goPage(page);
               } else {
-                currentPageRef.current!.blur();
                 Array.from(document.getElementsByClassName("page")).forEach(
                   (page) => {
                     if (page.getAttribute("checked") === "") {
@@ -158,3 +165,11 @@ const PDFViewer: React.FC<{
   );
 };
 export default PDFViewer;
+
+export function scrollPageIntoView(
+  pageNumber: number,
+  destArray: any,
+  ignoreDestinationZoom: any
+) {
+  console.log("hello");
+}
