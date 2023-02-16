@@ -94,5 +94,6 @@ export type TreeData = {
   name: string;
   disabledButton: boolean;
   children?: TreeData[];
+  resoureId?: string;
   type: TreeType;
 };
