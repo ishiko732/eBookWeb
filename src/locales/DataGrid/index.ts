@@ -1,15 +1,13 @@
-import { GRID_DEFAULT_LOCALE_TEXT_EN_US } from "./localeTextConstants_en_US";
-import { GRID_DEFAULT_LOCALE_TEXT_JA_JP } from "././localeTextConstants_ja_JP";
-import { GRID_DEFAULT_LOCALE_TEXT_ZH_CN } from "././localeTextConstants_zh_CN";
+import {zhCN,jaJP,enUS } from '@mui/x-data-grid';
 const localeTextConstants = (language: string) => {
   if (language === "zh_CN") {
-    return GRID_DEFAULT_LOCALE_TEXT_ZH_CN;
+    return zhCN.components.MuiDataGrid.defaultProps.localeText;
   } else if (language === "en_US") {
-    return GRID_DEFAULT_LOCALE_TEXT_EN_US;
+    return enUS.components.MuiDataGrid.defaultProps.localeText;
   } else if (language === "ja_JP") {
-    return GRID_DEFAULT_LOCALE_TEXT_JA_JP;
+    return jaJP.components.MuiDataGrid.defaultProps.localeText;
   } else {
-    return GRID_DEFAULT_LOCALE_TEXT_ZH_CN;
+    return zhCN.components.MuiDataGrid.defaultProps.localeText;
   }
 };
 export default localeTextConstants;
