@@ -58,6 +58,27 @@ export const deleteBookTypeById = (bookId: number, types: string[]) =>
     transformRequest: [(data) => JSON.stringify(data)],
   });
 
+// 更新图书的类型和关键词
+export const updateBookTypeAndKeywordById = (
+  bookId: number,
+  addTypes: string[],
+  deleteTypes: string[],
+  addKeywords: string[],
+  deleteKeywords: string[]
+) =>
+  request({
+    method: "put",
+    url: `book/keyword-type/${bookId}`,
+    data: {
+      addTypes: addTypes,
+      deleteTypes: deleteTypes,
+      addKeywords: addKeywords,
+      deleteKeywords: deleteKeywords,
+    },
+    headers: { "Content-Type": "application/json" },
+    transformRequest: [(data) => JSON.stringify(data)],
+  });
+
 // 添加单个类型
 export const addType = (type: string) => request.post(`book/type/${type}`);
 // 查询单个类型

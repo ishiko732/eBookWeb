@@ -32,6 +32,7 @@ export const filesToTreeData = (files: file[]): TreeData[] => {
           : file.filename.substring(0, file.filename.lastIndexOf(".")),
       disabledButton: false,
       type: fileType,
+      resoureId: file.fsId,
     };
   });
 };
@@ -40,8 +41,8 @@ export const treeUnique = (trees: TreeData[]): TreeData[] => {
   const resTree: TreeData[] = [];
   // eslint-disable-next-line array-callback-return
   trees.forEach((tree: TreeData, index: number) => {
-    const cnt=resTree.filter(tree=>tree.id===trees[index].id).length;
-    if (cnt===0) {
+    const cnt = resTree.filter((tree) => tree.id === trees[index].id).length;
+    if (cnt === 0) {
       const _index = resTree.push(tree) - 1;
       if (resTree[_index].children) {
         resTree[_index].children = treeUnique(
