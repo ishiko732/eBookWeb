@@ -208,6 +208,7 @@ const customChineseMessages = {
     Move: "移动{{type}}",
     Rename: "命名{{type}}",
     Upload: "上传{{type}}",
+    Share: "共享{{type}}",
     Input: "请输入{{type}}名称",
     Tip: "请谨慎操作,一旦{{type}}就无法恢复!",
     YES: "确定{{opt}}",
@@ -219,6 +220,7 @@ const customChineseMessages = {
       Rename: "重命名",
       Upload: "上传",
       Update: "更新",
+      Share: "共享",
     },
   },
 };
