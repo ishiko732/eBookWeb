@@ -1,4 +1,4 @@
-import {zhCN,jaJP,enUS } from '@mui/x-data-grid';
+import { zhCN, jaJP, enUS } from "@mui/x-data-grid";
 const localeTextConstants = (language: string) => {
   if (language === "zh_CN") {
     return zhCN.components.MuiDataGrid.defaultProps.localeText;
