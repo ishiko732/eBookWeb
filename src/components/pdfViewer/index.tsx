@@ -5,13 +5,6 @@ import { v4 } from "uuid";
 import { Box, Fab, LinearProgress, TextField, Typography } from "@mui/material";
 import { goPage } from "./base";
 // import DocumentInitParameters from 'pdfjs-dist/types/src/display/api';
-
-document.addEventListener("selectionchange", () => {
-  //https://stackoverflow.com/questions/48950038/how-do-i-retrieve-text-from-user-selection-in-pdf-js
-  console.log(
-    window.getSelection()?.toString().replace(/\r\n/g, "").replace(/\n/g, "")
-  );
-});
 const PDFViewer: React.FC<{
   documentInitParameters: any;
   scale: number;
@@ -31,6 +24,23 @@ const PDFViewer: React.FC<{
     createPages();
     // firstSubmitStatus.current=true
   }, [pdf]);
+
+  useEffect(() => {
+    const selectionchange = (ev: Event) => {
+      //https://stackoverflow.com/questions/48950038/how-do-i-retrieve-text-from-user-selection-in-pdf-js
+      console.log(
+        window
+          .getSelection()
+          ?.toString()
+          .replace(/\r\n/g, "")
+          .replace(/\n/g, "")
+      );
+    };
+    document.addEventListener("selectionchange", selectionchange);
+    return () => {
+      document.removeEventListener("selectionchange", selectionchange);
+    };
+  });
 
   const createPages = async () => {
     const pages = [];
