@@ -164,7 +164,12 @@ export default function FileTreeView({
         }
         setFile(file);
         (event?.target as HTMLInputElement).value = "";
-        // setOpenDialog(DialogMessage);
+        break;
+      case "Share":
+        setOpenDialog({
+          ...DialogMessage,
+          // node: selectedNode?.at(-1),
+        });
         break;
       default:
         break;
@@ -379,7 +384,11 @@ export default function FileTreeView({
           />
         </ThemeProvider>
       </div>
-      <InputDialog dialogMessage={openDialog} handleClose={handleDialogClose} />
+      <InputDialog
+        dialogMessage={openDialog}
+        handleClose={handleDialogClose}
+        selectedNode={selectedNode}
+      />
     </Stack>
   );
 }

@@ -1,6 +1,7 @@
 import { Menu, MenuItem } from "@mui/material";
 import { t } from "i18next";
 import React from "react";
+import { getShareBookByFileId } from "../../api/share";
 import { TreeData } from "../tree-view/CustomTreeView";
 
 export const FileMenu = ({
@@ -15,7 +16,19 @@ export const FileMenu = ({
   selectedNode: TreeData[] | null;
 }) => {
   const [node, setNode] = React.useState<TreeData[] | null>(null);
+  const [showShare, setShowSharew] = React.useState<boolean>(false);
+
   React.useEffect(() => {
+    if (selectedNode?.at(-1)?.type === "PDF") {
+      const fileId = Number(selectedNode.at(-1)?.id.split("_").at(-1));
+      getShareBookByFileId(fileId)
+        .then((res) => {
+          setShowSharew(false);
+        })
+        .catch((err) => {
+          setShowSharew(true);
+        });
+    }
     setNode(selectedNode);
   }, [selectedNode]);
 
@@ -66,6 +79,17 @@ export const FileMenu = ({
             })}
           </MenuItem>
         )}
+        {node?.at(-1)?.type === "PDF" && showShare ? (
+          <MenuItem
+            onClick={(event) => {
+              handleClose("Share", event);
+            }}
+          >
+            {t("TreeView.Share", {
+              type: t(`TreeView.${node?.at(-1)?.type}`),
+            })}
+          </MenuItem>
+        ) : null}
         <MenuItem
           onClick={(event) => {
             handleClose("Rename", event);
@@ -107,4 +131,5 @@ export type FileMenuType =
   | "Upload"
   | "Download"
   | "Update"
+  | "Share"
   | null;

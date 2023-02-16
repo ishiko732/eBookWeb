@@ -14,6 +14,10 @@ import {
 import * as React from "react";
 import { Transition } from "../AlertDialog";
 import { FileMenuType } from "./FileMenu";
+import { TreeData } from "../tree-view/CustomTreeView";
+import ShareDialogPart from "./ShareDialog";
+import { book } from "../../api/models";
+import { TFunction } from "i18next";
 
 export interface DialogMessage {
   open: boolean;
@@ -27,6 +31,7 @@ export interface DialogMessage {
 const InputDialog = ({
   dialogMessage,
   handleClose,
+  selectedNode,
 }: {
   dialogMessage: DialogMessage;
   handleClose: (
@@ -35,19 +40,16 @@ const InputDialog = ({
     dialogMessage?: DialogMessage,
     text?: string
   ) => void;
+  selectedNode?: TreeData[] | null;
 }) => {
   const { t } = useTranslation();
   const [value, setValue] = React.useState<string>("");
-
   const handleKeyUp = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" && value !== "") {
       handleClose(e, "escapeKeyDown", dialogMessage, value);
     }
   };
 
-  React.useEffect(() => {
-    setValue(dialogMessage.preValue || "");
-  }, [dialogMessage]);
   return (
     <Dialog
       // disableEscapeKeyDown
@@ -57,6 +59,48 @@ const InputDialog = ({
       onKeyUp={handleKeyUp}
     >
       <DialogTitle>{dialogMessage.title}</DialogTitle>
+      {dialogMessage.type === "Share" && selectedNode ? (
+        <ShareDialogPart
+          node={selectedNode}
+          dialogMessage={dialogMessage}
+          handleClose={handleClose}
+        />
+      ) : (
+        <InputContent
+          t={t}
+          dialogMessage={dialogMessage}
+          handleClose={handleClose}
+          value={value}
+          setValue={setValue}
+        />
+      )}
+    </Dialog>
+  );
+};
+export const InputContent = ({
+  t,
+  dialogMessage,
+  handleClose,
+  value,
+  setValue,
+}: {
+  t: TFunction<"translation", undefined, "translation">;
+  dialogMessage: DialogMessage;
+  handleClose: (
+    event: React.SyntheticEvent<unknown>,
+    reason?: string,
+    dialogMessage?: DialogMessage,
+    text?: string
+  ) => void;
+  value: string;
+  setValue: React.Dispatch<React.SetStateAction<string>>;
+}) => {
+  React.useEffect(() => {
+    setValue(dialogMessage.preValue || "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dialogMessage]);
+  return (
+    <React.Fragment>
       <DialogContent>
         <Stack spacing={2}>
           {dialogMessage.type === "Delete" ? (
@@ -99,7 +143,7 @@ const InputDialog = ({
           {dialogMessage.yes}
         </Button>
       </DialogActions>
-    </Dialog>
+    </React.Fragment>
   );
 };
 
