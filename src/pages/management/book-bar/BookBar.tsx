@@ -1,11 +1,12 @@
 import { useSnackbar } from "notistack";
 import { useTranslation } from "react-i18next";
-import { bookOpType } from "../BookControl";
 import { Loading } from "../../../components/Loading";
 import BookBarUser from "./BookBarUser";
 import { book } from "../../../api/models";
 import BookBarEditType from "./BookBarEditType";
 import BookBarEditKeyword from "./BookBarEditKeyword";
+import { bookOpType } from "./inex";
+import React from "react";
 
 const BookBar = ({
   op,

@@ -1,10 +1,20 @@
 import { useTranslation } from "react-i18next";
-import { DialogActions, DialogContent, Stack, TextField, Typography } from "@mui/material";
+import {
+  DialogActions,
+  DialogContent,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import * as React from "react";
-import { book } from "../../api/models";
+import { book, shareBook } from "../../api/models";
 import { TreeData } from "../tree-view/CustomTreeView";
 import { Loading } from "../Loading";
-import { getBookByResourceId, updateBook, updateBookTypeAndKeywordById } from "../../api/book";
+import {
+  getBookByResourceId,
+  updateBook,
+  updateBookTypeAndKeywordById,
+} from "../../api/book";
 import { v4 } from "uuid";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
@@ -20,11 +30,13 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { HttpStatusCode } from "../../utils/StatusCode";
 import { useSnackbar } from "notistack";
 import { addShareBook } from "../../api/share";
+import Button from "@mui/material/Button";
 
 const ShareDialogPart = ({
   node,
   dialogMessage,
   handleClose,
+  sharebook,
 }: {
   node: TreeData[];
   dialogMessage: DialogMessage;
@@ -34,6 +46,7 @@ const ShareDialogPart = ({
     dialogMessage?: DialogMessage,
     text?: string
   ) => void;
+  sharebook?: shareBook;
 }) => {
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
@@ -48,30 +61,39 @@ const ShareDialogPart = ({
   const [keywords, setKeywords] = React.useState<string[]>([]);
   const [loading, setLoading] = React.useState(false);
 
+  const setView = (book: book) => {
+    setMessage(book);
+    book.title && setTitle(book.title);
+    book.author && setAuthor(book.author);
+    book.subject && setSubject(book.subject);
+    book.creator && setCreator(book.creator);
+    book.creationDate &&
+      setCreationDate(dayjs(book.creationDate, defaultDateFormat));
+    if (book.types && book.types.length > 0) {
+      setTypes(book.types.map((type) => type.type));
+    }
+    if (book.keywords && book.keywords.length > 0) {
+      setKeywords(book.keywords.map((keyword) => keyword.keyword));
+    }
+  };
+
   React.useEffect(() => {
     if (node.at(-1)?.resoureId) {
       getBookByResourceId(node.at(-1)?.resoureId!)
         .then((res) => {
           const book: book = res.data[0];
-          setMessage(book);
           setFileId(Number(node.at(-1)!.id.split("_").at(-1))!);
-          book.title && setTitle(book.title);
-          book.author && setAuthor(book.author);
-          book.subject && setSubject(book.subject);
-          book.creator && setCreator(book.creator);
-          book.creationDate &&
-            setCreationDate(dayjs(book.creationDate, defaultDateFormat));
-          if (book.types && book.types.length > 0) {
-            setTypes(book.types.map((type) => type.type));
-          }
-          if (book.keywords && book.keywords.length > 0) {
-            setKeywords(book.keywords.map((keyword) => keyword.keyword));
-          }
+          setView(book);
         })
 
         .catch((err) => {
           console.log(err);
         });
+    }
+    if (sharebook) {
+      setLoading(true);
+      setFileId(sharebook.file.id);
+      setView(sharebook.book);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [node]);
@@ -95,91 +117,111 @@ const ShareDialogPart = ({
           setTypes={setTypes}
           keywords={keywords}
           setKeywords={setKeywords}
+          loading={loading}
         />
       </DialogContent>
       <DialogActions>
-        <LoadingButton
-          onClick={(e) => {
-            handleClose(e);
-          }}
-          variant="contained"
-          color="inherit"
-          loading={loading}
-        >
-          {dialogMessage.no}
-        </LoadingButton>
-        <LoadingButton
-          onClick={(e) => {
-            setLoading(true);
+        {sharebook ? (
+          <Button
+            variant="contained"
+            onClick={(e) => handleClose(e)}
+            sx={{ mt: 1, mr: 1 }}
+          >
+            {t("management.review.viewReview.Finish")}
+          </Button>
+        ) : (
+          <React.Fragment>
+            <LoadingButton
+              onClick={(e) => {
+                handleClose(e);
+              }}
+              variant="contained"
+              color="inherit"
+              loading={loading}
+            >
+              {dialogMessage.no}
+            </LoadingButton>
+            <LoadingButton
+              onClick={(e) => {
+                setLoading(true);
 
-            (async function () {
-              const bookid = message.id;
-              const _type = message.types.map((type) => type.type);
-              const _keyword = message.keywords.map(
-                (keyword) => keyword.keyword
-              );
-
-              const deleteType = _type.filter(
-                (type) => types.indexOf(type) === -1
-              );
-              const deleteKeyword = _keyword.filter(
-                (keyword) => keywords.indexOf(keyword) === -1
-              );
-
-              const update_op1: any = await updateBook({
-                id: bookid,
-                author: author,
-                title: title,
-                subject: subject,
-                creator: creator,
-                creationDate: creationDate?.format(defaultDateFormat) || null,
-                mid: "",
-                keywords: [],
-                types: [],
-              });
-              if (update_op1.code !== HttpStatusCode.Ok) {
-                enqueueSnackbar(t("api.opt_error", { data: update_op1.msg }), {
-                  variant: "error",
-                });
-                return;
-              }
-              const update_op2: any = await updateBookTypeAndKeywordById(
-                bookid,
-                types,
-                deleteType,
-                keywords,
-                deleteKeyword
-              );
-              if (update_op2.code !== HttpStatusCode.Ok) {
-                enqueueSnackbar(t("api.opt_error", { data: update_op1.msg }), {
-                  variant: "error",
-                });
-                return;
-              }
-              await addShareBook(fileId)
-                .then(() => {
-                  enqueueSnackbar(t("api.opt_success"), {
-                    variant: "success",
-                  });
-                })
-                .catch(() => {
-                  enqueueSnackbar(
-                    t("api.opt_error", { data: update_op1.msg }),
-                    {
-                      variant: "error",
-                    }
+                (async function () {
+                  const bookid = message.id;
+                  const _type = message.types.map((type) => type.type);
+                  const _keyword = message.keywords.map(
+                    (keyword) => keyword.keyword
                   );
-                });
-            })();
-            setLoading(false);
-            handleClose(e, "escapeKeyDown", dialogMessage);
-          }}
-          variant="contained"
-          color={"success"}
-          loading={loading}
-        >
-          {dialogMessage.yes}
-        </LoadingButton>
+
+                  const deleteType = _type.filter(
+                    (type) => types.indexOf(type) === -1
+                  );
+                  const deleteKeyword = _keyword.filter(
+                    (keyword) => keywords.indexOf(keyword) === -1
+                  );
+
+                  const update_op1: any = await updateBook({
+                    id: bookid,
+                    author: author,
+                    title: title,
+                    subject: subject,
+                    creator: creator,
+                    creationDate:
+                      creationDate?.format(defaultDateFormat) || null,
+                    mid: "",
+                    keywords: [],
+                    types: [],
+                  });
+                  if (update_op1.code !== HttpStatusCode.Ok) {
+                    enqueueSnackbar(
+                      t("api.opt_error", { data: update_op1.msg }),
+                      {
+                        variant: "error",
+                      }
+                    );
+                    return;
+                  }
+                  const update_op2: any = await updateBookTypeAndKeywordById(
+                    bookid,
+                    types,
+                    deleteType,
+                    keywords,
+                    deleteKeyword
+                  );
+                  if (update_op2.code !== HttpStatusCode.Ok) {
+                    enqueueSnackbar(
+                      t("api.opt_error", { data: update_op1.msg }),
+                      {
+                        variant: "error",
+                      }
+                    );
+                    return;
+                  }
+                  await addShareBook(fileId)
+                    .then(() => {
+                      enqueueSnackbar(t("api.opt_success"), {
+                        variant: "success",
+                      });
+                    })
+                    .catch(() => {
+                      enqueueSnackbar(
+                        t("api.opt_error", { data: update_op1.msg }),
+                        {
+                          variant: "error",
+                        }
+                      );
+                    });
+                })();
+                setLoading(false);
+                handleClose(e, "escapeKeyDown", dialogMessage);
+              }}
+              variant="contained"
+              color={"success"}
+              loading={loading}
+            >
+              {dialogMessage.yes}
+            </LoadingButton>
+          </React.Fragment>
+        )}
       </DialogActions>
     </React.Fragment>
   ) : (
