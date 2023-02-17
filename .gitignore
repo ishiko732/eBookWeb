@@ -24,3 +24,6 @@ yarn-error.log*
 
 # code number
 /.VSCodeCounter
+
+# webstorm
+/.idea/
