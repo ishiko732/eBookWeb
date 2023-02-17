@@ -6,8 +6,8 @@ export const getShareBookByBookId = (id: number) => request.get(`share/${id}`);
 export const getShareBookByFileId = (id: number) =>
   request.get(`share/file?fileId=${id}`);
 
-export const getShareBooksByUid = (uid: number) =>
-  request.get(`share/books?uid=${uid}`);
+export const getShareBooks = (uid?: number) =>
+  request.get(uid ? `share/books?uid=${uid}` : "share/books");
 
 // 添加共享书 updateBook更新图书信息
 export const addShareBook = (fileId: number) =>
@@ -26,7 +26,7 @@ export const checkShareBook = (
 ) =>
   request({
     method: "post",
-    url: `share/${bookId}`,
+    url: `share/${bookId}/check`,
     data: {
       status: status,
       comment: comment,

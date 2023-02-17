@@ -1,4 +1,5 @@
 import { role, userStatus } from "../entity/auth";
+
 export interface selectVo {
   page?: number;
   size?: number;
@@ -64,3 +65,25 @@ export interface bookType {
   updateAt: string;
   type: string;
 }
+
+export interface shareBook {
+  id: number;
+  book: book;
+  browse: number;
+  love: number;
+  review: review;
+  file: file;
+  createdAt: string;
+  updateAt: string;
+}
+export interface review {
+  id: number;
+  checkUser: User;
+  comment: string;
+  status: reviewStatusType;
+  createdAt: string;
+  updateAt: string;
+}
+
+export const reviewStatus = ["AGREE", "WAIT", "REVOKE"] as const;
+export type reviewStatusType = (typeof reviewStatus)[number];
