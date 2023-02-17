@@ -1,36 +1,22 @@
 import { useTranslation } from "react-i18next";
-import {
-  Stack,
-  Typography,
-  TextField,
-  Button,
-  DialogActions,
-  DialogContent,
-} from "@mui/material";
+import { DialogActions, DialogContent, Stack, TextField, Typography } from "@mui/material";
 import * as React from "react";
-import { book, bookKeyword, bookType } from "../../api/models";
+import { book } from "../../api/models";
 import { TreeData } from "../tree-view/CustomTreeView";
 import { Loading } from "../Loading";
-import {
-  getBookByResourceId,
-  updateBook,
-  updateBookTypeAndKeywordById,
-} from "../../api/book";
+import { getBookByResourceId, updateBook, updateBookTypeAndKeywordById } from "../../api/book";
 import { v4 } from "uuid";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { defaultDateFormat, defaultLanguage } from "../../config/config";
-import { localeTextConstants, adapterLocale } from "../../locales/datePicker";
+import { adapterLocale, localeTextConstants } from "../../locales/datePicker";
 import "dayjs/locale/zh-cn";
 import "dayjs/locale/ja";
 import "dayjs/locale/en";
 import { MuiChipsInput, MuiChipsInputChip } from "mui-chips-input";
-import Divider from "@mui/material/Divider";
-import { TFunction } from "i18next";
 import { DialogMessage } from "./InputDialog";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { STATUS_CODES } from "http";
 import { HttpStatusCode } from "../../utils/StatusCode";
 import { useSnackbar } from "notistack";
 import { addShareBook } from "../../api/share";
@@ -76,13 +62,6 @@ const ShareDialogPart = ({
           book.creationDate &&
             setCreationDate(dayjs(book.creationDate, defaultDateFormat));
           if (book.types && book.types.length > 0) {
-            // setTypes((types) => {
-            //   const newdata: string[] = [];
-            //   book.types.forEach((type: bookType) => {
-            //     keywords.push(type.type);
-            //   });
-            //   return newdata;
-            // });
             setTypes(book.types.map((type) => type.type));
           }
           if (book.keywords && book.keywords.length > 0) {
@@ -178,12 +157,12 @@ const ShareDialogPart = ({
                 return;
               }
               await addShareBook(fileId)
-                .then((res) => {
+                .then(() => {
                   enqueueSnackbar(t("api.opt_success"), {
                     variant: "success",
                   });
                 })
-                .catch((err) => {
+                .catch(() => {
                   enqueueSnackbar(
                     t("api.opt_error", { data: update_op1.msg }),
                     {
@@ -267,6 +246,7 @@ export const ShareContent = ({
         value={author}
         onChange={(e) => setAuthor(e.target.value)}
         fullWidth
+        disabled={loading}
       />
       <TextField
         id="input_subject"
@@ -277,6 +257,7 @@ export const ShareContent = ({
         onChange={(e) => setSubject(e.target.value)}
         multiline
         fullWidth
+        disabled={loading}
       />
       <TextField
         id="input_creator"
@@ -286,6 +267,7 @@ export const ShareContent = ({
         value={creator}
         onChange={(e) => setCreator(e.target.value)}
         fullWidth
+        disabled={loading}
       />
       <LocalizationProvider
         dateAdapter={AdapterDayjs}
@@ -302,6 +284,7 @@ export const ShareContent = ({
             setCreationDate(newValue);
           }}
           inputFormat={defaultDateFormat}
+          disabled={loading}
         />
       </LocalizationProvider>
       <Typography mt={2}>{t("management.book.bookField.types")}</Typography>
@@ -313,8 +296,8 @@ export const ShareContent = ({
         placeholder={t("management.book.edit_text") as string}
         variant="standard"
         fullWidth
+        disabled={loading}
       />
-      <Divider flexItem />
       <Typography mt={2}>{t("management.book.bookField.keywords")}</Typography>
       <MuiChipsInput
         value={keywords}
@@ -324,6 +307,7 @@ export const ShareContent = ({
         placeholder={t("management.book.edit_text") as string}
         variant="standard"
         fullWidth
+        disabled={loading}
       />
     </Stack>
   );

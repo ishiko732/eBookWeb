@@ -1,11 +1,11 @@
 import {
-  PDFViewer,
   EventBus,
-  PDFLinkService,
-  PDFFindController,
-  PDFScriptingManager,
-  PDFHistory,
   NullL10n,
+  PDFFindController,
+  PDFHistory,
+  PDFLinkService,
+  PDFScriptingManager,
+  PDFViewer
 } from "pdfjs-dist/web/pdf_viewer";
 import * as pdfJS from "pdfjs-dist";
 
@@ -132,3 +132,19 @@ export const goPage = (i: number) => {
   ) as HTMLDivElement;
   targetPage.scrollIntoView({ behavior: "auto" });
 };
+
+// pdf.getOutline get dest
+// pdf.getDestination get ref {num,gen}
+// pdf.getPageIndex get pageNumber;
+// pdf.getOutline().then((res) => {
+//   res.map((outline) => {
+//     if (typeof outline.dest === "string") {
+//       pdf.getDestination(outline.dest).then((dest) => {
+//         dest &&
+//           pdf.getPageIndex(dest[0]).then((page) => {
+//             console.log(page + 1, outline.title);
+//           });
+//       });
+//     }
+//   });
+// });

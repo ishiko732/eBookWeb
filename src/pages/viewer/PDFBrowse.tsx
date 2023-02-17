@@ -1,13 +1,12 @@
-import { useRef } from "react";
+import { Box, CircularProgress } from "@mui/material";
+import React, { memo } from "react";
 import { useSearchParams } from "react-router-dom";
-import { v4 } from "uuid";
-import { Loading } from "../../components/Loading";
 import PDFViewer from "../../components/pdfViewer";
 import { BaseURL } from "../../config/config";
 import { access_token as access_string } from "../../config/token";
 
-export const generenURL = (resourId: string) => {
-  return `${BaseURL}file/views/${resourId}`;
+export const generateURL = (resourceId: string) => {
+  return `${BaseURL}file/views/${resourceId}`;
 };
 
 export const documentInitParameters = (pdfURL: string) => {
@@ -25,19 +24,27 @@ export const documentInitParameters = (pdfURL: string) => {
     withCredentials: true,
   };
 };
-const DEFAULT_SCALE = 1.3;
-const PDFBrowse = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const resoureId = searchParams.get("resoure");
 
-  return resoureId ? (
-    <PDFViewer
-      documentInitParameters={documentInitParameters(generenURL(resoureId))}
-      scale={DEFAULT_SCALE}
-    />
+const DEFAULT_SCALE = 1.33;
+const PDFBrowse: React.FC = memo(() => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [searchParams, setSearchParams] = useSearchParams();
+  const resourceId = searchParams.get("resource");
+
+  return resourceId ? (
+    <Box>
+      <PDFViewer
+        documentInitParameters={documentInitParameters(generateURL(resourceId))}
+        scale={DEFAULT_SCALE}
+        // style={{
+        //   width: '50vw',
+        //   paddingLeft: 300
+        // }}
+      />
+    </Box>
   ) : (
-    <Loading />
+    <CircularProgress style={{ margin: "0 auto" }} />
   );
-};
+});
 
 export default PDFBrowse;

@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import usePDFDocument from "./Document";
 import { Page } from "./Page";
 import { v4 } from "uuid";
@@ -21,13 +21,16 @@ const PDFViewer: React.FC<{
     if (pdf === undefined) {
       return () => {};
     }
+    // noinspection JSIgnoredPromiseFromCall
     createPages();
     // firstSubmitStatus.current=true
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pdf]);
 
   useEffect(() => {
-    const selectionchange = (ev: Event) => {
+    const selectionchange = (event: Event) => {
       //https://stackoverflow.com/questions/48950038/how-do-i-retrieve-text-from-user-selection-in-pdf-js
+      console.log(event.target);
       console.log(
         window
           .getSelection()
@@ -44,7 +47,7 @@ const PDFViewer: React.FC<{
 
   const createPages = async () => {
     const pages = [];
-    const loadingObserver = new IntersectionObserver(
+    io.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((item) => {
           if (item.intersectionRatio > 0.5) {
@@ -65,7 +68,6 @@ const PDFViewer: React.FC<{
         threshold: 0.5,
       }
     );
-    io.current = loadingObserver;
     if (!pdf) {
       return;
     }
@@ -90,9 +92,9 @@ const PDFViewer: React.FC<{
   };
 
   useLayoutEffect(() => {
-    Array.from(document.getElementsByClassName("page")).map((page) => {
-      io.current?.observe(page);
-    });
+    Array.from(document.getElementsByClassName("page")).map((page) =>
+      io.current?.observe(page)
+    );
     return () => {
       io.current?.disconnect();
     };
@@ -175,11 +177,3 @@ const PDFViewer: React.FC<{
   );
 };
 export default PDFViewer;
-
-export function scrollPageIntoView(
-  pageNumber: number,
-  destArray: any,
-  ignoreDestinationZoom: any
-) {
-  console.log("hello");
-}

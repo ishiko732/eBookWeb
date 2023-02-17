@@ -1,11 +1,6 @@
 import * as pdfJS from "pdfjs-dist";
-import { useLayoutEffect, useRef } from "react";
-import {
-  annotations,
-  clickHandler,
-  getBeforeAfter,
-  pdfLinkService,
-} from "./base";
+import React, { useLayoutEffect, useRef } from "react";
+import { annotations, clickHandler, getBeforeAfter, pdfLinkService } from "./base";
 import "pdfjs-dist/web/pdf_viewer.css";
 import { v4 } from "uuid";
 
@@ -89,6 +84,7 @@ export const loadAnnotation = async (
     enableScripting: true,
   });
   Array.from(annotationContainer.getElementsByClassName("popupDate")).map(
+    // eslint-disable-next-line array-callback-return
     (date_time) => {
       const _target = date_time as HTMLSpanElement;
       const message = JSON.parse(_target.getAttribute("data-l10n-args")!);
@@ -98,6 +94,7 @@ export const loadAnnotation = async (
   annotation.forEach((ann) => {
     annotations.push(ann);
   });
+  // eslint-disable-next-line array-callback-return
   Array.from(annotationContainer.getElementsByTagName("a")).map((a) => {
     a.addEventListener("click", (event) => {
       clickHandler(event, pdf);
@@ -112,12 +109,13 @@ export const loadBeforeAfterPage = (
   pdf: pdfJS.PDFDocumentProxy,
   scale: number
 ) => {
+  // eslint-disable-next-line array-callback-return
   pages.map((pageNumber) => {
     const page = document.getElementById(
       `pageContainer${pageNumber}`
     ) as HTMLDivElement | null;
     if (page && page.getAttribute("data-loaded") === "false") {
-      // console.log("尝试加载数据", pageNumber);
+      // noinspection JSIgnoredPromiseFromCall
       loadPage(pdf, pageNumber, scale);
     }
   });
@@ -168,6 +166,7 @@ export const Page: React.FC<{
     if (firstSubmitStatus.current) {
       firstSubmitStatus.current = false;
       if (props.loadContent) {
+        // noinspection JSIgnoredPromiseFromCall
         loadPage(props.pdf, props.pageNumber, props.scale);
       } else {
         const page = document.getElementById(
@@ -180,6 +179,7 @@ export const Page: React.FC<{
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       props.loadContent && loadingRef.current.disconnect();
       // observer.unobserve(ref.current as HTMLDivElement);
     };

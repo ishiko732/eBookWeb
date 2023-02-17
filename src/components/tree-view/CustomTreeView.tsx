@@ -7,6 +7,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { renderTreeData } from "./CustomTreeViewHelper";
 import { useEffect, useState } from "react";
 import { toTree } from "../../algorithm/tree";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const classes = {
   focused: {
     bgcolor: "transparent",
@@ -45,8 +46,7 @@ const CustomTreeView = ({
   const [expanded, setExpanded] = useState<string[]>([]);
   const DatatoTree = (parentId: string, childNode: TreeData[]) => {
     setData((dates) => {
-      const data = toTree(dates, parentId, childNode);
-      return data;
+      return toTree(dates, parentId, childNode);
     });
   };
   const handleToggle = async (event: React.SyntheticEvent, nodes: string[]) => {

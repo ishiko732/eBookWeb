@@ -1,14 +1,6 @@
-import {
-  Box,
-  Paper,
-  Stack,
-  Button,
-  Divider,
-  Typography,
-  Chip,
-  IconButton,
-  Tooltip,
-} from "@mui/material";
+// noinspection JSUnusedLocalSymbols,JSIgnoredPromiseFromCall
+
+import { Box, Button, Chip, Divider, IconButton, Paper, Stack, Tooltip, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
 import React from "react";
 import { useTranslation } from "react-i18next";
@@ -21,6 +13,7 @@ import { getBookList } from "../../api/book";
 import BookDataTable from "./BookDataTable";
 import PositionSwipeableDrawer from "../../components/PositionSwipeableDrawer";
 import BookBar from "./book-bar/BookBar";
+
 export type bookOpType =
   | "viewFile"
   | "viewComment"
@@ -89,7 +82,7 @@ const BookControl = (props: any) => {
         )
       );
       const win = window.open(
-        `/views?resoure=${
+        `/views?resource=${
           message.filter(
             (data) => data.id === (selectedId as unknown as number[])[0]
           )[0].mid
