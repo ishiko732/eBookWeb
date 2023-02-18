@@ -35,6 +35,15 @@ const columns = ({ t, ClickOp }: any): GridColDef[] => {
       },
     },
     {
+      field: "file",
+      headerName: t("management.media.fileName") as string,
+      width: 250,
+      sortable: true,
+      valueGetter(params) {
+        return params.value.filename;
+      },
+    },
+    {
       field: "browse",
       headerName: t("management.review.sharebookField.browse") as string,
       width: 90,
@@ -49,12 +58,18 @@ const columns = ({ t, ClickOp }: any): GridColDef[] => {
     {
       field: "createdAt",
       headerName: t("management.review.sharebookField.createdAt") as string,
-      width: 200,
+      width: 180,
+      valueGetter(params) {
+        return params.row.review.createdAt;
+      },
     },
     {
       field: "updateAt",
       headerName: t("management.review.sharebookField.updateAt") as string,
-      width: 200,
+      width: 180,
+      valueGetter(params) {
+        return params.row.review.updateAt;
+      },
     },
     {
       field: "op",
@@ -70,24 +85,6 @@ const columns = ({ t, ClickOp }: any): GridColDef[] => {
             >
               {t(`management.review.view`, {
                 field: t(`management.review.sharebookField.check`),
-              })}
-            </Button>
-            <Button
-              variant="contained"
-              color="info"
-              onClick={(e) => ClickOp(e, params.row, "viewBookFile")}
-            >
-              {t(`management.review.view`, {
-                field: t(`management.review.sharebookField.file`),
-              })}
-            </Button>
-            <Button
-              variant="contained"
-              color="info"
-              onClick={(e) => ClickOp(e, params.row, "viewBook")}
-            >
-              {t(`management.review.view`, {
-                field: t(`management.review.sharebookField.book`),
               })}
             </Button>
           </Stack>
