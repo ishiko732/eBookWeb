@@ -87,3 +87,23 @@ export interface review {
 
 export const reviewStatus = ["AGREE", "WAIT", "REVOKE"] as const;
 export type reviewStatusType = (typeof reviewStatus)[number];
+
+export interface comment {
+  id: number;
+  bid: number;
+  cid: number | null;
+  uid: number;
+  createdAt: string;
+  updateAt: string;
+}
+
+export interface commentTree {
+  cid: number;
+  bid: number;
+  user: string;
+  message: string;
+  children: commentTree[];
+  createdAt: string;
+  updateAt: string;
+  parentId: number | null;
+}

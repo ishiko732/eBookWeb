@@ -8,7 +8,7 @@
  */
 export function findItem(
   arr: any[],
-  findValue: string,
+  findValue: string | number,
   attribute: string,
   nextAttribute: string
 ): any {
@@ -226,6 +226,36 @@ export function DFS_Rename(
         if (ret) {
           break;
         }
+      }
+    }
+  }
+  return ret;
+}
+
+export function DFS_Delete2(
+  nodes: any[],
+  attribute: string,
+  findValue: any,
+  nextAttribute: string
+): boolean {
+  let ret = false;
+  for (let index = 0; index < nodes.length; index++) {
+    const node = nodes[index];
+    if (!node) {
+      return false;
+    }
+    if (node[attribute] === findValue) {
+      nodes.splice(index, index + 1);
+      return true;
+    } else if (node[nextAttribute]?.length > 0) {
+      ret = DFS_Delete2(
+        node[nextAttribute],
+        attribute,
+        findValue,
+        nextAttribute
+      );
+      if (ret) {
+        break;
       }
     }
   }

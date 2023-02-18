@@ -45,10 +45,10 @@ export const getShareBookComments = (bookId: number) =>
   request.get(`share/${bookId}/comments`);
 
 // 添加共享书的评论
-export const addShareBookComments = (
+export const addShareBookComment = (
   bookId: number,
   comment: string,
-  parentId?: number
+  parentId?: number | null
 ) =>
   request({
     method: "post",
@@ -64,3 +64,7 @@ export const addShareBookComments = (
     headers: { "Content-Type": "application/json" },
     transformRequest: [(data) => JSON.stringify(data)],
   });
+
+// 删除共享书的评论
+export const deleteShareBookComment = (bookId: number, commentId: number) =>
+  request.delete(`share/${bookId}/${commentId}`);

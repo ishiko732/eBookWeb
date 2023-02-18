@@ -1,4 +1,4 @@
-import { file, folder } from "../api/models";
+import { commentTree, file, folder } from "../api/models";
 import { TreeData } from "../components/tree-view/CustomTreeView";
 import { findItem } from "./graph";
 
@@ -75,4 +75,47 @@ export const toTree = (
     }
   }
   return treeUnique(dates);
+};
+
+export const commentToTree = (
+  dates: commentTree[],
+  parentId: number | null,
+  childNode: commentTree
+): any => {
+  if (parentId === null) {
+    dates.push(childNode);
+    return dates;
+  } else {
+    const parent: commentTree | null = findItem(
+      dates,
+      parentId,
+      "cid",
+      "children"
+    );
+    if (parent) {
+      if (parent.children && parent.children.length > 0) {
+        parent?.children?.push(childNode);
+      } else {
+        parent.children = [childNode];
+      }
+    }
+  }
+  return commentTreeUnique(dates);
+};
+
+export const commentTreeUnique = (trees: commentTree[]): commentTree[] => {
+  const resTree: commentTree[] = [];
+  // eslint-disable-next-line array-callback-return
+  trees.forEach((tree: commentTree, index: number) => {
+    const cnt = resTree.filter((tree) => tree.cid === trees[index].cid).length;
+    if (cnt === 0) {
+      const _index = resTree.push(tree) - 1;
+      if (resTree[_index].children) {
+        resTree[_index].children = commentTreeUnique(
+          resTree[_index].children as commentTree[]
+        );
+      }
+    }
+  });
+  return resTree;
 };
