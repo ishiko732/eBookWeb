@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Chip,
   Divider,
   IconButton,
@@ -10,16 +9,12 @@ import {
   Typography,
 } from "@mui/material";
 import {
-  OptionsObject,
-  SnackbarKey,
-  SnackbarMessage,
   useSnackbar,
 } from "notistack";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { role } from "../../api/entity/auth";
 import {
-  book,
   reviewStatus,
   reviewStatusType,
   shareBook,
@@ -27,13 +22,9 @@ import {
 import Title from "../../components/Title";
 import RequiredRole from "../../config/requiredRole";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import { getBookList } from "../../api/book";
-import BookDataTable from "./BookDataTable";
 import PositionSwipeableDrawer from "../../components/PositionSwipeableDrawer";
-import { t, TFunction } from "i18next";
 import { getShareBooks } from "../../api/share";
 import ShareDataTable from "./ShareDataTable";
-import request from "../../config/request";
 import { bookOpType } from "./book-bar/inex";
 import ShareBookBar from "./book-bar/ShareBookBar";
 
