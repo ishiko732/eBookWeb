@@ -9,7 +9,7 @@ import {
   Input,
   InputLabel,
   Stack,
-  Typography
+  Typography,
 } from "@mui/material";
 import * as React from "react";
 import { Transition } from "../AlertDialog";

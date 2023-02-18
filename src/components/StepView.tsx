@@ -1,7 +1,15 @@
 import React from "react";
 import { DefaultTFuncReturn, TFunction } from "i18next";
 import StepContent from "@mui/material/StepContent";
-import { Box, Grid, Stack, Step, StepLabel, Stepper, Typography } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Stack,
+  Step,
+  StepLabel,
+  Stepper,
+  Typography,
+} from "@mui/material";
 import Button from "@mui/material/Button";
 import { Loading } from "./Loading";
 
