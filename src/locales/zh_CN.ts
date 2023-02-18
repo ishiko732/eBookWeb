@@ -264,6 +264,15 @@ const customChineseMessages = {
       Share: "共享",
     },
   },
+  comment: {
+    comment: "评论",
+    notComment: "暂无评论",
+    notComment_msg: "立即发表自己的评论",
+    newCommnet: "发表评论",
+    addComment: "添加评论",
+    deleteComment: "删除评论",
+    myself: "本人",
+  },
 };
 
 export default customChineseMessages;
