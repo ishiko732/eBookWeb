@@ -8,4 +8,5 @@ export type bookOpType =
   | "viewReview"
   | "viewBookFile"
   | "viewBook"
+  | "viewComment"
   | undefined;

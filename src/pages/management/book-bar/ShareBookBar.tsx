@@ -5,6 +5,7 @@ import { shareBook } from "../../../api/models";
 import { bookOpType } from "./inex";
 import BookBarShare from "./BookBarShare";
 import React from "react";
+import BookBarComment from "./BookBarComment";
 
 const ShareBookBar = ({
   op,
@@ -27,8 +28,14 @@ const ShareBookBar = ({
             sharebook={shareBook}
           />
         );
-      case "viewBook":
-      case "viewBookFile":
+      case "viewComment":
+        return (
+          <BookBarComment
+            t={t}
+            enqueueSnackbar={enqueueSnackbar}
+            sharebook={shareBook}
+          />
+        );
     }
   }
   return <Loading />;

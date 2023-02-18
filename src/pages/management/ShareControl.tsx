@@ -8,17 +8,11 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import {
-  useSnackbar,
-} from "notistack";
+import { useSnackbar } from "notistack";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { role } from "../../api/entity/auth";
-import {
-  reviewStatus,
-  reviewStatusType,
-  shareBook,
-} from "../../api/models";
+import { reviewStatus, reviewStatusType, shareBook } from "../../api/models";
 import Title from "../../components/Title";
 import RequiredRole from "../../config/requiredRole";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
@@ -78,8 +72,7 @@ const ShareControl = (props: any) => {
     console.log(op);
     switch (op) {
       case "viewReview":
-      case "viewBook":
-      case "viewBookFile":
+      case "viewComment":
         setOpNode(row);
         setType(op);
         setAnchorEl(event.currentTarget);

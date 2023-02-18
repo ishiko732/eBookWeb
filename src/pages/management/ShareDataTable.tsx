@@ -87,6 +87,15 @@ const columns = ({ t, ClickOp }: any): GridColDef[] => {
                 field: t(`management.review.sharebookField.check`),
               })}
             </Button>
+            <Button
+              variant="contained"
+              color="info"
+              onClick={(e) => ClickOp(e, params.row, "viewComment")}
+            >
+              {t(`management.review.view`, {
+                field: t(`comment.comment`),
+              })}
+            </Button>
           </Stack>
         );
       },
