@@ -1,6 +1,11 @@
 import * as pdfJS from "pdfjs-dist";
 import React, { useLayoutEffect, useRef } from "react";
-import { annotations, clickHandler, getBeforeAfter, pdfLinkService } from "./base";
+import {
+  annotations,
+  clickHandler,
+  getBeforeAfter,
+  pdfLinkService,
+} from "./base";
 import "pdfjs-dist/web/pdf_viewer.css";
 import { v4 } from "uuid";
 

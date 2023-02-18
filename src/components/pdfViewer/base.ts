@@ -5,7 +5,7 @@ import {
   PDFHistory,
   PDFLinkService,
   PDFScriptingManager,
-  PDFViewer
+  PDFViewer,
 } from "pdfjs-dist/web/pdf_viewer";
 import * as pdfJS from "pdfjs-dist";
 
