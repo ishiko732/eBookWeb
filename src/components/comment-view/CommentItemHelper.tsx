@@ -105,7 +105,7 @@ export const CommentItemHelper = ({
                 />
                 {commentsAddHelper(
                   comment.cid,
-                  comments,
+                  comment.children,
                   t,
                   [selected, setSelected],
                   message,
