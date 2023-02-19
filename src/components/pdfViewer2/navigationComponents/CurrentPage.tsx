@@ -10,27 +10,28 @@ export const goPage = (i: number) => {
 };
 
 const CurrentPage = () => {
-  const { pdf } = usePDFContext();
+  const { pdf, scale } = usePDFContext();
   const totalPages = pdf?.numPages;
   const currentPageRef = useRef<HTMLInputElement>(null);
-
+  const scaleRate = (1 / scale) * 0.5;
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((item) => {
-          if (item.intersectionRatio > 0.5) {
+          if (item.intersectionRatio > scaleRate) {
             (item.target as HTMLDivElement).setAttribute("checked", "");
+            Array.from(document.getElementsByClassName("page"))
+              .filter((page) => page !== item.target)
+              .map((page) => page.removeAttribute("checked"));
             if (currentPageRef.current) {
               currentPageRef.current!.value =
                 item.target.getAttribute("data-page-number")!;
             }
-          } else {
-            (item.target as HTMLDivElement).removeAttribute("checked");
           }
         });
       },
       {
-        threshold: 0.5,
+        threshold: [0.5],
       }
     );
     Array.from(document.getElementsByClassName("page")).map((page) =>

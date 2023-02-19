@@ -12,6 +12,7 @@ const Page: React.FC<{
   pageNumber: number;
 }> = (props) => {
   const { pdf, defaultHeight, defaultWidth, scale } = usePDFContext();
+  const scaleRate = (1 / scale) * 0.3;
   const { pageNumber } = props;
   const pageRef = useRef<HTMLDivElement | null>(null);
   const firstSubmitStatus = useRef(true);
@@ -26,7 +27,7 @@ const Page: React.FC<{
         (entries) => {
           entries.forEach((entry) => {
             const { target, intersectionRatio } = entry;
-            if (intersectionRatio >= 0.3) {
+            if (intersectionRatio >= scaleRate) {
               const _target = target as HTMLDivElement;
               const index = Number(_target.getAttribute("data-page-number"));
               const pages = getBeforeAfter(index, totalPage, 4);
@@ -48,7 +49,7 @@ const Page: React.FC<{
         observer.observe(pageRef.current);
       }
     }
-  }, [pdf, scale]);
+  }, [pdf, scale, scaleRate]);
 
   return (
     <div
@@ -61,7 +62,7 @@ const Page: React.FC<{
       ref={pageRef}
     >
       <div className={`loader`}>
-        <Loader text={`load page ${pageNumber}`} inner />
+        <Loader text={`load page ${pageNumber}`} inner disabledProgress />
       </div>
       <div
         key={v4()}
