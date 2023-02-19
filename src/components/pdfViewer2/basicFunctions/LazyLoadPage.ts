@@ -65,7 +65,6 @@ export const loadPage = async (
   const outputScale = window.devicePixelRatio || 1;
   const transform =
     outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
-
   canvas.height = viewport.height * outputScale;
   canvas.width = viewport.width * outputScale;
   canvas.style.width = viewport.width + "px";
@@ -82,15 +81,14 @@ export const loadPage = async (
     viewport: viewport,
     transform: transform,
   };
-  loadText(textContainer, pdfPage, viewport);
-  loadAnnotation(annotationContainer, pdf, pdfPage, viewport);
   await pdfPage.render(renderContext).promise;
+  canvas.setAttribute("data-img", canvas.toDataURL("image/jpeg", 0.4));
+  await loadText(textContainer, pdfPage, viewport);
+  await loadAnnotation(annotationContainer, pdf, pdfPage, viewport);
   if (loader) {
     // console.log("移除loader",pageNumber)
     loader.innerHTML = "";
     loader.parentNode?.removeChild(loader);
   }
-  canvas.setAttribute("data-img", canvas.toDataURL("image/jpeg", 0.4));
-  page_div.style.opacity = "1";
   return true;
 };

@@ -9,12 +9,14 @@ import { usePDFContext } from "./usePDFContext";
 export default function Pages(props: {
   children?: JSX.Element[] | JSX.Element;
   style?: any;
+  loadingPageText?: string;
 }) {
-  const { pdf, loading } = usePDFContext();
+  const { pdf, loading, loadingText } = usePDFContext();
 
   const PDFViewerRef = createRef<HTMLDivElement>();
   const value = {
     PDFViewerRef,
+    loadingPageText: props.loadingPageText || "Loading Page",
   };
   useEffect(() => {
     if (pdf) {
@@ -25,7 +27,7 @@ export default function Pages(props: {
   return (
     <PageContext.Provider value={value}>
       {loading ? (
-        <Loader text="load document..." />
+        <Loader text={loadingText} />
       ) : (
         <div
           id="viewer"

@@ -1,6 +1,7 @@
 import { createContext, useContext } from "react";
 export interface PagesProviderContext {
   PDFViewerRef: React.RefObject<HTMLDivElement>;
+  loadingPageText: string;
 }
 
 // @ts-ignore

@@ -1,11 +1,11 @@
 import { Box } from "@mui/material";
 import React, { memo } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Document, Pages } from "../../components/pdfViewer2";
 import { CurrentPage } from "../../components/pdfViewer2/navigationComponents";
 import { BaseURL } from "../../config/config";
 import { access_token as access_string } from "../../config/token";
-
+import useLocalStorage from "../../config/useLocalStorage";
 export const generateURL = (resourceId: string) => {
   return `${BaseURL}file/views/${resourceId}`;
 };
@@ -31,12 +31,23 @@ const PDFBrowse: React.FC = memo(() => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [searchParams, setSearchParams] = useSearchParams();
   const resourceId = searchParams.get("resource");
-
+  const scale = searchParams.get("scale");
+  const [localScale] = useLocalStorage("scale", DEFAULT_SCALE, Number(scale));
+  const navigate = useNavigate();
+  if (!resourceId) {
+    navigate("/exception/404", { replace: true });
+  }
+  if (!scale) {
+    setSearchParams({
+      resource: resourceId as string,
+      scale: `${localScale}`,
+    });
+  }
   return resourceId ? (
     <Box>
       <Document
         option={documentInitParameters(generateURL(resourceId))}
-        scale={DEFAULT_SCALE}
+        scale={Number(localScale)}
       >
         <Pages />
         <CurrentPage />

@@ -7,12 +7,13 @@ import {
   loadBeforeAfterPage,
 } from "./basicFunctions/LazyLoadPage";
 import Loader from "./Loader";
+import { usePageContext } from "./usePageContext";
 
 const Page: React.FC<{
   pageNumber: number;
 }> = (props) => {
   const { pdf, defaultHeight, defaultWidth, scale } = usePDFContext();
-  const scaleRate = (1 / scale) * 0.3;
+  const { loadingPageText } = usePageContext();
   const { pageNumber } = props;
   const pageRef = useRef<HTMLDivElement | null>(null);
   const firstSubmitStatus = useRef(true);
@@ -21,8 +22,9 @@ const Page: React.FC<{
     if (!pdf) {
       return;
     }
-    const totalPage = pdf.numPages;
     if (firstSubmitStatus.current) {
+      const totalPage = pdf.numPages;
+      const scaleRate = (1 / scale) * 0.3;
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
@@ -30,7 +32,11 @@ const Page: React.FC<{
             if (intersectionRatio >= scaleRate) {
               const _target = target as HTMLDivElement;
               const index = Number(_target.getAttribute("data-page-number"));
-              const pages = getBeforeAfter(index, totalPage, 4);
+              const pages = getBeforeAfter(
+                index,
+                totalPage,
+                pageNumber === 1 ? 2 : 4
+              );
               if (firstLoadingStatus.current) {
                 firstLoadingStatus.current = false;
                 loadBeforeAfterPage(pages, pdf, scale);
@@ -49,7 +55,8 @@ const Page: React.FC<{
         observer.observe(pageRef.current);
       }
     }
-  }, [pdf, scale, scaleRate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pdf, scale]);
 
   return (
     <div
@@ -62,7 +69,11 @@ const Page: React.FC<{
       ref={pageRef}
     >
       <div className={`loader`}>
-        <Loader text={`load page ${pageNumber}`} inner disabledProgress />
+        <Loader
+          text={`${loadingPageText} ${pageNumber}`}
+          inner
+          disabledProgress={pageNumber === 1 ? false : true}
+        />
       </div>
       <div
         key={v4()}

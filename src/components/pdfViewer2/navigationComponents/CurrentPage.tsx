@@ -13,16 +13,11 @@ const CurrentPage = () => {
   const { pdf, scale } = usePDFContext();
   const totalPages = pdf?.numPages;
   const currentPageRef = useRef<HTMLInputElement>(null);
-  const scaleRate = (1 / scale) * 0.5;
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((item) => {
-          if (item.intersectionRatio > scaleRate) {
-            (item.target as HTMLDivElement).setAttribute("checked", "");
-            Array.from(document.getElementsByClassName("page"))
-              .filter((page) => page !== item.target)
-              .map((page) => page.removeAttribute("checked"));
+    const scaleRate=(1 / scale) * 0.5;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((item) => {
+        if (item.intersectionRatio > scaleRate) {
             if (currentPageRef.current) {
               currentPageRef.current!.value =
                 item.target.getAttribute("data-page-number")!;
@@ -56,6 +51,12 @@ const CurrentPage = () => {
         inputProps={{ style: { textAlign: "center" } }}
         inputRef={currentPageRef}
         defaultValue={0}
+        onClick={(event) => {
+          const page = Number(currentPageRef.current!.value);
+          if (page > 0 && page <= totalPages) {
+            currentPageRef.current?.setAttribute("prePage", `${page}`);
+          }
+        }}
         onKeyUp={(event) => {
           const page = Number(currentPageRef.current?.value);
           if (event.key === "Enter") {
@@ -63,15 +64,8 @@ const CurrentPage = () => {
             if (page > 0 && page <= totalPages) {
               goPage(page);
             } else {
-              Array.from(document.getElementsByClassName("page")).forEach(
-                (page) => {
-                  if (page.getAttribute("checked") === "") {
-                    currentPageRef.current!.value = page.getAttribute(
-                      "data-page-number"
-                    ) as string;
-                  }
-                }
-              );
+              currentPageRef.current!.value =
+                currentPageRef.current?.getAttribute("prePage")!;
             }
           }
         }}

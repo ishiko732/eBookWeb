@@ -6,6 +6,8 @@ export default function Document(props: {
   option: any;
   children: JSX.Element | JSX.Element[];
   scale: number;
+  LoadingDocumentText?: string;
+  LoadingInitiateText?: string;
 }) {
   const [pdf, setPDF] = useState<pdfJS.PDFDocumentProxy | undefined>();
   const [loading, setLoading] = useState(false);
@@ -13,6 +15,9 @@ export default function Document(props: {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
   const [showNavBar, setShowNavBar] = useState(false);
+  const [loadingText, setLoadingText] = useState(
+    props.LoadingDocumentText || "Loading document..."
+  );
   const option = props.option;
   const value = {
     option,
@@ -26,6 +31,7 @@ export default function Document(props: {
     defaultHeight: height,
     showNavBar,
     setShowNavBar,
+    loadingText,
   };
 
   useEffect(() => {
@@ -35,7 +41,6 @@ export default function Document(props: {
         pdfJS.GlobalWorkerOptions.workerSrc = require("pdfjs-dist/build/pdf.worker.entry.js");
         const pdf = await pdfJS.getDocument(option).promise;
         setPDF(pdf);
-        setLoading(false);
       })();
     }
   }, [option]);
@@ -43,12 +48,15 @@ export default function Document(props: {
   useEffect(() => {
     if (pdf) {
       (async () => {
+        setLoadingText(props.LoadingInitiateText || "Initializing document...");
         const page = await pdf.getPage(1);
         const viewport = page.getViewport({ scale: props.scale });
         setHeight(viewport.height);
         setWidth(viewport.width);
+        setLoading(false);
       })();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pdf, props.scale]);
   return (
     <PDFContext.Provider value={value}>{props.children}</PDFContext.Provider>

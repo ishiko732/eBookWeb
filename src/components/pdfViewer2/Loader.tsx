@@ -1,9 +1,13 @@
 import { CircularProgress, Stack, Typography } from "@mui/material";
-const Loader = (props: { text?: string; inner?: boolean }) => {
+const Loader = (props: {
+  text?: string;
+  inner?: boolean;
+  disabledProgress?: boolean;
+}) => {
   return (
     <Stack
       spacing={2}
-      style={{
+      sx={{
         position: props.inner ? "absolute" : "fixed",
         display: "flex",
         margin: "auto",
@@ -14,7 +18,7 @@ const Loader = (props: { text?: string; inner?: boolean }) => {
         zIndex: "999",
       }}
     >
-      <CircularProgress />
+      {!props.disabledProgress ? <CircularProgress /> : null}
       {props.text ? <Typography>{props.text}</Typography> : null}
     </Stack>
   );

@@ -7,6 +7,7 @@ export interface ProviderContext {
   >;
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  loadingText: string;
   scale: number;
   setScale: React.Dispatch<React.SetStateAction<number>>;
   option: any;
