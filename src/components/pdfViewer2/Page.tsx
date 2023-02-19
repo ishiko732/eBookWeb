@@ -1,12 +1,14 @@
 import React, { useEffect, useRef } from "react";
-import { getBeforeAfter } from "../pdfViewer/base";
 import "pdfjs-dist/web/pdf_viewer.css";
 import { v4 } from "uuid";
 import { usePDFContext } from "./usePDFContext";
-import { loadBeforeAfterPage } from "./basicFunctions/LazyLoadPage";
+import {
+  getBeforeAfter,
+  loadBeforeAfterPage,
+} from "./basicFunctions/LazyLoadPage";
 import Loader from "./Loader";
 
-export const Page: React.FC<{
+const Page: React.FC<{
   pageNumber: number;
 }> = (props) => {
   const { pdf, defaultHeight, defaultWidth, scale } = usePDFContext();
@@ -27,7 +29,7 @@ export const Page: React.FC<{
             if (intersectionRatio >= 0.3) {
               const _target = target as HTMLDivElement;
               const index = Number(_target.getAttribute("data-page-number"));
-              const pages = getBeforeAfter(index, totalPage, 2);
+              const pages = getBeforeAfter(index, totalPage, 4);
               if (firstLoadingStatus.current) {
                 firstLoadingStatus.current = false;
                 loadBeforeAfterPage(pages, pdf, scale);
@@ -96,3 +98,5 @@ const createWidthAndHeightStyle = (
       }
     : undefined;
 };
+
+export default Page;

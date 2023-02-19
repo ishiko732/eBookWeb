@@ -2,7 +2,7 @@ import { createRef, useEffect } from "react";
 import { v4 } from "uuid";
 import { SelectionText } from "./basicFunctions/SelectionText";
 import Loader from "./Loader";
-import { Page } from "./Page";
+import Page from "./Page";
 import { PageContext } from "./usePageContext";
 import { usePDFContext } from "./usePDFContext";
 
