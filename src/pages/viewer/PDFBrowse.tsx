@@ -2,6 +2,10 @@ import { Box, CircularProgress } from "@mui/material";
 import React, { memo } from "react";
 import { useSearchParams } from "react-router-dom";
 import PDFViewer from "../../components/pdfViewer";
+import { Document } from "../../components/pdfViewer2";
+import CurrentPage from "../../components/pdfViewer2/navigationComponents/CurrentPage";
+import { Page } from "../../components/pdfViewer2/Page";
+import Pages from "../../components/pdfViewer2/Pages";
 import { BaseURL } from "../../config/config";
 import { access_token as access_string } from "../../config/token";
 
@@ -12,7 +16,7 @@ export const generateURL = (resourceId: string) => {
 export const documentInitParameters = (pdfURL: string) => {
   return {
     url: pdfURL,
-    disableAutoFetch: false,
+    disableAutoFetch: true,
     disableRange: true,
     cMapUrl: "pdfjs-dist/cmaps/",
     cMapPacked: true,
@@ -33,17 +37,24 @@ const PDFBrowse: React.FC = memo(() => {
 
   return resourceId ? (
     <Box>
-      <PDFViewer
+      {/* <PDFViewer
         documentInitParameters={documentInitParameters(generateURL(resourceId))}
         scale={DEFAULT_SCALE}
         // style={{
         //   width: '50vw',
         //   paddingLeft: 300
         // }}
-      />
+      /> */}
+      <Document
+        option={documentInitParameters(generateURL(resourceId))}
+        scale={DEFAULT_SCALE}
+      >
+        <Pages />
+        <CurrentPage />
+      </Document>
     </Box>
   ) : (
-    <CircularProgress style={{ margin: "0 auto" }} />
+    <div>Error 404</div>
   );
 });
 
