@@ -1,11 +1,8 @@
-import { Box, CircularProgress } from "@mui/material";
+import { Box } from "@mui/material";
 import React, { memo } from "react";
 import { useSearchParams } from "react-router-dom";
-import PDFViewer from "../../components/pdfViewer";
-import { Document } from "../../components/pdfViewer2";
-import CurrentPage from "../../components/pdfViewer2/navigationComponents/CurrentPage";
-import { Page } from "../../components/pdfViewer2/Page";
-import Pages from "../../components/pdfViewer2/Pages";
+import { Document, Pages } from "../../components/pdfViewer2";
+import { CurrentPage } from "../../components/pdfViewer2/navigationComponents";
 import { BaseURL } from "../../config/config";
 import { access_token as access_string } from "../../config/token";
 
@@ -37,14 +34,6 @@ const PDFBrowse: React.FC = memo(() => {
 
   return resourceId ? (
     <Box>
-      {/* <PDFViewer
-        documentInitParameters={documentInitParameters(generateURL(resourceId))}
-        scale={DEFAULT_SCALE}
-        // style={{
-        //   width: '50vw',
-        //   paddingLeft: 300
-        // }}
-      /> */}
       <Document
         option={documentInitParameters(generateURL(resourceId))}
         scale={DEFAULT_SCALE}
