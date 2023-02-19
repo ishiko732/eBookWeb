@@ -1,4 +1,10 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  createRef,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import usePDFDocument from "./Document";
 import { Page } from "./Page";
 import { v4 } from "uuid";
@@ -15,33 +21,34 @@ const PDFViewer: React.FC<{
     option: props.documentInitParameters,
   });
   const [pages, setPage] = useState<JSX.Element[]>([]);
-  const currentPageRef = useRef<HTMLInputElement>();
-
+  const currentPageRef = useRef<HTMLInputElement>(null);
+  const PDFViewerRef = createRef<HTMLDivElement>();
   useEffect(() => {
     if (pdf === undefined) {
       return () => {};
     }
     // noinspection JSIgnoredPromiseFromCall
     createPages();
-    // firstSubmitStatus.current=true
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pdf]);
 
   useEffect(() => {
     const selectionchange = (event: Event) => {
       //https://stackoverflow.com/questions/48950038/how-do-i-retrieve-text-from-user-selection-in-pdf-js
-      console.log(event.target);
-      console.log(
-        window
-          .getSelection()
-          ?.toString()
-          .replace(/\r\n/g, "")
-          .replace(/\n/g, "")
-      );
+      const text = window
+        .getSelection()
+        ?.toString()
+        .replace(/\r\n/g, "")
+        .replace(/\n/g, "");
+      text !== "" && console.log(text);
     };
-    document.addEventListener("selectionchange", selectionchange);
+    if (!PDFViewerRef.current) {
+      return;
+    }
+    const _target = PDFViewerRef.current;
+    _target.addEventListener("mouseup", selectionchange);
     return () => {
-      document.removeEventListener("selectionchange", selectionchange);
+      _target.removeEventListener("mouseup", selectionchange);
     };
   });
 
@@ -121,6 +128,7 @@ const PDFViewer: React.FC<{
         className="pdfViewer"
         key={v4()}
         style={{ margin: "0 auto", ...props.style }}
+        ref={PDFViewerRef}
       >
         {pdf && pages}
       </div>

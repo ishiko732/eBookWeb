@@ -117,6 +117,10 @@ export const clickHandler = (
   );
   if (annotation_filter.length > 0) {
     const annotation = annotation_filter[0];
+    if (annotation.url) {
+      window.open(annotation.url, "_blank")?.focus();
+      return;
+    }
     pdf.getDestination(annotation.dest).then((dest) => {
       dest &&
         pdf.getPageIndex(dest[0]).then((page) => {
