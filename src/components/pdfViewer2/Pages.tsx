@@ -11,7 +11,7 @@ export default function Pages(props: {
   style?: any;
   loadingPageText?: string;
 }) {
-  const { pdf, loading, loadingText } = usePDFContext();
+  const { pdf, loading, loadingText, defaultHeight } = usePDFContext();
 
   const PDFViewerRef = createRef<HTMLDivElement>();
   const value = {
@@ -26,9 +26,8 @@ export default function Pages(props: {
 
   return (
     <PageContext.Provider value={value}>
-      {loading ? (
-        <Loader text={loadingText} />
-      ) : (
+      {loading ? <Loader text={loadingText} /> : null}
+      {defaultHeight ? (
         <div
           id="viewer"
           className="pdfViewer"
@@ -41,7 +40,7 @@ export default function Pages(props: {
             return <Page pageNumber={index + 1} />;
           })}
         </div>
-      )}
+      ) : null}
     </PageContext.Provider>
   );
 }

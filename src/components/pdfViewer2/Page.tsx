@@ -12,7 +12,8 @@ import { usePageContext } from "./usePageContext";
 const Page: React.FC<{
   pageNumber: number;
 }> = (props) => {
-  const { pdf, defaultHeight, defaultWidth, scale } = usePDFContext();
+  const { pdf, defaultHeight, defaultWidth, scale, loading, setLoading } =
+    usePDFContext();
   const { loadingPageText } = usePageContext();
   const { pageNumber } = props;
   const pageRef = useRef<HTMLDivElement | null>(null);
@@ -23,6 +24,7 @@ const Page: React.FC<{
       return;
     }
     if (firstSubmitStatus.current) {
+      firstSubmitStatus.current = false;
       const totalPage = pdf.numPages;
       const scaleRate = (1 / scale) * 0.3;
       const observer = new IntersectionObserver(
@@ -39,7 +41,7 @@ const Page: React.FC<{
               );
               if (firstLoadingStatus.current) {
                 firstLoadingStatus.current = false;
-                loadBeforeAfterPage(pages, pdf, scale);
+                loadBeforeAfterPage(pages, pdf, scale, loading, setLoading);
               }
               observer.unobserve(_target);
               observer.disconnect();
@@ -50,7 +52,6 @@ const Page: React.FC<{
           threshold: [0.5],
         }
       );
-      firstSubmitStatus.current = false;
       if (pageRef.current) {
         observer.observe(pageRef.current);
       }
@@ -72,7 +73,7 @@ const Page: React.FC<{
         <Loader
           text={`${loadingPageText} ${pageNumber}`}
           inner
-          disabledProgress={pageNumber === 1 ? false : true}
+          disabledProgress
         />
       </div>
       <div

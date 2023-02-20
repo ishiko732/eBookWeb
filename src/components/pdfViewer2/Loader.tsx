@@ -15,7 +15,8 @@ const Loader = (props: {
         height: props.inner ? "100%" : "100vh",
         justifyContent: "center",
         alignItems: "center",
-        zIndex: "999",
+        zIndex: props.inner ? "999" : "998",
+        backgroundColor: "white",
       }}
     >
       {!props.disabledProgress ? <CircularProgress /> : null}

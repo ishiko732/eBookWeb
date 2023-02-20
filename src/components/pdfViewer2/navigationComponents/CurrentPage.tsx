@@ -10,14 +10,15 @@ export const goPage = (i: number) => {
 };
 
 const CurrentPage = () => {
-  const { pdf, scale } = usePDFContext();
+  const { pdf, scale, loading } = usePDFContext();
   const totalPages = pdf?.numPages;
   const currentPageRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
-    const scaleRate=(1 / scale) * 0.5;
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((item) => {
-        if (item.intersectionRatio > scaleRate) {
+    const scaleRate = (1 / scale) * 0.5;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((item) => {
+          if (item.intersectionRatio > scaleRate) {
             if (currentPageRef.current) {
               currentPageRef.current!.value =
                 item.target.getAttribute("data-page-number")!;
@@ -36,7 +37,7 @@ const CurrentPage = () => {
       observer.disconnect();
     };
   });
-  return totalPages ? (
+  return !loading && totalPages ? (
     <Fab
       variant="extended"
       sx={{

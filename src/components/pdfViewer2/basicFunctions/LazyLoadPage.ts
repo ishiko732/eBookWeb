@@ -28,7 +28,9 @@ export const getBeforeAfter = (x: number, max: number, range: number) => {
 export const loadBeforeAfterPage = (
   pages: number[],
   pdf: pdfJS.PDFDocumentProxy,
-  scale: number
+  scale: number,
+  loading?: boolean,
+  setLoading?: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   // eslint-disable-next-line array-callback-return
   pages.map((pageNumber) => {
@@ -37,7 +39,7 @@ export const loadBeforeAfterPage = (
     ) as HTMLDivElement | null;
     if (page && page.getAttribute("data-loaded") === "false") {
       // noinspection JSIgnoredPromiseFromCall
-      loadPage(pdf, pageNumber, scale);
+      loadPage(pdf, pageNumber, scale, loading, setLoading);
     }
   });
 };
@@ -46,7 +48,9 @@ export const loadBeforeAfterPage = (
 export const loadPage = async (
   pdf: pdfJS.PDFDocumentProxy,
   pageNumber: number,
-  scale: number
+  scale: number,
+  loading?: boolean,
+  setLoading?: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   const page_div = document.getElementById(
     `pageContainer${pageNumber}`
@@ -89,6 +93,7 @@ export const loadPage = async (
     // console.log("移除loader",pageNumber)
     loader.innerHTML = "";
     loader.parentNode?.removeChild(loader);
+    loading && setLoading && setLoading(false);
   }
   return true;
 };

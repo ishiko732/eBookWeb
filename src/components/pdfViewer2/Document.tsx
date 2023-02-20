@@ -53,7 +53,7 @@ export default function Document(props: {
         const viewport = page.getViewport({ scale: props.scale });
         setHeight(viewport.height);
         setWidth(viewport.width);
-        setLoading(false);
+        // setLoading(false);
       })();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
