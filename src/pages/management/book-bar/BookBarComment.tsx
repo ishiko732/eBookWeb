@@ -14,6 +14,7 @@ import dayjs from "dayjs";
 import { defaultDateFormat } from "../../../config/config";
 import { CommentsView } from "../../../components/comment-view/CommentsView";
 import { DFS_Delete2 } from "../../../algorithm/graph";
+import { useUserContext } from "../../../UserContext";
 
 const BookBarComment = ({
   t,
@@ -28,6 +29,7 @@ const BookBarComment = ({
   sharebook: shareBook;
 }) => {
   const [comments, setComments] = React.useState<commentTree[]>([]);
+  const {user}=useUserContext();
   useEffect(() => {
     if (sharebook) {
       getShareBookComments(sharebook.book.id)
@@ -54,7 +56,7 @@ const BookBarComment = ({
       const temp = commentToTree([...comments], message.id || null, {
         cid: time.unix(),
         bid: sharebook.book.id,
-        user: t("comment.myself") as string,
+        user: user.name||t("comment.myself") as string,
         createdAt: time.format(defaultDateFormat),
         updateAt: time.format(defaultDateFormat),
         parentId: message.id || null,

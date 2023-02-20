@@ -12,6 +12,8 @@ import {
 import { delete_token } from "./config/token";
 import { SnackbarProvider } from "notistack";
 import { useTranslation } from "react-i18next";
+import { UserContext } from "./UserContext";
+import { User } from "./api/models";
 const rotuerViews = (routerItems: route[], parent?: string) => {
   return routerItems.map((item: route) => {
     const path = parent ? `${parent}${item.path}` : `${item.path}`;
@@ -69,57 +71,61 @@ const App = () => {
     }
   }, [user]);
 
-  // React.useEffect(() => {
-  //   if (first.current) {
-  //     first.current = false;
-  //     // console.log("Health 请求更新:" + health);
-  //     setInterval(() => {
-  //       if (onHealth.current) {
-  //         healthApi()
-  //           .then((res) => {
-  //             console.log(res.data);
-  //             if ("OK" === res.data) {
-  //               if (health === false) {
-  //                 setHealth(true);
-  //               }
-  //             }
-  //           })
-  //           .catch((err) => {
-  //             setHealth(false);
-  //           });
-  //       }
-  //     }, 60000);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
   const list_data = localStorage.getItem("list_data");
   const [mainOpen, setMainOpen] = React.useState<boolean>(
     list_data ? JSON.parse(list_data).mainOpen : true
   );
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
   document.title = t("webTitle");
+  const handleCurrentUserInfo=async()=>{
+    let user:User|null=null;
+    setLoading(true);
+    await info()
+    .then((res) => {
+      user=res.data
+      setUser(res.data);
+    })
+    .catch((err) => {
+      delete_token();
+    });
+    setLoading(false);
+    return user;
+}
+
+  const value={
+    user,
+    setUser,
+    t,
+    i18n,
+    handleCurrentUserInfo,
+    isloading,
+    setLoading,
+  }
+
   return (
     <BrowserRouter>
       <SnackbarProvider
         maxSnack={defaultSnackBarNumber}
         anchorOrigin={defaultSnackBarAnchorOrigin}
       >
-        <Routes>
-          {rotuerViews(
-            routes({
-              submittingStatus,
-              user,
-              setUser,
-              // health,
-              // setHealth,
-              onHealth,
-              isloading,
-              setLoading,
-              mainOpen,
-              setMainOpen,
-            })
-          )}
-        </Routes>
+        <UserContext.Provider value={value}>
+          <Routes>
+            {rotuerViews(
+              routes({
+                submittingStatus,
+                user,
+                setUser,
+                // health,
+                // setHealth,
+                onHealth,
+                isloading,
+                setLoading,
+                mainOpen,
+                setMainOpen,
+              })
+            )}
+          </Routes>
+        </UserContext.Provider>
       </SnackbarProvider>
     </BrowserRouter>
   );

@@ -26,6 +26,7 @@ import { getChildByParentId, getTopFolder } from "../../api/file";
 import { folder, User } from "../../api/models";
 import { TreeData, TreeType } from "../../components/tree-view/CustomTreeView";
 import { filesToTreeData, toTreeData, treeUnique } from "../../algorithm/tree";
+import { useUserContext } from "../../UserContext";
 
 async function operation(type_id: string) {
   let ret: { status: boolean; data: any } = { status: false, data: null };
@@ -46,9 +47,8 @@ const ReadControl = (props: any) => {
   const { enqueueSnackbar } = useSnackbar();
   const [status, setStatus] = React.useState(false);
   const [message, setMessage] = React.useState<TreeData[]>([]);
-  const { t } = useTranslation();
-  const user: User = props.user;
-
+  const {user,t}=useUserContext();
+  
   React.useEffect(() => {
     if (status) {
       const json = localStorage.getItem("read_tree");
