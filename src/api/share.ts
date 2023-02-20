@@ -1,4 +1,5 @@
 import request from "../config/request";
+import { reviewStatusType } from "./models";
 
 // 查询共享书信息
 export const getShareBookByBookId = (id: number) => request.get(`share/${id}`);
@@ -6,8 +7,14 @@ export const getShareBookByBookId = (id: number) => request.get(`share/${id}`);
 export const getShareBookByFileId = (id: number) =>
   request.get(`share/file?fileId=${id}`);
 
-export const getShareBooks = (uid?: number) =>
-  request.get(uid ? `share/books?uid=${uid}` : "share/books");
+export const getShareBooks = (uid?: number | null, type?: reviewStatusType) =>
+  request.get(
+    uid
+      ? `share/books?uid=${uid}`
+      : type
+      ? `share/books?review=${type}`
+      : "share/books"
+  );
 
 // 添加共享书 updateBook更新图书信息
 export const addShareBook = (fileId: number) =>

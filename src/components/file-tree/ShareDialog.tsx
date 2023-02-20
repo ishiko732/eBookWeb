@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import {
+  CircularProgress,
   DialogActions,
   DialogContent,
   Stack,
@@ -60,6 +61,7 @@ const ShareDialogPart = ({
   const [types, setTypes] = React.useState<string[]>([]);
   const [keywords, setKeywords] = React.useState<string[]>([]);
   const [loading, setLoading] = React.useState(false);
+  const firstStatus = React.useRef(true);
 
   const setView = (book: book) => {
     setMessage(book);
@@ -78,6 +80,10 @@ const ShareDialogPart = ({
   };
 
   React.useEffect(() => {
+    if (!firstStatus.current) {
+      return;
+    }
+    firstStatus.current = false;
     if (node.at(-1)?.resoureId) {
       getBookByResourceId(node.at(-1)?.resoureId!)
         .then((res) => {
@@ -98,9 +104,10 @@ const ShareDialogPart = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [node]);
 
-  return message ? (
+  return (
     <React.Fragment>
       <DialogContent>
+        {loading && !sharebook ? <CircularProgress /> : null}
         <ShareContent
           t={t}
           title={title}
@@ -143,8 +150,10 @@ const ShareDialogPart = ({
             </LoadingButton>
             <LoadingButton
               onClick={(e) => {
+                if (!message) {
+                  return;
+                }
                 setLoading(true);
-
                 (async function () {
                   const bookid = message.id;
                   const _type = message.types.map((type) => type.type);
@@ -224,8 +233,6 @@ const ShareDialogPart = ({
         )}
       </DialogActions>
     </React.Fragment>
-  ) : (
-    <Loading />
   );
 };
 
@@ -262,54 +269,46 @@ export const ShareContent = ({
 
   return (
     <Stack
-      component="form"
+      // component="form"
       sx={{
         width: "50ch",
       }}
       spacing={2}
-      noValidate
-      autoComplete="off"
+      // noValidate
+      // autoComplete="off"
     >
       <TextField
         id="input_title"
         label={t("management.book.bookField.title")}
         variant="standard"
-        key={v4()}
         value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        onChange={(e) => !loading && setTitle(e.target.value)}
         fullWidth
-        disabled={loading}
       />
       <TextField
         id="input_author"
         label={t("management.book.bookField.author")}
         variant="standard"
-        key={v4()}
         value={author}
-        onChange={(e) => setAuthor(e.target.value)}
+        onChange={(e) => !loading && setAuthor(e.target.value)}
         fullWidth
-        disabled={loading}
       />
       <TextField
         id="input_subject"
         label={t("management.book.bookField.subject")}
         variant="standard"
-        key={v4()}
         value={subject}
-        onChange={(e) => setSubject(e.target.value)}
+        onChange={(e) => !loading && setSubject(e.target.value)}
         multiline
         fullWidth
-        disabled={loading}
       />
       <TextField
         id="input_creator"
         label={t("management.book.bookField.creator")}
         variant="standard"
-        key={v4()}
         value={creator}
-        onChange={(e) => setCreator(e.target.value)}
+        onChange={(e) => !loading && setCreator(e.target.value)}
         fullWidth
-        disabled={loading}
       />
       <LocalizationProvider
         dateAdapter={AdapterDayjs}
@@ -323,33 +322,30 @@ export const ShareContent = ({
           label={t("management.book.bookField.creationDate")}
           value={creationDate}
           onChange={(newValue) => {
-            setCreationDate(newValue);
+            !loading && setCreationDate(newValue);
           }}
           inputFormat={defaultDateFormat}
-          disabled={loading}
         />
       </LocalizationProvider>
       <Typography mt={2}>{t("management.book.bookField.types")}</Typography>
       <MuiChipsInput
         value={types}
-        onChange={(value) => handleChange(value, "type")}
+        onChange={(value) => !loading && handleChange(value, "type")}
         disableEdition
         hideClearAll
         placeholder={t("management.book.edit_text") as string}
         variant="standard"
         fullWidth
-        disabled={loading}
       />
       <Typography mt={2}>{t("management.book.bookField.keywords")}</Typography>
       <MuiChipsInput
         value={keywords}
-        onChange={(value) => handleChange(value, "keyword")}
+        onChange={(value) => !loading && handleChange(value, "keyword")}
         disableEdition
         hideClearAll
         placeholder={t("management.book.edit_text") as string}
         variant="standard"
         fullWidth
-        disabled={loading}
       />
     </Stack>
   );
