@@ -14,13 +14,13 @@ const RequiredRole = ({
   status: boolean;
   setStatus: React.Dispatch<React.SetStateAction<boolean>>;
   user: any;
-  requireRole: role[];
+  requireRole?: role[];
   children: JSX.Element;
 }) => {
   const navigate = useNavigate();
   React.useEffect(() => {
     if (user !== null && user !== get_access_token()) {
-      if (requireRole.indexOf(user.role) === -1) {
+      if (requireRole && requireRole.indexOf(user.role) === -1) {
         navigate(default403URL, { replace: true });
       }
       setStatus(true);

@@ -175,7 +175,8 @@ export default function FileTreeView({
         break;
     }
   };
-  window.addEventListener("click", () => {
+  window.addEventListener("click", (event) => {
+    event.preventDefault();
     if (contextMenu) {
       setContextMenu(null);
     }
@@ -188,10 +189,10 @@ export default function FileTreeView({
     text?: string
   ) => {
     if (reason !== "backdropClick") {
-      console.log(dialogMessage);
-      console.log(selectedNode);
-      console.log(text);
       if (dialogMessage && selectedNode) {
+        if (event.type === "keyup" && dialogMessage.type === "Share") {
+          return event.preventDefault();
+        }
         const currentNode = selectedNode.at(-1) as TreeData;
         setLoading(true);
         switch (dialogMessage.type) {

@@ -75,24 +75,24 @@ const App = () => {
   const [mainOpen, setMainOpen] = React.useState<boolean>(
     list_data ? JSON.parse(list_data).mainOpen : true
   );
-  const { t,i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   document.title = t("webTitle");
-  const handleCurrentUserInfo=async()=>{
-    let user:User|null=null;
+  const handleCurrentUserInfo = async () => {
+    let user: User | null = null;
     setLoading(true);
     await info()
-    .then((res) => {
-      user=res.data
-      setUser(res.data);
-    })
-    .catch((err) => {
-      delete_token();
-    });
+      .then((res) => {
+        user = res.data;
+        setUser(res.data);
+      })
+      .catch((err) => {
+        delete_token();
+      });
     setLoading(false);
     return user;
-}
+  };
 
-  const value={
+  const value = {
     user,
     setUser,
     t,
@@ -100,7 +100,7 @@ const App = () => {
     handleCurrentUserInfo,
     isloading,
     setLoading,
-  }
+  };
 
   return (
     <BrowserRouter>

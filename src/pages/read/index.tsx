@@ -47,8 +47,8 @@ const ReadControl = (props: any) => {
   const { enqueueSnackbar } = useSnackbar();
   const [status, setStatus] = React.useState(false);
   const [message, setMessage] = React.useState<TreeData[]>([]);
-  const {user,t}=useUserContext();
-  
+  const { user, t } = useUserContext();
+
   React.useEffect(() => {
     if (status) {
       const json = localStorage.getItem("read_tree");
