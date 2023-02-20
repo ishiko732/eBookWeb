@@ -69,10 +69,49 @@ export const uploadFile = (
     onUploadProgress: onUpload,
   });
 
+// 上传图片到PDF
+export const uploadPDFImage = (
+  file: File,
+  sourceId: String,
+  onUpload?: (progressEvent: AxiosProgressEvent) => void
+) =>
+  request({
+    method: "put",
+    url: `file/download/${sourceId}`,
+    data: file,
+    headers: { "Content-Type": "multipart/form-data" },
+    transformRequest: [
+      (data) => {
+        const formData = new FormData();
+        formData.append("file", data);
+        return formData;
+      },
+    ],
+    timeout: 0,
+    onUploadProgress: onUpload,
+  });
+
 // 查看文件
 export const viewFileURL = (fsId: string) => {
   return `${BaseURL}file/views/${fsId}`;
 };
+
+// 查看PDF的图像
+export const viewPDFImageURL = (fsId: string) => {
+  return `${BaseURL}file/images/${fsId}`;
+};
+
+export const viewPDFImage = (
+  fsId: string,
+  onDownload?: (progressEvent: AxiosProgressEvent) => void
+) =>
+  request({
+    method: "get",
+    url: `file/images/${fsId}`,
+    responseType: "blob", // important
+    timeout: 0,
+    onDownloadProgress: onDownload,
+  });
 
 export const viewFile = (
   fsId: string,

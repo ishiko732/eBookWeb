@@ -1,7 +1,8 @@
 import { Box } from "@mui/material";
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Document, Pages } from "../../components/pdfViewer2";
+import { UploadImage } from "../../components/pdfViewer2/basicFunctions/UploadImage";
 import { CurrentPage } from "../../components/pdfViewer2/navigationComponents";
 import { BaseURL } from "../../config/config";
 import { access_token as access_string } from "../../config/token";
@@ -44,15 +45,18 @@ const PDFBrowse: React.FC = memo(() => {
     });
   }
   return resourceId ? (
-    <Box>
-      <Document
-        option={documentInitParameters(generateURL(resourceId))}
-        scale={Number(localScale)}
-      >
-        <Pages />
-        <CurrentPage />
-      </Document>
-    </Box>
+    <div id="PDFViwer">
+      <Box>
+        <Document
+          option={documentInitParameters(generateURL(resourceId))}
+          scale={Number(localScale)}
+        >
+          <Pages />
+          <CurrentPage />
+          <UploadImage />
+        </Document>
+      </Box>
+    </div>
   ) : (
     <div>Error 404</div>
   );
