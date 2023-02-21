@@ -12,7 +12,7 @@ import { filesToTreeData, toTree } from "../../algorithm/tree";
 import { uploadFile } from "../../api/file";
 import { file, file as fileModel } from "../../api/models";
 import { TreeData } from "../tree-view/CustomTreeView";
-function LinearProgressWithLabel(
+export function LinearProgressWithLabel(
   props: LinearProgressProps & { value: number }
 ) {
   return (
