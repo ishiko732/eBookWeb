@@ -1,6 +1,6 @@
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { Stack, IconButton } from "@mui/material";
-import { commentTree } from "../../api/models";
+import { commentTree, User } from "../../api/models";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -23,6 +23,7 @@ export const commentsSecondaryActionHelper = (
       comment?: string | null;
     }
   ) => void,
+  loginUser:User,
   addContent?: true,
   deleteContent?: true
 ) => {
@@ -58,7 +59,7 @@ export const commentsSecondaryActionHelper = (
           <AddIcon />
         ) : null}
       </IconButton>
-      {deleteContent ? (
+      {deleteContent||loginUser.id===comment.uid ? (
         <IconButton
           edge="start"
           aria-label={`delete-${comment.cid}`}

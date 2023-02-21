@@ -56,6 +56,7 @@ const BookBarComment = ({
       const temp = commentToTree([...comments], message.id || null, {
         cid: time.unix(),
         bid: sharebook.book.id,
+        uid:user.id,
         user: user.name || (t("comment.myself") as string),
         createdAt: time.format(defaultDateFormat),
         updateAt: time.format(defaultDateFormat),

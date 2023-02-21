@@ -9,6 +9,7 @@ import {
 import { TFunction } from "i18next";
 import React from "react";
 import { commentTree } from "../../api/models";
+import { useUserContext } from "../../UserContext";
 import { commentsAddHelper } from "./AddHelper";
 import { commentsIsEmptyHelper } from "./IsEmptyHelper";
 import { commentsSecondaryActionHelper } from "./SecondaryActionHelper";
@@ -46,6 +47,7 @@ export const CommentItemHelper = ({
   const [open, setOpen] = React.useState(
     new Array(comments.length).fill(false)
   );
+  const {user}=useUserContext()
 
   return (
     <React.Fragment>
@@ -61,6 +63,7 @@ export const CommentItemHelper = ({
                 [selected, setSelected],
                 message,
                 handleSubmit,
+                user,
                 addContent,
                 deleteContent
               )}
