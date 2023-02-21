@@ -1,7 +1,8 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-type Anchor = "top" | "left" | "bottom" | "right";
+import { createContext } from "react";
+export type Anchor = "top" | "left" | "bottom" | "right";
 
 export default function PositionSwipeableDrawer({
   position,
@@ -66,3 +67,61 @@ export default function PositionSwipeableDrawer({
     </div>
   );
 }
+
+interface ProviderContext {
+  position: Anchor;
+  setPostion: React.Dispatch<React.SetStateAction<Anchor>>;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  anchorEl: HTMLButtonElement | null;
+  setAnchorEl: React.Dispatch<React.SetStateAction<HTMLButtonElement | null>>;
+  width: number;
+  setWidth: React.Dispatch<React.SetStateAction<number>>;
+  drawerContent: JSX.Element | undefined;
+  setDrawerContent: React.Dispatch<
+    React.SetStateAction<JSX.Element | undefined>
+  >;
+}
+// @ts-ignore
+export const SwipeableDrawerContext = createContext<ProviderContext>();
+
+export function useSwipeableDrawerContext() {
+  return React.useContext(SwipeableDrawerContext);
+}
+
+export const SwipeableDrawerProvider = (props: { children: JSX.Element }) => {
+  const [position, setPostion] = React.useState<Anchor>("right");
+  const [open, setOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
+    null
+  );
+  const [width, setWidth] = React.useState(250);
+  const [drawerContent, setDrawerContent] = React.useState<JSX.Element>();
+  const value = {
+    position,
+    setPostion,
+    open,
+    setOpen,
+    anchorEl,
+    setAnchorEl,
+    width,
+    setWidth,
+    drawerContent,
+    setDrawerContent,
+  };
+
+  return (
+    <SwipeableDrawerContext.Provider value={value}>
+      {props.children}
+      <PositionSwipeableDrawer
+        position={position}
+        open={open}
+        setOpen={setOpen}
+        setAnchorEl={setAnchorEl}
+        width={width}
+      >
+        {drawerContent}
+      </PositionSwipeableDrawer>
+    </SwipeableDrawerContext.Provider>
+  );
+};
