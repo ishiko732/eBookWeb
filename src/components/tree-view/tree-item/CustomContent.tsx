@@ -1,5 +1,5 @@
 import { TreeItemContentProps, useTreeItem } from "@mui/lab";
-import { Box, Typography } from "@mui/material";
+import { Box, Tooltip, Typography } from "@mui/material";
 import clsx from "clsx";
 import React from "react";
 
@@ -67,9 +67,19 @@ const CustomContent = React.forwardRef((props: TreeItemContentProps, ref) => {
         onClick={handleSelectionClick}
       >
         {iconProp && <div className={classes.iconContainer}>{iconProp}</div>}
-        <Typography component="div" className={classes.label}>
-          {label}
-        </Typography>
+        <div
+          style={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            width: "14rem",
+          }}
+        >
+          <Tooltip title={label} placement="right">
+            <Typography component="div" className={classes.label} noWrap>
+              {label}
+            </Typography>
+          </Tooltip>
+        </div>
       </div>
     </Box>
   );

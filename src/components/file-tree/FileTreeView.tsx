@@ -94,12 +94,6 @@ export default function FileTreeView({
   ) => {
     // setSelectText(event.currentTarget.textContent);
     const path = DFS_path(message, ids as string, "id", "children");
-    console.log(path);
-    // setMessage((dates) => {
-    //   console.log(DFS_Delete(dates, "id", "children", path));
-    //   return dates;
-    // });
-
     setSelectNode(path);
   };
 
