@@ -49,10 +49,14 @@ export default function Search({
   value,
   setValue,
   placeholder,
+  handleKeyUp,
 }: {
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
   placeholder?: string;
+  handleKeyUp?:
+    | React.KeyboardEventHandler<HTMLInputElement | HTMLTextAreaElement>
+    | undefined;
 }) {
   return (
     <SearchBar>
@@ -68,6 +72,7 @@ export default function Search({
         ) => {
           setValue(event.target.value);
         }}
+        onKeyUp={handleKeyUp}
       />
     </SearchBar>
   );
