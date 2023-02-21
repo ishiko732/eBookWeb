@@ -31,6 +31,7 @@ import ShareDialogPart from "../../../components/file-tree/ShareDialog";
 import { DialogMessage } from "../../../components/file-tree/InputDialog";
 import { stepContent, StepView } from "../../../components/StepView";
 import { checkShareBook } from "../../../api/share";
+import { openViewWindow } from "../../../config/Basic";
 
 const useSteps = (
   sharebook: shareBook,
@@ -86,11 +87,7 @@ const useSteps = (
                   variant="outlined"
                   sx={{ mt: 1, mr: 1 }}
                   onClick={(e) => {
-                    const win = window.open(
-                      `/views?resource=${sharebook.file.fsId}`,
-                      "_blank"
-                    );
-                    win?.focus();
+                    openViewWindow(sharebook.file.fsId);
                   }}
                 >
                   {t("management.book.op.view")}

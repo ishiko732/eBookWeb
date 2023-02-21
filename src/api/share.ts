@@ -75,3 +75,10 @@ export const addShareBookComment = (
 // 删除共享书的评论
 export const deleteShareBookComment = (bookId: number, commentId: number) =>
   request.delete(`share/${bookId}/${commentId}`);
+
+// 拷贝书籍到用户目录
+export const copyBookToUser = (
+  bookId: number,
+  fileId: number,
+  sourceId: string
+) => request.post(`share/${bookId}/copy?fileId=${fileId}&sourceId=${sourceId}`);

@@ -24,6 +24,7 @@ import BookDataTable from "./BookDataTable";
 import PositionSwipeableDrawer from "../../components/PositionSwipeableDrawer";
 import BookBar from "./book-bar/BookBar";
 import { bookOpType } from "./book-bar/inex";
+import { openViewWindow } from "../../config/Basic";
 
 const BookControl = (props: any) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -78,20 +79,11 @@ const BookControl = (props: any) => {
       return;
     }
     if (op === "viewPDF") {
-      console.log(
+      openViewWindow(
         message.filter(
           (data) => data.id === (selectedId as unknown as number[])[0]
-        )
+        )[0].mid
       );
-      const win = window.open(
-        `/views?resource=${
-          message.filter(
-            (data) => data.id === (selectedId as unknown as number[])[0]
-          )[0].mid
-        }`,
-        "_blank"
-      );
-      win?.focus();
     } else {
       setType(op);
       setAnchorEl(event.currentTarget);

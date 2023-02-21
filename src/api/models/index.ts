@@ -76,6 +76,11 @@ export interface shareBook {
   createdAt: string;
   updateAt: string;
 }
+export interface shareBook {
+  store: boolean;
+  loveForDay: boolean;
+  shareUserName: string;
+}
 export interface review {
   id: number;
   checkUser: User;
@@ -100,6 +105,7 @@ export interface comment {
 export interface commentTree {
   cid: number;
   bid: number;
+  uid:number;
   user: string;
   message: string;
   children: commentTree[];
