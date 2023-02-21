@@ -29,6 +29,7 @@ import PublicIcon from "@mui/icons-material/Public";
 import { role, userStatus } from "../api/entity/auth";
 import ReadControl from "../pages/read";
 import PDFBrowse from "../pages/viewer/PDFBrowse";
+import BrowseShareBook from "../pages/browse";
 
 // import PDFViewRangeBorwse from "../pages/pdf/PDFViewRangeBorwse";
 export interface route {
@@ -93,7 +94,7 @@ export const routes = (props: any): route[] => {
         },
         {
           path: "browse",
-          element: <MyHome {...props} />,
+          element: <BrowseShareBook {...props} />,
         },
         {
           path: "read",
