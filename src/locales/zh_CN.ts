@@ -273,6 +273,11 @@ const customChineseMessages = {
     deleteComment: "删除评论",
     myself: "本人",
   },
+  read: {
+    read: "阅读",
+    addBook: "添加到书库",
+    downloadBook: "下载图书",
+  },
 };
 
 export default customChineseMessages;
