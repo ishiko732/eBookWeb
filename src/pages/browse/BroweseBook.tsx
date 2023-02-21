@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import LibraryAddOutlinedIcon from "@mui/icons-material/LibraryAddOutlined";
 import LibraryAddCheckOutlinedIcon from "@mui/icons-material/LibraryAddCheckOutlined";
-import { addLove, copyBookToUser } from "../../api/share";
+import { addbrowse, addLove, copyBookToUser } from "../../api/share";
 import Search from "../../components/search-bar/search";
 import {
   SwipeableDrawerProvider,
@@ -58,6 +58,8 @@ const MediaItem = ({ item }: { item: shareBook }) => {
   const [loveStatus, setLove] = React.useState(item.loveForDay);
   const [loveCnt, setLoveCnt] = React.useState(item.love);
   const [store, setStore] = React.useState(item.store);
+  const [browse, setBrowse] = React.useState(item.browse);
+  const isBrowse = React.useRef(item.browseFor4Hour);
   const { setOpen, setDrawerContent } = useSwipeableDrawerContext();
   const handleLoveClick = () => {
     setLoveCnt((pre) => (loveStatus ? pre - 1 : pre + 1));
@@ -105,6 +107,12 @@ const MediaItem = ({ item }: { item: shareBook }) => {
               sStore={setStore}
             />
           );
+          if (!isBrowse.current) {
+            addbrowse(item.book.id).then((res) => {
+              setBrowse((pre) => pre + 1);
+              isBrowse.current = !isBrowse.current;
+            });
+          }
           setOpen(true);
         }}
       />
@@ -126,7 +134,7 @@ const MediaItem = ({ item }: { item: shareBook }) => {
             size="small"
             color="info"
             icon={<AutoStoriesIcon />}
-            label={item.browse}
+            label={browse}
           />
         </Box>
         {

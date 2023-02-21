@@ -79,6 +79,7 @@ export interface shareBook {
 export interface shareBook {
   store: boolean;
   loveForDay: boolean;
+  browseFor4Hour: boolean;
   shareUserName: string;
 }
 export interface review {

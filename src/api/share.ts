@@ -45,7 +45,8 @@ export const checkShareBook = (
 // 点赞共享书
 export const addLove = (bookId: number) => request.get(`share/${bookId}/love`);
 // 添加共享书浏览量
-export const browse = (bookId: number) => request.get(`share/${bookId}/browse`);
+export const addbrowse = (bookId: number) =>
+  request.get(`share/${bookId}/browse`);
 
 // 查询共享书的评论
 export const getShareBookComments = (bookId: number) =>
