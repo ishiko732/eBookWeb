@@ -47,7 +47,7 @@ export const CommentItemHelper = ({
   const [open, setOpen] = React.useState(
     new Array(comments.length).fill(false)
   );
-  const {user}=useUserContext()
+  const { user } = useUserContext();
 
   return (
     <React.Fragment>

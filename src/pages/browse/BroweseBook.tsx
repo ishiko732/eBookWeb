@@ -26,7 +26,7 @@ import {
 import { BookContent } from "../../components/BookContent";
 import { CommentContent } from "../../components/comment-view";
 import { queryBook } from "./query";
-  
+
 const DrawerContent = ({
   item,
   sStore,
@@ -47,7 +47,7 @@ const DrawerContent = ({
       >
         <BookContent item={item} sStore={sStore} />
 
-        <CommentContent item={item}/>
+        <CommentContent item={item} />
       </Stack>
     </React.Fragment>
   );

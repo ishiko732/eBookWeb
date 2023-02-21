@@ -105,7 +105,7 @@ export interface comment {
 export interface commentTree {
   cid: number;
   bid: number;
-  uid:number;
+  uid: number;
   user: string;
   message: string;
   children: commentTree[];

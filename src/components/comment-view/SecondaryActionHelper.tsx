@@ -23,7 +23,7 @@ export const commentsSecondaryActionHelper = (
       comment?: string | null;
     }
   ) => void,
-  loginUser:User,
+  loginUser: User,
   addContent?: true,
   deleteContent?: true
 ) => {
@@ -59,7 +59,7 @@ export const commentsSecondaryActionHelper = (
           <AddIcon />
         ) : null}
       </IconButton>
-      {deleteContent||loginUser.id===comment.uid ? (
+      {deleteContent || loginUser.id === comment.uid ? (
         <IconButton
           edge="start"
           aria-label={`delete-${comment.cid}`}
