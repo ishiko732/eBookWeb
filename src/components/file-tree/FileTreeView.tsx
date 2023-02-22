@@ -1,4 +1,4 @@
-import { LinearProgress, Stack, ThemeProvider } from "@mui/material";
+import { Divider, LinearProgress, Stack, ThemeProvider } from "@mui/material";
 import CustomTreeView, { TreeData } from "../tree-view/CustomTreeView";
 import { useState, MouseEvent, useEffect } from "react";
 import { getMuiTheme } from "../tree-view/Styles";
@@ -346,7 +346,7 @@ export default function FileTreeView({
   };
 
   return (
-    <Stack spacing={2}>
+    <Stack>
       {isLoading ? <LinearProgress color="info" /> : null}
       <UploadFile
         file={file}
@@ -355,6 +355,7 @@ export default function FileTreeView({
         fid={parentId}
       />
       <Search value={searchQuery} setValue={setSearchQuery} />
+      <Divider />
       <div onContextMenu={handleContextMenu} style={{ cursor: "context-menu" }}>
         <ThemeProvider theme={getMuiTheme()}>
           <CustomTreeView

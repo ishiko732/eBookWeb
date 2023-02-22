@@ -78,6 +78,13 @@ const CustomTreeView = ({
         expanded={expanded}
         onNodeToggle={handleToggle}
         onNodeSelect={handleNodeSelect}
+        // sx={{
+        //   ".MuiTreeItem-root": {
+        //     ".Mui-focused:not(.Mui-selected)": classes.focused,
+        //     ".Mui-selected, .Mui-focused.Mui-selected, .Mui-selected:hover":
+        //       classes.selected
+        //   }
+        // }}
       >
         {renderTreeData(data, loads, isSearch)}
       </TreeView>
