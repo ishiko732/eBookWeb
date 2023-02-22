@@ -170,7 +170,7 @@ export default function FileTreeView({
     }
   };
   window.addEventListener("click", (event) => {
-    event.preventDefault();
+    // event.preventDefault(); // 移除拦截input file
     if (contextMenu) {
       setContextMenu(null);
     }
