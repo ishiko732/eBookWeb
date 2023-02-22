@@ -58,6 +58,17 @@ export const FileMenu = ({
         >
           {t("TreeView.Copy", { name: node?.at(-1)?.name })}
         </MenuItem>
+        {node?.at(-1)?.type === "PDF" ? (
+          <MenuItem
+            onClick={(event) => {
+              handleClose("Open", event);
+            }}
+          >
+            {t("TreeView.Open", {
+              type: t(`TreeView.${node?.at(-1)?.type}`),
+            })}
+          </MenuItem>
+        ) : null}
         <MenuItem
           onClick={(event) => {
             event.preventDefault();
@@ -132,4 +143,5 @@ export type FileMenuType =
   | "Download"
   | "Update"
   | "Share"
+  | "Open"
   | null;
