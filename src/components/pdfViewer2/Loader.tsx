@@ -11,12 +11,15 @@ const Loader = (props: {
         position: props.inner ? "absolute" : "fixed",
         display: "flex",
         margin: "auto",
-        width: props.inner ? "100%" : "100vw",
-        height: props.inner ? "100%" : "100vh",
+        // width: props.inner ? "50%" : "100vw",
+        // height: props.inner ? "50%" : "100vh",
         justifyContent: "center",
         alignItems: "center",
+        left: "50%",
+        top: "50%",
         zIndex: props.inner ? "999" : "998",
-        backgroundColor: "white",
+        transform: "translate(-50%, -50%)",
+        // backgroundColor: "white",
       }}
     >
       {!props.disabledProgress ? <CircularProgress /> : null}

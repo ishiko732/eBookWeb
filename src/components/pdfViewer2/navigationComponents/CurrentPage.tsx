@@ -1,5 +1,5 @@
 import { Fab, TextField, Typography } from "@mui/material";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePDFContext } from "../usePDFContext";
 
 export const goPage = (i: number) => {
@@ -13,6 +13,8 @@ const CurrentPage = () => {
   const { pdf, scale, loading } = usePDFContext();
   const totalPages = pdf?.numPages;
   const currentPageRef = useRef<HTMLInputElement>(null);
+  const [firstpage, setFirstPage] = useState<HTMLDivElement | null>(null);
+
   useEffect(() => {
     const scaleRate = (1 / scale) * 0.5;
     const observer = new IntersectionObserver(
@@ -37,12 +39,21 @@ const CurrentPage = () => {
       observer.disconnect();
     };
   });
-  return !loading && totalPages ? (
+  useEffect(() => {
+    return () => {
+      setFirstPage(document.querySelector(".page") as HTMLDivElement | null);
+    };
+  });
+
+  return !loading && totalPages && firstpage ? (
     <Fab
       variant="extended"
       sx={{
         position: "fixed",
-        left: "50%",
+        left:
+          document.getElementById("viewer")?.offsetLeft !== 0
+            ? firstpage.offsetWidth * 0.5 + firstpage.offsetLeft
+            : "50%",
         bottom: 16,
       }}
     >
