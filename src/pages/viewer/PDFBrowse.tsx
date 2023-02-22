@@ -27,7 +27,7 @@ export const documentInitParameters = (pdfURL: string) => {
   };
 };
 
-const DEFAULT_SCALE = 1.33;
+export const DEFAULT_SCALE = 1.33;
 const PDFBrowse: React.FC = memo(() => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [searchParams, setSearchParams] = useSearchParams();
