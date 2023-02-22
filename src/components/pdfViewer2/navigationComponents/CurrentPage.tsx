@@ -5,8 +5,8 @@ import { usePDFContext } from "../usePDFContext";
 export const goPage = (i: number) => {
   const targetPage = document.getElementById(
     `pageContainer${i}`
-  ) as HTMLDivElement;
-  targetPage.scrollIntoView({ behavior: "auto" });
+  ) as HTMLDivElement | null;
+  targetPage?.scrollIntoView({ behavior: "auto" });
 };
 
 const CurrentPage = () => {
