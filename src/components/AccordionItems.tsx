@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
+import { CSSProperties } from "react";
 
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -17,12 +18,18 @@ const StyledAccordion = styled(Accordion)(({ theme }) => ({
 export interface AccordionItem {
   title: string;
   details: string | JSX.Element;
-  defaultExpanded?:boolean
+  defaultExpanded?: boolean;
 }
 
-export default function AccordionItems({ items}: { items: AccordionItem[]}) {
+export default function AccordionItems({
+  items,
+  style,
+}: {
+  items: AccordionItem[];
+  style?: CSSProperties | undefined;
+}) {
   return (
-    <Stack sx={{ width: "18rem", minHeight: 377 }} spacing={2}>
+    <Stack sx={{ minWidth: "18rem", minHeight: 377, ...style }} spacing={2}>
       {items.map((item, index: number) => (
         <Paper key={`AccordionItem-${index}`}>
           <StyledAccordion defaultExpanded>
