@@ -27,6 +27,7 @@ import { folder, User } from "../../api/models";
 import { TreeData, TreeType } from "../../components/tree-view/CustomTreeView";
 import { filesToTreeData, toTreeData, treeUnique } from "../../algorithm/tree";
 import { useUserContext } from "../../UserContext";
+import AccordionItems, { AccordionItem } from "../../components/AccordionItems";
 
 async function operation(type_id: string) {
   let ret: { status: boolean; data: any } = { status: false, data: null };
@@ -43,11 +44,16 @@ async function operation(type_id: string) {
   return ret;
 }
 
+
+
+
 const ReadControl = (props: any) => {
   const { enqueueSnackbar } = useSnackbar();
   const [status, setStatus] = React.useState(false);
   const [message, setMessage] = React.useState<TreeData[]>([]);
   const { user, t } = useUserContext();
+  const [items, setItems] = React.useState<AccordionItem[]>([]);
+  const [openFile,setOpenFile]=React.useState(true);
 
   React.useEffect(() => {
     if (status) {
@@ -69,10 +75,12 @@ const ReadControl = (props: any) => {
                   }
                 }
                 setMessage(obj);
+                handleMessage(obj);
               });
             }
           } else {
             setMessage(data);
+            handleMessage(data);
           }
           enqueueSnackbar(t("api.success"), { variant: "success" });
         })
@@ -83,6 +91,19 @@ const ReadControl = (props: any) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
+
+const handleMessage=(treedata:TreeData[])=>{
+  const _items:AccordionItem[]=[]
+  const newFiles:AccordionItem={
+    title: "Files",
+    details: (
+      <FileTreeView data={treedata} operation={operation} loginUser={user} />
+    ),
+    defaultExpanded:true
+  }
+  _items.push(newFiles)
+  setItems(_items);
+}
 
   return (
     <RequiredRole
@@ -95,19 +116,10 @@ const ReadControl = (props: any) => {
         <CssBaseline />
         <Stack
           direction="row"
-          divider={<Divider orientation="vertical" flexItem />}
+          divider={<Divider orientation="vertical" />}
           spacing={2}
         >
-          <Box bgcolor="white" width="300px">
-            <Paper elevation={3}>
-              <FileTreeView
-                data={message}
-                operation={operation}
-                // ram="read_tree"
-                loginUser={user}
-              />
-            </Paper>
-          </Box>
+          <AccordionItems items={items} />
         </Stack>
       </React.Fragment>
     </RequiredRole>
