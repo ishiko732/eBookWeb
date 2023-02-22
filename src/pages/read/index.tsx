@@ -1,33 +1,29 @@
-import { useTranslation } from "react-i18next";
 import { role } from "../../api/entity/auth";
-import React from "react";
+import React, { useEffect } from "react";
 import RequiredRole from "../../config/requiredRole";
-import { loginUser } from "../../api/auth";
 import {
   Box,
-  Chip,
-  Paper,
-  Typography,
-  Divider,
   Stack,
-  IconButton,
-  Tooltip,
   CssBaseline,
-  makeStyles,
-  Card,
-  CardContent,
 } from "@mui/material";
-import Title from "../../components/Title";
-import request from "../../config/request";
-import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useSnackbar } from "notistack";
 import FileTreeView from "../../components/file-tree/FileTreeView";
 import { getChildByParentId, getTopFolder } from "../../api/file";
-import { folder, User } from "../../api/models";
+import { folder } from "../../api/models";
 import { TreeData, TreeType } from "../../components/tree-view/CustomTreeView";
-import { filesToTreeData, toTreeData, treeUnique } from "../../algorithm/tree";
+import { filesToTreeData, toTreeData } from "../../algorithm/tree";
 import { useUserContext } from "../../UserContext";
 import AccordionItems, { AccordionItem } from "../../components/AccordionItems";
+import {
+  documentInitParameters,
+  generateURL,
+} from "../viewer/PDFBrowse";
+import { Document, Pages } from "../../components/pdfViewer2";
+import { UploadImage } from "../../components/pdfViewer2/basicFunctions/UploadImage";
+import { CurrentPage } from "../../components/pdfViewer2/navigationComponents";
+import { useReadContext } from "./ReadContext";
+import { goPage } from "../../components/pdfViewer2/navigationComponents/CurrentPage";
+import { task } from "../../utils/sleep";
 
 async function operation(type_id: string) {
   let ret: { status: boolean; data: any } = { status: false, data: null };
@@ -44,16 +40,15 @@ async function operation(type_id: string) {
   return ret;
 }
 
-
-
-
 const ReadControl = (props: any) => {
   const { enqueueSnackbar } = useSnackbar();
   const [status, setStatus] = React.useState(false);
   const [message, setMessage] = React.useState<TreeData[]>([]);
   const { user, t } = useUserContext();
   const [items, setItems] = React.useState<AccordionItem[]>([]);
-  const [openFile,setOpenFile]=React.useState(true);
+  const { selectedFilesNode, setSelectFilesNode } = useReadContext();
+  const [resouceId, setResouceId] = React.useState<string>("");
+  const [scale, setScale] = React.useState(1.33);
 
   React.useEffect(() => {
     if (status) {
@@ -92,18 +87,35 @@ const ReadControl = (props: any) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
-const handleMessage=(treedata:TreeData[])=>{
-  const _items:AccordionItem[]=[]
-  const newFiles:AccordionItem={
-    title: "Files",
-    details: (
-      <FileTreeView data={treedata} operation={operation} loginUser={user} />
-    ),
-    defaultExpanded:true
-  }
-  _items.push(newFiles)
-  setItems(_items);
-}
+  const handleMessage = (treedata: TreeData[]) => {
+    const _items: AccordionItem[] = [];
+    const newFiles: AccordionItem = {
+      title: "Files",
+      details: (
+        <FileTreeView data={treedata} operation={operation} loginUser={user} />
+      ),
+      defaultExpanded: true,
+    };
+    _items.push(newFiles);
+    _items.push(newFiles);
+    setItems(_items);
+  };
+  useEffect(() => {
+    if (!selectedFilesNode) {
+      return;
+    }
+    const file = selectedFilesNode.at(-1);
+    if (file && file.type === "PDF" && file.resoureId) {
+      if (resouceId !== "") {
+        goPage(1);
+        setResouceId("");
+        task();
+      }
+      setResouceId(file.resoureId);
+    }
+    setSelectFilesNode(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedFilesNode]);
 
   return (
     <RequiredRole
@@ -114,12 +126,28 @@ const handleMessage=(treedata:TreeData[])=>{
     >
       <React.Fragment>
         <CssBaseline />
+        <Box>
+          <AccordionItems items={items} style={{ position: "fixed" }} />
+        </Box>
+
         <Stack
           direction="row"
-          divider={<Divider orientation="vertical" />}
+          justifyContent="center"
+          alignItems="center"
           spacing={2}
         >
-          <AccordionItems items={items} />
+          {resouceId !== "" && (
+            <Box maxWidth={document.body.clientWidth * 0.7}>
+              <Document
+                option={documentInitParameters(generateURL(resouceId))}
+                scale={scale}
+              >
+                <Pages />
+                <CurrentPage />
+                <UploadImage />
+              </Document>
+            </Box>
+          )}
         </Stack>
       </React.Fragment>
     </RequiredRole>
