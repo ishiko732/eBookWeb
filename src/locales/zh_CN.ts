@@ -250,6 +250,7 @@ const customChineseMessages = {
     Rename: "命名{{type}}",
     Upload: "上传{{type}}",
     Share: "共享{{type}}",
+    Open: "打开{{type}}",
     Input: "请输入{{type}}名称",
     Tip: "请谨慎操作,一旦{{type}}就无法恢复!",
     YES: "确定{{opt}}",
@@ -262,6 +263,7 @@ const customChineseMessages = {
       Upload: "上传",
       Update: "更新",
       Share: "共享",
+      Open: "打开",
     },
   },
   comment: {

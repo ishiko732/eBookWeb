@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import React, { memo, useEffect } from "react";
+import React, { memo } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Document, Pages } from "../../components/pdfViewer2";
 import { UploadImage } from "../../components/pdfViewer2/basicFunctions/UploadImage";
