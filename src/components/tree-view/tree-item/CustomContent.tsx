@@ -71,7 +71,7 @@ const CustomContent = React.forwardRef((props: TreeItemContentProps, ref) => {
           style={{
             overflow: "hidden",
             textOverflow: "ellipsis",
-            width: "14rem",
+            width: "12rem",
           }}
         >
           <Tooltip title={label} placement="right">
