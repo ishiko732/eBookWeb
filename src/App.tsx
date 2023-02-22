@@ -14,6 +14,7 @@ import { SnackbarProvider } from "notistack";
 import { useTranslation } from "react-i18next";
 import { UserContext } from "./UserContext";
 import { User } from "./api/models";
+import { ReadProvider } from "./pages/read/ReadContext";
 const rotuerViews = (routerItems: route[], parent?: string) => {
   return routerItems.map((item: route) => {
     const path = parent ? `${parent}${item.path}` : `${item.path}`;
@@ -109,22 +110,24 @@ const App = () => {
         anchorOrigin={defaultSnackBarAnchorOrigin}
       >
         <UserContext.Provider value={value}>
-          <Routes>
-            {rotuerViews(
-              routes({
-                submittingStatus,
-                user,
-                setUser,
-                // health,
-                // setHealth,
-                onHealth,
-                isloading,
-                setLoading,
-                mainOpen,
-                setMainOpen,
-              })
-            )}
-          </Routes>
+          <ReadProvider>
+            <Routes>
+              {rotuerViews(
+                routes({
+                  submittingStatus,
+                  user,
+                  setUser,
+                  // health,
+                  // setHealth,
+                  onHealth,
+                  isloading,
+                  setLoading,
+                  mainOpen,
+                  setMainOpen,
+                })
+              )}
+            </Routes>
+          </ReadProvider>
         </UserContext.Provider>
       </SnackbarProvider>
     </BrowserRouter>
