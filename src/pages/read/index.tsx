@@ -1,11 +1,7 @@
 import { role } from "../../api/entity/auth";
 import React, { useEffect } from "react";
 import RequiredRole from "../../config/requiredRole";
-import {
-  Box,
-  Stack,
-  CssBaseline,
-} from "@mui/material";
+import { Box, Stack, CssBaseline } from "@mui/material";
 import { useSnackbar } from "notistack";
 import FileTreeView from "../../components/file-tree/FileTreeView";
 import { getChildByParentId, getTopFolder } from "../../api/file";
@@ -14,10 +10,7 @@ import { TreeData, TreeType } from "../../components/tree-view/CustomTreeView";
 import { filesToTreeData, toTreeData } from "../../algorithm/tree";
 import { useUserContext } from "../../UserContext";
 import AccordionItems, { AccordionItem } from "../../components/AccordionItems";
-import {
-  documentInitParameters,
-  generateURL,
-} from "../viewer/PDFBrowse";
+import { documentInitParameters, generateURL } from "../viewer/PDFBrowse";
 import { Document, Pages } from "../../components/pdfViewer2";
 import { UploadImage } from "../../components/pdfViewer2/basicFunctions/UploadImage";
 import { CurrentPage } from "../../components/pdfViewer2/navigationComponents";
@@ -117,6 +110,13 @@ const ReadControl = (props: any) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFilesNode]);
 
+  useEffect(()=>{
+    const _scrollBar=document.getElementsByClassName('PrivateSwipeArea-root css-x15wq9');
+    if(_scrollBar){
+      (_scrollBar[0] as HTMLDivElement).style.position='absolute';
+    }
+    console.log(document.getElementsByClassName('PrivateSwipeArea-root css-x15wq9')[0])
+  })
   return (
     <RequiredRole
       user={user}
