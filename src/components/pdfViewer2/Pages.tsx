@@ -11,7 +11,8 @@ export default function Pages(props: {
   style?: any;
   loadingPageText?: string;
 }) {
-  const { pdf, loading, loadingText, defaultHeight } = usePDFContext();
+  const { pdf, loading, loadingText, defaultHeight, loadedDocument } =
+    usePDFContext();
 
   const PDFViewerRef = createRef<HTMLDivElement>();
   const value = {
@@ -19,10 +20,11 @@ export default function Pages(props: {
     loadingPageText: props.loadingPageText || "Loading Page",
   };
   useEffect(() => {
-    if (pdf) {
-      SelectionText(PDFViewerRef);
+    if (loadedDocument) {
+      pdf && SelectionText(PDFViewerRef);
     }
-  }, [PDFViewerRef, pdf]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadedDocument]);
 
   return (
     <PageContext.Provider value={value}>

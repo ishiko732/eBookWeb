@@ -5,6 +5,10 @@ export interface ProviderContext {
   setPDF: React.Dispatch<
     React.SetStateAction<pdfJS.PDFDocumentProxy | undefined>
   >;
+  loadedDocument: boolean;
+  setLoadedDocument: React.Dispatch<React.SetStateAction<boolean>>;
+  loadedOutline: boolean;
+  setLoadedOutline: React.Dispatch<React.SetStateAction<boolean>>;
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   loadingText: string;

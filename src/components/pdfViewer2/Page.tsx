@@ -12,8 +12,15 @@ import { usePageContext } from "./usePageContext";
 const Page: React.FC<{
   pageNumber: number;
 }> = (props) => {
-  const { pdf, defaultHeight, defaultWidth, scale, loading, setLoading } =
-    usePDFContext();
+  const {
+    pdf,
+    defaultHeight,
+    defaultWidth,
+    scale,
+    loading,
+    setLoading,
+    loadedDocument,
+  } = usePDFContext();
   const { loadingPageText } = usePageContext();
   const { pageNumber } = props;
   const pageRef = useRef<HTMLDivElement | null>(null);
@@ -23,7 +30,7 @@ const Page: React.FC<{
     if (!pdf) {
       return;
     }
-    if (firstSubmitStatus.current) {
+    if (firstSubmitStatus.current && loadedDocument) {
       firstSubmitStatus.current = false;
       const totalPage = pdf.numPages;
       const scaleRate = (1 / scale) * 0.3;
@@ -57,7 +64,7 @@ const Page: React.FC<{
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pdf, scale]);
+  }, [loadedDocument, scale]);
 
   return (
     <div
