@@ -32,9 +32,18 @@ export default function AccordionItems({
     <Stack sx={{ minWidth: "18rem", minHeight: 377, ...style }} spacing={2}>
       {items.map((item, index: number) => (
         <Paper key={`AccordionItem-${index}`}>
-          <StyledAccordion defaultExpanded>
+          <StyledAccordion defaultExpanded={item.defaultExpanded}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography>{item.title}</Typography>
+              <div
+                style={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  maxWidth: "12rem",
+                  width: "fit-content",
+                }}
+              >
+                <Typography>{item.title}</Typography>
+              </div>
             </AccordionSummary>
             <AccordionDetails>{item.details}</AccordionDetails>
           </StyledAccordion>
