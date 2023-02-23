@@ -110,13 +110,22 @@ const ReadControl = (props: any) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFilesNode]);
 
-  useEffect(()=>{
-    const _scrollBar=document.getElementsByClassName('PrivateSwipeArea-root css-x15wq9');
-    if(_scrollBar){
-      (_scrollBar[0] as HTMLDivElement).style.position='absolute';
+  const [itemWidth, setItemWidth] = React.useState<number | undefined | string>(
+    "18rem"
+  );
+
+  useEffect(() => {
+    const _scrollBar = document.getElementsByClassName(
+      "PrivateSwipeArea-root css-x15wq9"
+    );
+    if (_scrollBar.length > 0) {
+      (_scrollBar[0] as HTMLDivElement).style.position = "absolute";
     }
-    console.log(document.getElementsByClassName('PrivateSwipeArea-root css-x15wq9')[0])
-  })
+    const _viewer = document.getElementById("viewer");
+    if (_viewer && _viewer.offsetLeft) {
+      setItemWidth(_viewer.offsetLeft - 96);
+    }
+  }, []);
   return (
     <RequiredRole
       user={user}
@@ -126,8 +135,24 @@ const ReadControl = (props: any) => {
     >
       <React.Fragment>
         <CssBaseline />
-        <Box>
-          <AccordionItems items={items} style={{ position: "fixed" }} />
+        <Box
+          sx={{
+            transition: (theme) =>
+              theme.transitions.create("width", {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+              }),
+          }}
+        >
+          <AccordionItems
+            items={items}
+            style={{
+              position: "fixed",
+              maxWidth: itemWidth,
+              minWidth: itemWidth,
+              transform: "width 200ms",
+            }}
+          />
         </Box>
 
         <Stack
