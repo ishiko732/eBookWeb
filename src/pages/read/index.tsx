@@ -13,10 +13,15 @@ import AccordionItems, { AccordionItem } from "../../components/AccordionItems";
 import { documentInitParameters, generateURL } from "../viewer/PDFBrowse";
 import { Document, Pages } from "../../components/pdfViewer2";
 import { UploadImage } from "../../components/pdfViewer2/basicFunctions/UploadImage";
-import { CurrentPage } from "../../components/pdfViewer2/navigationComponents";
+import {
+  CurrentPage,
+  Outline,
+} from "../../components/pdfViewer2/navigationComponents";
 import { useReadContext } from "./ReadContext";
 import { goPage } from "../../components/pdfViewer2/navigationComponents/CurrentPage";
 import { task } from "../../utils/sleep";
+import { viewer_outline } from "../../components/pdfViewer2/basicFunctions/LoadOutline";
+import { OutlineItems } from "../../components/pdfViewer2/navigationComponents/OutlineItems";
 
 async function operation(type_id: string) {
   let ret: { status: boolean; data: any } = { status: false, data: null };
@@ -42,7 +47,6 @@ const ReadControl = (props: any) => {
   const { selectedFilesNode, setSelectFilesNode } = useReadContext();
   const [resouceId, setResouceId] = React.useState<string>("");
   const [scale, setScale] = React.useState(1.33);
-
   React.useEffect(() => {
     if (status) {
       const json = localStorage.getItem("read_tree");
@@ -90,8 +94,24 @@ const ReadControl = (props: any) => {
       defaultExpanded: true,
     };
     _items.push(newFiles);
-    _items.push(newFiles);
     setItems(_items);
+  };
+
+  const handleOutline = (outline: viewer_outline[]) => {
+    const outlineAccordionItems: AccordionItem = {
+      title: "Outline",
+      details: <OutlineItems outline={outline} />,
+      defaultExpanded: false,
+    };
+    setItems((pre) => {
+      let newdata = [...pre];
+      if (pre.length !== 1) {
+        newdata = newdata.splice(0, 1);
+      }
+      newdata[0].defaultExpanded = false;
+      outline.length > 0 && newdata.push(outlineAccordionItems);
+      return newdata;
+    });
   };
   useEffect(() => {
     if (!selectedFilesNode) {
@@ -167,6 +187,7 @@ const ReadControl = (props: any) => {
                 option={documentInitParameters(generateURL(resouceId))}
                 scale={scale}
               >
+                <Outline handleOutline={handleOutline} />
                 <Pages />
                 <CurrentPage />
                 <UploadImage />
