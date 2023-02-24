@@ -150,13 +150,15 @@ const ReadControl = (props: any) => {
     }
   };
   useEffect(() => {
-    const _scrollBar = document.getElementsByClassName(
-      "PrivateSwipeArea-root css-x15wq9"
-    );
-    if (_scrollBar.length > 0) {
-      (_scrollBar[0] as HTMLDivElement).style.position = "absolute";
+    return ()=>{
+      const _scrollBar = document.getElementsByClassName(
+        "PrivateSwipeArea-root css-x15wq9"
+      );
+      if (_scrollBar.length > 0) {
+        (_scrollBar[0] as HTMLDivElement).style.position = "absolute";
+      }
     }
-  }, []);
+  });
 
   return (
     <RequiredRole
