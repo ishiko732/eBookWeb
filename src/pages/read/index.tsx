@@ -113,10 +113,8 @@ const ReadControl = (props: any) => {
       details: <OutlineItems outline={outline} />,
       defaultExpanded: false,
     };
-    console.log(outline);
     setItems((pre) => {
       let newdata = [...pre];
-      console.log(pre.length);
       if (pre.length !== 1) {
         newdata = newdata.splice(0, 1);
       }

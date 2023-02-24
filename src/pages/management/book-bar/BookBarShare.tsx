@@ -41,8 +41,8 @@ const useSteps = (
   const [open, setOpen] = React.useState(false);
   const [user, setUser] = React.useState<User | null>(null);
   React.useEffect(() => {
-    sharebook.file.uid&&
-    userById(sharebook.file.uid).then((res) => setUser(res.data));
+    sharebook.file.uid &&
+      userById(sharebook.file.uid).then((res) => setUser(res.data));
   }, [sharebook.file.uid]);
   const DialogMessage: any = {
     title: t("TreeView.Share", { type: t(`TreeView.PDF`) }),
