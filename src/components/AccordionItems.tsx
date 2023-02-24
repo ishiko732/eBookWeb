@@ -29,7 +29,7 @@ export default function AccordionItems({
   style?: CSSProperties | undefined;
 }) {
   return (
-    <Stack sx={{ minWidth: "18rem", minHeight: 377, ...style }} spacing={2}>
+    <Stack sx={{ ...style }} spacing={2}>
       {items.map((item, index: number) => (
         <Paper key={`AccordionItem-${index}`}>
           <StyledAccordion defaultExpanded={item.defaultExpanded}>

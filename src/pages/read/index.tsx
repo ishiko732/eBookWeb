@@ -4,8 +4,8 @@ import RequiredRole from "../../config/requiredRole";
 import { Box, Stack, CssBaseline } from "@mui/material";
 import { useSnackbar } from "notistack";
 import FileTreeView from "../../components/file-tree/FileTreeView";
-import { getChildByParentId, getTopFolder } from "../../api/file";
-import { folder } from "../../api/models";
+import { getChildByParentId, getFile, getTopFolder } from "../../api/file";
+import { file, folder } from "../../api/models";
 import { TreeData, TreeType } from "../../components/tree-view/CustomTreeView";
 import { filesToTreeData, toTreeData } from "../../algorithm/tree";
 import { useUserContext } from "../../UserContext";
@@ -22,6 +22,11 @@ import { goPage } from "../../components/pdfViewer2/navigationComponents/Current
 import { task } from "../../utils/sleep";
 import { viewer_outline } from "../../components/pdfViewer2/basicFunctions/LoadOutline";
 import { OutlineItems } from "../../components/pdfViewer2/navigationComponents/OutlineItems";
+import VditorEdit from "./VditorEdit";
+import {
+  LeftBar,
+  RightBar,
+} from "../../components/pdfViewer2/navigationComponents/PositionBar";
 
 async function operation(type_id: string) {
   let ret: { status: boolean; data: any } = { status: false, data: null };
@@ -46,6 +51,7 @@ const ReadControl = (props: any) => {
   const [items, setItems] = React.useState<AccordionItem[]>([]);
   const { selectedFilesNode, setSelectFilesNode } = useReadContext();
   const [resouceId, setResouceId] = React.useState<string>("");
+  const [file, setFile] = React.useState<file | null>();
   const [scale, setScale] = React.useState(1.33);
   React.useEffect(() => {
     if (status) {
@@ -124,16 +130,14 @@ const ReadControl = (props: any) => {
         setResouceId("");
         task();
       }
+      getFile(Number(file.id.split("_").at(-1))).then((res) =>
+        setFile(res.data)
+      );
       setResouceId(file.resoureId);
     }
     setSelectFilesNode(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFilesNode]);
-
-  const [itemWidth, setItemWidth] = React.useState<number | undefined | string>(
-    "18rem"
-  );
-
   useEffect(() => {
     const _scrollBar = document.getElementsByClassName(
       "PrivateSwipeArea-root css-x15wq9"
@@ -141,11 +145,8 @@ const ReadControl = (props: any) => {
     if (_scrollBar.length > 0) {
       (_scrollBar[0] as HTMLDivElement).style.position = "absolute";
     }
-    const _viewer = document.getElementById("viewer");
-    if (_viewer && _viewer.offsetLeft) {
-      setItemWidth(_viewer.offsetLeft - 96);
-    }
   }, []);
+
   return (
     <RequiredRole
       user={user}
@@ -155,26 +156,9 @@ const ReadControl = (props: any) => {
     >
       <React.Fragment>
         <CssBaseline />
-        <Box
-          sx={{
-            transition: (theme) =>
-              theme.transitions.create("width", {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.enteringScreen,
-              }),
-          }}
-        >
-          <AccordionItems
-            items={items}
-            style={{
-              position: "fixed",
-              maxWidth: itemWidth,
-              minWidth: itemWidth,
-              transform: "width 200ms",
-            }}
-          />
-        </Box>
-
+        <LeftBar alway_children={true}>
+          <AccordionItems items={items} />
+        </LeftBar>
         <Stack
           direction="row"
           justifyContent="center"
@@ -195,6 +179,19 @@ const ReadControl = (props: any) => {
             </Box>
           )}
         </Stack>
+        <RightBar
+          style={{
+            top: 33,
+          }}
+        >
+          {file ? (
+            <VditorEdit
+              style={{
+                minHeight: "50%",
+              }}
+            />
+          ) : null}
+        </RightBar>
       </React.Fragment>
     </RequiredRole>
   );
