@@ -10,13 +10,11 @@ import {
 import * as React from "react";
 import { book, shareBook } from "../../api/models";
 import { TreeData } from "../tree-view/CustomTreeView";
-import { Loading } from "../Loading";
 import {
   getBookByResourceId,
   updateBook,
   updateBookTypeAndKeywordById,
 } from "../../api/book";
-import { v4 } from "uuid";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";

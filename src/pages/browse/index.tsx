@@ -1,4 +1,3 @@
-import { Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { shareBook } from "../../api/models";
 import { getShareBooks } from "../../api/share";

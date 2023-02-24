@@ -1,22 +1,17 @@
-import { DefaultTFuncReturn, t, TFunction } from "i18next";
+import { TFunction } from "i18next";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import React, { Dispatch, SetStateAction } from "react";
 import {
-  file,
   reviewStatus,
   reviewStatusType,
   shareBook,
   User,
 } from "../../../api/models";
-import { getFileByResourceId } from "../../../api/file";
 import { userById } from "../../../api/user";
 import {
   Chip,
   Dialog,
   DialogTitle,
-  Divider,
-  FormControl,
-  Grid,
   MenuItem,
   Paper,
   Select,
@@ -46,8 +41,9 @@ const useSteps = (
   const [open, setOpen] = React.useState(false);
   const [user, setUser] = React.useState<User | null>(null);
   React.useEffect(() => {
+    sharebook.file.uid&&
     userById(sharebook.file.uid).then((res) => setUser(res.data));
-  }, []);
+  }, [sharebook.file.uid]);
   const DialogMessage: any = {
     title: t("TreeView.Share", { type: t(`TreeView.PDF`) }),
     context: t("TreeView.Input", { type: t(`TreeView.PDF`) }),

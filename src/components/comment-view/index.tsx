@@ -26,7 +26,7 @@ export const CommentContent = ({ item }: { item: shareBook }) => {
       setComments(res.data);
       setLoaded(true);
     });
-  }, []);
+  }, [item.book.id]);
 
   const handleSubmit = (
     event:
