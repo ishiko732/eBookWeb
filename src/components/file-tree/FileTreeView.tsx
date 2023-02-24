@@ -168,6 +168,7 @@ export default function FileTreeView({
         });
         break;
       case "Open":
+        setSearchQuery(selectedNode?.at(-1)?.name || "");
         handleSelectNode && handleSelectNode(selectedNode!);
         break;
       default:

@@ -91,6 +91,23 @@ export const uploadPDFImage = (
     onUploadProgress: onUpload,
   });
 
+// 上传图片到空的文件夹中
+export const uploadImage = (file: File[]) =>
+  request({
+    method: "post",
+    url: `file/uploadImage`,
+    data: file,
+    headers: { "Content-Type": "multipart/form-data" },
+    transformRequest: [
+      (data: File[]) => {
+        const formData = new FormData();
+        data.forEach((item) => {
+          formData.append("file", item);
+        });
+        return formData;
+      },
+    ],
+  });
 // 查看文件
 export const viewFileURL = (fsId: string) => {
   return `${BaseURL}file/views/${fsId}`;
