@@ -1,12 +1,11 @@
 import React from "react";
 import { createContext, useContext } from "react";
 import { book } from "../../api/models";
-import { TreeData } from "../../components/tree-view/CustomTreeView";
 export interface ProviderContext {
   book: book | null;
   setBook: React.Dispatch<React.SetStateAction<book | null>>;
-  selectedFilesNode: TreeData[] | null;
-  setSelectFilesNode: React.Dispatch<React.SetStateAction<TreeData[] | null>>;
+  selectText: string;
+  setSelectText: React.Dispatch<React.SetStateAction<string>>;
 }
 
 // @ts-ignore
@@ -18,12 +17,12 @@ export function useReadContext() {
 
 export const ReadProvider = (props: { children: JSX.Element }) => {
   const [book, setBook] = React.useState<book | null>(null);
-  const [selectedNode, setSelectNode] = React.useState<TreeData[] | null>(null);
+  const [selectText, setSelectText] = React.useState<string>("");
   const value = {
     book,
     setBook,
-    selectedFilesNode: selectedNode,
-    setSelectFilesNode: setSelectNode,
+    selectText,
+    setSelectText,
   };
   return (
     <ReadContext.Provider value={value}>{props.children}</ReadContext.Provider>

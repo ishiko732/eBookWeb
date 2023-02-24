@@ -6,8 +6,10 @@ import { timer } from "../../utils/sleep";
 
 export const SelectTextContent = ({
   textRef,
+  style,
 }: {
   textRef: React.MutableRefObject<HTMLInputElement | null>;
+  style?: React.CSSProperties;
 }) => {
   const [selected, setSelected] = React.useState(false);
   const copyOpt = () => {
@@ -49,7 +51,7 @@ export const SelectTextContent = ({
         maxRows={5}
         fullWidth
         sx={{
-          minHeight: document.body.offsetHeight * 0.1,
+          ...style,
         }}
         InputProps={{ disableUnderline: true }}
         multiline

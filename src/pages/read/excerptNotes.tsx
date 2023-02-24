@@ -15,12 +15,16 @@ const ExcerptNotes = (props: {
       // divider={<Divider  flexItem />}
       spacing={2}
     >
-      <SelectTextContent textRef={textRef} />
+      <SelectTextContent
+        textRef={textRef}
+        style={{ minHeight: document.body.offsetHeight * 0.05 }}
+      />
 
       {file ? (
         <VditorEdit
           style={{
-            minHeight: document.body.offsetHeight * 0.4,
+            minHeight: document.body.offsetHeight * 0.2,
+            maxHeight: document.body.offsetHeight * 0.5,
           }}
         />
       ) : null}
