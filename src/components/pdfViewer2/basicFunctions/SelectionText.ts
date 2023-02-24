@@ -7,18 +7,19 @@ export const selectionchange = (event: Event) => {
     ?.toString()
     .replace(/\r\n/g, "")
     .replace(/\n/g, "");
-  text !== "" && console.log(text);
+  return text && text !== "" ? text : null;
 };
 
 export const SelectionText = (
-  PDFViewerRef: React.RefObject<HTMLDivElement>
+  PDFViewerRef: React.RefObject<HTMLDivElement>,
+  handleText: (event: Event) => void
 ) => {
   if (!PDFViewerRef.current) {
     return;
   }
   const _target = PDFViewerRef.current;
-  _target.addEventListener("mouseup", selectionchange);
+  _target.addEventListener("mouseup", handleText);
   return () => {
-    _target.removeEventListener("mouseup", selectionchange);
+    _target.removeEventListener("mouseup", handleText);
   };
 };

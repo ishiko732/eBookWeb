@@ -11,13 +11,12 @@ import { filesToTreeData, toTreeData } from "../../algorithm/tree";
 import { useUserContext } from "../../UserContext";
 import AccordionItems, { AccordionItem } from "../../components/AccordionItems";
 import { documentInitParameters, generateURL } from "../viewer/PDFBrowse";
-import { Document, Pages, usePDFContext } from "../../components/pdfViewer2";
+import { Document, Pages } from "../../components/pdfViewer2";
 import { UploadImage } from "../../components/pdfViewer2/basicFunctions/UploadImage";
 import {
   CurrentPage,
   Outline,
 } from "../../components/pdfViewer2/navigationComponents";
-import { useReadContext } from "./ReadContext";
 import { goPage } from "../../components/pdfViewer2/navigationComponents/CurrentPage";
 import { task } from "../../utils/sleep";
 import { viewer_outline } from "../../components/pdfViewer2/basicFunctions/LoadOutline";
@@ -27,6 +26,7 @@ import {
   LeftBar,
   RightBar,
 } from "../../components/pdfViewer2/navigationComponents/PositionBar";
+import { selectionchange } from "../../components/pdfViewer2/basicFunctions/SelectionText";
 
 async function operation(type_id: string) {
   let ret: { status: boolean; data: any } = { status: false, data: null };
@@ -118,7 +118,7 @@ const ReadControl = (props: any) => {
       if (pre.length !== 1) {
         newdata = newdata.splice(0, 1);
       }
-      newdata[0].defaultExpanded = false;
+      // newdata[0].defaultExpanded = false; 无法修改默认状态
       outline.length > 0 && newdata.push(outlineAccordionItems);
       return newdata;
     });
@@ -139,6 +139,11 @@ const ReadControl = (props: any) => {
       );
       setResouceId(file.resoureId);
     }
+  };
+
+  const handleText = (event: Event) => {
+    const text = selectionchange(event);
+    text && console.log(text, 233);
   };
   useEffect(() => {
     const _scrollBar = document.getElementsByClassName(
@@ -174,7 +179,7 @@ const ReadControl = (props: any) => {
                 scale={scale}
               >
                 <Outline handleOutline={handleOutline} />
-                <Pages />
+                <Pages handleText={handleText} />
                 <CurrentPage />
                 <UploadImage />
               </Document>
