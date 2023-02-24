@@ -21,12 +21,12 @@ import { goPage } from "../../components/pdfViewer2/navigationComponents/Current
 import { task } from "../../utils/sleep";
 import { viewer_outline } from "../../components/pdfViewer2/basicFunctions/LoadOutline";
 import { OutlineItems } from "../../components/pdfViewer2/navigationComponents/OutlineItems";
-import VditorEdit from "./VditorEdit";
 import {
   LeftBar,
   RightBar,
 } from "../../components/pdfViewer2/navigationComponents/PositionBar";
 import { selectionchange } from "../../components/pdfViewer2/basicFunctions/SelectionText";
+import ExcerptNotes from "./excerptNotes";
 
 async function operation(type_id: string) {
   let ret: { status: boolean; data: any } = { status: false, data: null };
@@ -52,6 +52,8 @@ const ReadControl = (props: any) => {
   const [resouceId, setResouceId] = React.useState<string>("");
   const [file, setFile] = React.useState<file | null>();
   const [scale, setScale] = React.useState(1.33);
+  const textRef = React.useRef<HTMLInputElement | null>(null);
+
   React.useEffect(() => {
     if (status) {
       const json = localStorage.getItem("read_tree");
@@ -143,7 +145,9 @@ const ReadControl = (props: any) => {
 
   const handleText = (event: Event) => {
     const text = selectionchange(event);
-    text && console.log(text, 233);
+    if (text && textRef.current) {
+      textRef.current.value = text;
+    }
   };
   useEffect(() => {
     const _scrollBar = document.getElementsByClassName(
@@ -191,13 +195,7 @@ const ReadControl = (props: any) => {
             top: 33,
           }}
         >
-          {file ? (
-            <VditorEdit
-              style={{
-                minHeight: "50%",
-              }}
-            />
-          ) : null}
+          <ExcerptNotes file={file} textRef={textRef} />
         </RightBar>
       </React.Fragment>
     </RequiredRole>

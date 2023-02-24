@@ -12,7 +12,7 @@ export const selectionchange = (event: Event) => {
 
 export const SelectionText = (
   PDFViewerRef: React.RefObject<HTMLDivElement>,
-  handleText: (event: Event) => void
+  handleText: (event: Event) => void //plase use useRef/crateRef
 ) => {
   if (!PDFViewerRef.current) {
     return;
