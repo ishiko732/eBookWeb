@@ -14,6 +14,11 @@ const CurrentPage = () => {
   const totalPages = pdf?.numPages;
   const currentPageRef = useRef<HTMLInputElement>(null);
   const [firstpage, setFirstPage] = useState<HTMLDivElement | null>(null);
+  const [left, setLeft] = useState<number | string | null>("50%");
+  const getLeft: () => void = () => {
+    const _viewer = document.getElementById("viewer");
+    _viewer && setLeft(_viewer.offsetLeft + _viewer.offsetWidth * 0.5);
+  };
 
   useEffect(() => {
     const scaleRate = (1 / scale) * 0.5;
@@ -41,19 +46,25 @@ const CurrentPage = () => {
   });
   useEffect(() => {
     return () => {
-      setFirstPage(document.querySelector(".page") as HTMLDivElement | null);
+      const _page = document.querySelector(".page") as HTMLDivElement | null;
+      setFirstPage(_page);
+      _page && getLeft();
     };
   });
+
+  useEffect(() => {
+    window.addEventListener("resize", getLeft);
+    return () => {
+      window.removeEventListener("resize", getLeft);
+    };
+  }, []);
 
   return !loading && totalPages && firstpage ? (
     <Fab
       variant="extended"
       sx={{
         position: "fixed",
-        left:
-          document.getElementById("viewer")?.offsetLeft !== 0
-            ? firstpage.offsetWidth * 0.5 + firstpage.offsetLeft
-            : "50%",
+        left: left,
         bottom: 16,
       }}
     >
