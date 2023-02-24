@@ -44,6 +44,7 @@ export default function Document(props: {
     if (option && option.url) {
       (async () => {
         setLoading(true);
+        setLoadedOutline(false);
         setLoadedDocument(false);
         pdfJS.GlobalWorkerOptions.workerSrc = require("pdfjs-dist/build/pdf.worker.entry.js");
         const pdf = await pdfJS.getDocument(option).promise;
@@ -51,7 +52,8 @@ export default function Document(props: {
         setLoadedDocument(true);
       })();
     }
-  }, [option]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [option.url]);
 
   useEffect(() => {
     if (loadedDocument && pdf) {

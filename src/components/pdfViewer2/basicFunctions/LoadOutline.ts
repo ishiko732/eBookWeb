@@ -25,7 +25,9 @@ export interface viewer_outline {
   children: viewer_outline[];
 }
 const getVo = (pdf: pdfJS.PDFDocumentProxy, items: pdfJS_outline[]) => {
-  const outline: viewer_outline[] = new Array(items.length);
+  const outline: viewer_outline[] = new Array(
+    Array.isArray(items) ? items.length : 0
+  );
   items &&
     items.length > 0 &&
     items.forEach(async (item, index) => {

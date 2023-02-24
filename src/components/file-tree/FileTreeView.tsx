@@ -25,18 +25,19 @@ import { useSnackbar } from "notistack";
 import { folder } from "../../api/models";
 import UploadFile from "./UploadFile";
 import React from "react";
-import { useReadContext } from "../../pages/read/ReadContext";
 
 export default function FileTreeView({
   data,
   operation,
   loginUser,
   ram,
+  handleSelectNode,
 }: {
   data: TreeData[];
   operation: any;
   loginUser: any;
   ram?: string;
+  handleSelectNode?: (nodes: TreeData[]) => void;
 }) {
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
@@ -53,7 +54,6 @@ export default function FileTreeView({
   const [isLoading, setLoading] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>();
   const [parentId, setParentId] = useState<number | null>(null);
-  const { setSelectFilesNode } = useReadContext();
   const [openDialog, setOpenDialog] = useState<DialogMessage>({
     open: false,
     title: "",
@@ -168,7 +168,7 @@ export default function FileTreeView({
         });
         break;
       case "Open":
-        setSelectFilesNode(selectedNode);
+        handleSelectNode && handleSelectNode(selectedNode!);
         break;
       default:
         break;

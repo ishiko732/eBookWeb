@@ -11,7 +11,7 @@ import { filesToTreeData, toTreeData } from "../../algorithm/tree";
 import { useUserContext } from "../../UserContext";
 import AccordionItems, { AccordionItem } from "../../components/AccordionItems";
 import { documentInitParameters, generateURL } from "../viewer/PDFBrowse";
-import { Document, Pages } from "../../components/pdfViewer2";
+import { Document, Pages, usePDFContext } from "../../components/pdfViewer2";
 import { UploadImage } from "../../components/pdfViewer2/basicFunctions/UploadImage";
 import {
   CurrentPage,
@@ -49,7 +49,6 @@ const ReadControl = (props: any) => {
   const [message, setMessage] = React.useState<TreeData[]>([]);
   const { user, t } = useUserContext();
   const [items, setItems] = React.useState<AccordionItem[]>([]);
-  const { selectedFilesNode, setSelectFilesNode } = useReadContext();
   const [resouceId, setResouceId] = React.useState<string>("");
   const [file, setFile] = React.useState<file | null>();
   const [scale, setScale] = React.useState(1.33);
@@ -95,7 +94,12 @@ const ReadControl = (props: any) => {
     const newFiles: AccordionItem = {
       title: "Files",
       details: (
-        <FileTreeView data={treedata} operation={operation} loginUser={user} />
+        <FileTreeView
+          data={treedata}
+          operation={operation}
+          loginUser={user}
+          handleSelectNode={handleSelectNode}
+        />
       ),
       defaultExpanded: true,
     };
@@ -109,8 +113,10 @@ const ReadControl = (props: any) => {
       details: <OutlineItems outline={outline} />,
       defaultExpanded: false,
     };
+    console.log(outline);
     setItems((pre) => {
       let newdata = [...pre];
+      console.log(pre.length);
       if (pre.length !== 1) {
         newdata = newdata.splice(0, 1);
       }
@@ -119,7 +125,7 @@ const ReadControl = (props: any) => {
       return newdata;
     });
   };
-  useEffect(() => {
+  const handleSelectNode = (selectedFilesNode: TreeData[]) => {
     if (!selectedFilesNode) {
       return;
     }
@@ -135,9 +141,7 @@ const ReadControl = (props: any) => {
       );
       setResouceId(file.resoureId);
     }
-    setSelectFilesNode(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedFilesNode]);
+  };
   useEffect(() => {
     const _scrollBar = document.getElementsByClassName(
       "PrivateSwipeArea-root css-x15wq9"
