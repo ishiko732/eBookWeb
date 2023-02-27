@@ -21,7 +21,9 @@ export const documentInitParameters = (pdfURL: string) => {
     enableXfa: true,
     httpHeaders: {
       "Accept-Encoding": "Identity",
-      Authorization: `Bearer ${localStorage.getItem(access_string)}`,
+      Authorization:
+        localStorage.getItem(access_string) &&
+        `Bearer ${localStorage.getItem(access_string)}`,
     },
     withCredentials: true,
   };
