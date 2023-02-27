@@ -1,6 +1,7 @@
 import { Card, Parameters, Rating, State } from "./models";
 import dayjs from "dayjs";
 import { SchedulingCard } from "./Scheduler";
+import seedrandom from "seedrandom";
 
 export function createCard(): Card {
   return {
@@ -17,18 +18,24 @@ export function createCard(): Card {
 
 export class FSRS {
   private param: Parameters;
+  private readonly intervalModifier;
+  private seed: string;
 
   constructor(param?: Parameters) {
     this.param = param || new Parameters();
+    this.intervalModifier =
+      Math.log(this.param.request_retention) / Math.log(0.9);
+    this.seed = "";
   }
 
   repeat = (card: Card, now: dayjs.Dayjs) => {
     card.elapsed_days =
-      card.state === State.New ? 0 : now.diff(card.last_review, "day");
+      card.state === State.New ? 0 : now.diff(card.last_review, "days"); //相距时间
     card.last_review = now; // 上次复习时间
     card.reps += 1;
     const s = new SchedulingCard(card);
     s.update_state(card.state);
+    this.seed = String(card.last_review.unix()) + String(card.elapsed_days);
     let easy_interval, good_interval, hard_interval;
     switch (card.state) {
       case State.New:
@@ -40,7 +47,7 @@ export class FSRS {
           s.easy.stability * this.param.easy_bonus
         );
         s.easy.scheduled_days = easy_interval;
-        s.easy.due = now.add(easy_interval * 1440, "minutes");
+        s.easy.due = now.add(easy_interval, "days");
         break;
       case State.Learning:
       case State.Relearning:
@@ -144,9 +151,19 @@ export class FSRS {
     );
   }
 
+  apply_fuzz(ivl: number) {
+    if (!this.param.enable_fuzz || ivl < 2.5) return ivl;
+    const generator = seedrandom(this.seed);
+    const fuzz_factor = generator();
+    ivl = Math.round(ivl);
+    const min_ivl = Math.max(2, Math.round(ivl * 0.95 - 1));
+    const max_ivl = Math.round(ivl * 1.05 + 1);
+    console.log(ivl, min_ivl, max_ivl, fuzz_factor);
+    return Math.floor(fuzz_factor * (max_ivl - min_ivl + 1) + min_ivl);
+  }
+
   next_interval(s: number): number {
-    const newInterval =
-      (s * Math.log(this.param.request_retention)) / Math.log(0.9);
+    const newInterval = this.apply_fuzz(s * this.intervalModifier);
     return Math.min(
       Math.max(Math.round(newInterval), 1),
       this.param.maximum_interval
@@ -155,10 +172,13 @@ export class FSRS {
 
   next_difficulty(d: number, r: number): number {
     const next_d = d + this.param.w[4] * (r - 2);
-    return Math.min(
-      Math.max(this.mean_reversion(this.param.w[2], next_d), 1),
-      10
+    return this.constrain_difficulty(
+      this.mean_reversion(this.param.w[2], next_d)
     );
+  }
+
+  constrain_difficulty(difficulty: number) {
+    return Math.min(Math.max(Number(difficulty.toFixed(2)), 1), 10);
   }
 
   mean_reversion(init: number, current: number): number {

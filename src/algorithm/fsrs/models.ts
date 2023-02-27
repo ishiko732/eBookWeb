@@ -47,18 +47,21 @@ export class Parameters {
   public easy_bonus: number;
   public hard_factor: number;
   public w: number[];
+  public enable_fuzz: boolean;
 
   constructor(
     request_retention?: number,
     maximum_interval?: number,
     easy_bonus?: number,
     hard_factor?: number,
-    w?: number[]
+    w?: number[],
+    enable_fuzz?: boolean
   ) {
     this.request_retention = request_retention || 0.9;
     this.maximum_interval = maximum_interval || 36500;
     this.easy_bonus = easy_bonus || 1.3;
     this.hard_factor = hard_factor || 1.2;
     this.w = w || [1, 1, 5, -0.5, -0.5, 0.2, 1.4, -0.12, 0.8, 2, -0.2, 0.2, 1];
+    this.enable_fuzz = enable_fuzz || false;
   }
 }
