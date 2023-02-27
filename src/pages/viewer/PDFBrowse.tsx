@@ -4,7 +4,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { Document, Pages } from "../../components/pdfViewer2";
 import { UploadImage } from "../../components/pdfViewer2/basicFunctions/UploadImage";
 import { CurrentPage } from "../../components/pdfViewer2/navigationComponents";
-import { BaseURL } from "../../config/config";
+import { BaseURL, DEFAULT_SCALE } from "../../config/config";
 import { access_token as access_string } from "../../config/token";
 import useLocalStorage from "../../config/useLocalStorage";
 export const generateURL = (resourceId: string) => {
@@ -29,7 +29,6 @@ export const documentInitParameters = (pdfURL: string) => {
   };
 };
 
-export const DEFAULT_SCALE = 1.33;
 const PDFBrowse: React.FC = memo(() => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [searchParams, setSearchParams] = useSearchParams();

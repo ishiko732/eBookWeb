@@ -242,3 +242,4 @@ export const healthStatusColor = (status: HealthStatus) => {
 };
 
 export const defaultDateFormat = "YYYY-MM-DD HH:mm:ss";
+export const DEFAULT_SCALE = 1.33;

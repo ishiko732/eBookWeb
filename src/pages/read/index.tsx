@@ -27,6 +27,7 @@ import {
 } from "../../components/pdfViewer2/navigationComponents/PositionBar";
 import { selectionchange } from "../../components/pdfViewer2/basicFunctions/SelectionText";
 import ExcerptNotes from "./excerptNotes";
+import { DEFAULT_SCALE } from "../../config/config";
 
 async function operation(type_id: string) {
   let ret: { status: boolean; data: any } = { status: false, data: null };
@@ -51,7 +52,7 @@ const ReadControl = (props: any) => {
   const [items, setItems] = React.useState<AccordionItem[]>([]);
   const [resouceId, setResouceId] = React.useState<string>("");
   const [file, setFile] = React.useState<file | null>();
-  const [scale, setScale] = React.useState(1.33);
+  const [scale, setScale] = React.useState(DEFAULT_SCALE);
   const textRef = React.useRef<HTMLInputElement | null>(null);
 
   React.useEffect(() => {
