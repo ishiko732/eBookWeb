@@ -16,7 +16,7 @@ const StyledAccordion = styled(Accordion)(({ theme }) => ({
 }));
 
 export interface AccordionItem {
-  title: string;
+  title: string | JSX.Element;
   details: string | JSX.Element;
   defaultExpanded?: boolean;
 }
@@ -42,7 +42,11 @@ export default function AccordionItems({
                   width: "fit-content",
                 }}
               >
-                <Typography>{item.title}</Typography>
+                {typeof item.title === "string" ? (
+                  <Typography>{item.title}</Typography>
+                ) : (
+                  (item.title as JSX.Element)
+                )}
               </div>
             </AccordionSummary>
             <AccordionDetails>{item.details}</AccordionDetails>
