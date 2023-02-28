@@ -102,5 +102,6 @@ export type TreeData = {
   disabledButton: boolean;
   children?: TreeData[];
   resoureId?: string;
+  findText?: string;
   type: TreeType;
 };

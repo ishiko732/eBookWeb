@@ -12,7 +12,12 @@ import {
 } from "../../algorithm/graph";
 import { useTranslation } from "react-i18next";
 import InputDialog, { DialogMessage } from "./InputDialog";
-import { toTree, toTreeData, treeUnique } from "../../algorithm/tree";
+import {
+  topicsToTreeData,
+  toTree,
+  toTreeData,
+  treeUnique,
+} from "../../algorithm/tree";
 import { FileMenu, FileMenuType } from "./FileMenu";
 import {
   addFolder,
@@ -22,9 +27,10 @@ import {
   updateFolder,
 } from "../../api/file";
 import { useSnackbar } from "notistack";
-import { folder } from "../../api/models";
+import { folder, topic } from "../../api/models";
 import UploadFile from "./UploadFile";
 import React from "react";
+import { createTopic, queryTopics } from "../../api/note";
 
 export default function FileTreeView({
   data,
@@ -169,6 +175,44 @@ export default function FileTreeView({
         break;
       case "Open":
         setSearchQuery(selectedNode?.at(-1)?.name || "");
+        const fileId = Number(selectedNode?.at(-1)?.id.split("_").at(-1));
+        (async (fileId: number) => {
+          const topics = await queryTopics({ fileId: fileId });
+          const isEmpty =
+            Array.isArray(topics.data) && topics.data.length === 0;
+          console.log(isEmpty);
+          isEmpty &&
+            createTopic({
+              fileId: fileId,
+              name: "default",
+            })
+              .then((res) => {
+                setMessage((pre) => {
+                  const newdata = [...pre];
+                  const tree = toTree(
+                    newdata,
+                    `PDF_${fileId}`,
+                    topicsToTreeData(new Array(res.data as topic))
+                  );
+                  return tree;
+                });
+                setFilter((pre) => {
+                  if (!pre) {
+                    return pre;
+                  }
+                  const newdata = [...pre];
+                  const tree = toTree(
+                    newdata,
+                    `PDF_${fileId}`,
+                    topicsToTreeData(new Array(res.data as topic))
+                  );
+                  return tree;
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+        })(fileId);
         handleSelectNode && handleSelectNode(selectedNode!);
         break;
       default:

@@ -3,13 +3,11 @@ import React, { useEffect } from "react";
 import RequiredRole from "../../config/requiredRole";
 import { Box, Stack, CssBaseline } from "@mui/material";
 import { useSnackbar } from "notistack";
-import FileTreeView from "../../components/file-tree/FileTreeView";
-import { getChildByParentId, getFile, getTopFolder } from "../../api/file";
+import { getTopFolder } from "../../api/file";
 import { file, folder } from "../../api/models";
-import { TreeData, TreeType } from "../../components/tree-view/CustomTreeView";
+import { TreeData } from "../../components/tree-view/CustomTreeView";
 import { filesToTreeData, toTreeData } from "../../algorithm/tree";
 import { useUserContext } from "../../UserContext";
-import AccordionItems, { AccordionItem } from "../../components/AccordionItems";
 import { documentInitParameters, generateURL } from "../viewer/PDFBrowse";
 import { Document, Pages } from "../../components/pdfViewer2";
 import { UploadImage } from "../../components/pdfViewer2/basicFunctions/UploadImage";
@@ -17,10 +15,7 @@ import {
   CurrentPage,
   Outline,
 } from "../../components/pdfViewer2/navigationComponents";
-import { goPage } from "../../components/pdfViewer2/navigationComponents/CurrentPage";
-import { task } from "../../utils/sleep";
 import { viewer_outline } from "../../components/pdfViewer2/basicFunctions/LoadOutline";
-import { OutlineItems } from "../../components/pdfViewer2/navigationComponents/OutlineItems";
 import {
   LeftBar,
   RightBar,
@@ -28,30 +23,16 @@ import {
 import { selectionchange } from "../../components/pdfViewer2/basicFunctions/SelectionText";
 import ExcerptNotes from "./excerptNotes";
 import { DEFAULT_SCALE } from "../../config/config";
-
-async function operation(type_id: string) {
-  let ret: { status: boolean; data: any } = { status: false, data: null };
-  const [type, id] = type_id.split("_");
-  if ((type as TreeType) === "Folder") {
-    await getChildByParentId(id)
-      .then((res) => {
-        ret = { status: true, data: toTreeData(res.data as folder[]) };
-      })
-      .catch((err) => {
-        ret = { status: false, data: err };
-      });
-  }
-  return ret;
-}
+import ExcerptTree from "./excerptTree";
 
 const ReadControl = (props: any) => {
   const { enqueueSnackbar } = useSnackbar();
   const [status, setStatus] = React.useState(false);
   const [message, setMessage] = React.useState<TreeData[]>([]);
   const { user, t } = useUserContext();
-  const [items, setItems] = React.useState<AccordionItem[]>([]);
   const [resouceId, setResouceId] = React.useState<string>("");
   const [file, setFile] = React.useState<file | null>();
+  const [outline, setOutline] = React.useState<viewer_outline[]>([]);
   const [scale, setScale] = React.useState(DEFAULT_SCALE);
   const textRef = React.useRef<HTMLInputElement | null>(null);
 
@@ -75,12 +56,10 @@ const ReadControl = (props: any) => {
                   }
                 }
                 setMessage(obj);
-                handleMessage(obj);
               });
             }
           } else {
             setMessage(data);
-            handleMessage(data);
           }
           enqueueSnackbar(t("api.success"), { variant: "success" });
         })
@@ -92,56 +71,8 @@ const ReadControl = (props: any) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
-  const handleMessage = (treedata: TreeData[]) => {
-    const _items: AccordionItem[] = [];
-    const newFiles: AccordionItem = {
-      title: "Files",
-      details: (
-        <FileTreeView
-          data={treedata}
-          operation={operation}
-          loginUser={user}
-          handleSelectNode={handleSelectNode}
-        />
-      ),
-      defaultExpanded: true,
-    };
-    _items.push(newFiles);
-    setItems(_items);
-  };
-
   const handleOutline = (outline: viewer_outline[]) => {
-    const outlineAccordionItems: AccordionItem = {
-      title: "Outline",
-      details: <OutlineItems outline={outline} />,
-      defaultExpanded: false,
-    };
-    setItems((pre) => {
-      let newdata = [...pre];
-      if (pre.length !== 1) {
-        newdata = newdata.splice(0, 1);
-      }
-      // newdata[0].defaultExpanded = false; 无法修改默认状态
-      outline.length > 0 && newdata.push(outlineAccordionItems);
-      return newdata;
-    });
-  };
-  const handleSelectNode = (selectedFilesNode: TreeData[]) => {
-    if (!selectedFilesNode) {
-      return;
-    }
-    const file = selectedFilesNode.at(-1);
-    if (file && file.type === "PDF" && file.resoureId) {
-      if (resouceId !== "") {
-        goPage(1);
-        setResouceId("");
-        task();
-      }
-      getFile(Number(file.id.split("_").at(-1))).then((res) =>
-        setFile(res.data)
-      );
-      setResouceId(file.resoureId);
-    }
+    setOutline(outline);
   };
 
   const handleText = (event: Event) => {
@@ -171,7 +102,16 @@ const ReadControl = (props: any) => {
       <React.Fragment>
         <CssBaseline />
         <LeftBar alway_children={true}>
-          <AccordionItems items={items} />
+          <ExcerptTree
+            treeData={message}
+            setTreeData={setMessage}
+            file={file}
+            setFile={setFile}
+            outline={outline}
+            resouceId={resouceId}
+            setResouceId={setResouceId}
+            textRef={textRef}
+          />
         </LeftBar>
         <Stack
           direction="row"
@@ -198,7 +138,7 @@ const ReadControl = (props: any) => {
             top: 33,
           }}
         >
-          <ExcerptNotes file={file} textRef={textRef} />
+          <ExcerptNotes file={file}/>
         </RightBar>
       </React.Fragment>
     </RequiredRole>
