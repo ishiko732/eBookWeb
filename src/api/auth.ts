@@ -1,6 +1,5 @@
 import request from "../config/request";
 import * as vo from "./entity/auth";
-import jsonBig from "json-bigint";
 
 // 登录
 export const Login = (params: vo.loginVo) =>
@@ -56,5 +55,5 @@ export const updatePassword = (params: vo.updatePasswordVo) =>
     url: "auth/update/password",
     data: params,
     headers: { "Content-Type": "application/json" },
-    transformRequest: [(data) => jsonBig.stringify(data)],
+    transformRequest: [(data) => JSON.stringify(data)],
   });
