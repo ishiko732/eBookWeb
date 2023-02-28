@@ -36,13 +36,7 @@ export const createCard = (vo: createCardVo) =>
   });
 
 export const queryCard = (vo: queryCardVo) =>
-  request({
-    method: "get",
-    url: `fsrs/card`,
-    data: vo,
-    headers: { "Content-Type": "application/json" },
-    transformRequest: [(data) => JSON.stringify(data)],
-  });
+  request.get(`fsrs/card`, { params: vo });
 
 export const updateCard = (vo: updateCardVo) =>
   request({
@@ -63,19 +57,7 @@ export const deleteCard = (vo: queryCardVo) =>
   });
 
 export const queryCards = (vo: queryCardsVo) =>
-  request({
-    method: "get",
-    url: `fsrs/cards`,
-    data: vo,
-    headers: { "Content-Type": "application/json" },
-    transformRequest: [(data) => JSON.stringify(data)],
-  });
+  request.get(`fsrs/cards`, { params: vo });
 
 export const queryCardLog = (vo: queryCardVo) =>
-  request({
-    method: "get",
-    url: `fsrs/log`,
-    data: vo,
-    headers: { "Content-Type": "application/json" },
-    transformRequest: [(data) => JSON.stringify(data)],
-  });
+  request.get(`fsrs/log`, { params: vo });

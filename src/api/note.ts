@@ -40,13 +40,7 @@ export const deleteTopic = (tid: string) =>
   request.delete(`fsrs/topic?tid=${tid}`);
 
 export const queryTopics = (vo: queryTopicsVo) =>
-  request({
-    method: "get",
-    url: `fsrs/topics`,
-    data: vo,
-    headers: { "Content-Type": "application/json" },
-    transformRequest: [(data) => JSON.stringify(data)],
-  });
+  request.get(`fsrs/topics`, { params: vo });
 
 export const createNote = (vo: createNoteVo) =>
   request({
@@ -77,10 +71,4 @@ export const deleteNote = (noteId: string) =>
   request.delete(`fsrs/note?noteId=${noteId}`);
 
 export const queryNotes = (vo: queryNotesVo) =>
-  request({
-    method: "get",
-    url: `fsrs/notes`,
-    data: vo,
-    headers: { "Content-Type": "application/json" },
-    transformRequest: [(data) => JSON.stringify(data)],
-  });
+  request.get(`fsrs/notes`, { params: vo });

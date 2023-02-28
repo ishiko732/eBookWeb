@@ -117,6 +117,7 @@ export interface commentTree {
 }
 
 export interface createTopicVo {
+  name?: string;
   fileId?: number;
   data?: string;
   topicId?: string;
