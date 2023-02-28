@@ -1,3 +1,4 @@
+import { Rating, State } from "../../algorithm/fsrs/models";
 import { role, userStatus } from "../entity/auth";
 
 export interface selectVo {
@@ -113,4 +114,128 @@ export interface commentTree {
   createdAt: string;
   updateAt: string;
   parentId: number | null;
+}
+
+export interface createTopicVo {
+  fileId?: number;
+  data?: string;
+  topicId?: string;
+}
+
+export interface topic {
+  id: string;
+  createdAt: number;
+  updateAt: number;
+  uid: number;
+  data?: string;
+  topicId?: string;
+  fileId?: string;
+}
+
+export interface queryTopicsVo {
+  fileId?: number;
+  uid?: number;
+  topicId?: string;
+}
+
+export interface createNoteVo {
+  data?: number;
+  uid: number;
+  topicId: string;
+}
+export interface note {
+  id: string;
+  createdAt: number;
+  updateAt: number;
+  tid: string;
+  uid: number;
+  tags: string;
+  flds: string;
+  sfld: string;
+}
+
+export interface queryNotesVo {
+  uid?: number;
+  topicId?: string;
+  firstField: string;
+  allField: string;
+}
+
+export interface fsrsParameter {
+  uid: number;
+  createdAt: number;
+  updateAt: number;
+  request_retention: number;
+  maximum_interval: number;
+  easy_bonus: number;
+  hard_factor: number;
+  w: number[];
+  enable_fuzz: boolean;
+}
+
+export interface createCardVo {
+  nid: string;
+  type: number;
+  card: cardVo;
+}
+
+export interface cardVo {
+  due: string;
+  stability: number;
+  difficulty: number;
+  elapsed_days: number;
+  scheduled_days: number;
+  reps: number;
+  lapses: number;
+  state: State;
+  last_review?: string;
+}
+export interface card {
+  id: string;
+  type: number;
+  createdAt: number;
+  updateAt: number;
+  due: string;
+  stability: number;
+  difficulty: number;
+  elapsed_days: number;
+  scheduled_days: number;
+  reps: number;
+  lapses: number;
+  state: State;
+  last_review?: string;
+  note: note;
+}
+
+export interface queryCardVo {
+  id: string;
+  type: number;
+}
+
+export interface updateCardVo {
+  nid: string;
+  id: queryCardVo;
+  card: cardVo;
+  log: reviewLog;
+}
+
+export interface reviewLog {
+  id: string;
+}
+
+export interface reviewLog {
+  rating: Rating;
+  state: State;
+  elapsed_days: number;
+  scheduled_days: number;
+  review: string;
+}
+
+export interface queryCardsVo {
+  uid?: number;
+  state?: State;
+  id?: string;
+  beforeTime?: string;
+  start?: string;
+  end?: string;
 }
