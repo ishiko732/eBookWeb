@@ -1,4 +1,4 @@
-import { commentTree, file, folder } from "../api/models";
+import { commentTree, file, folder, note, topic } from "../api/models";
 import { TreeData } from "../components/tree-view/CustomTreeView";
 import { findItem } from "./graph";
 
@@ -33,6 +33,32 @@ export const filesToTreeData = (files: file[]): TreeData[] => {
       disabledButton: false,
       type: fileType,
       resoureId: file.fsId,
+    };
+  });
+};
+
+export const topicsToTreeData = (topics: topic[]): TreeData[] => {
+  const fileType = "Topic";
+  return topics?.map((topic) => {
+    return {
+      id: `${fileType}_${topic.id}`,
+      name: topic.name,
+      disabledButton: false,
+      type: fileType,
+      findText: topic.data,
+    };
+  });
+};
+
+export const notesToTreeData = (notes: note[]): TreeData[] => {
+  const fileType = "Note";
+  return notes?.map((note) => {
+    return {
+      id: `${fileType}_${note.id}`,
+      name: note.sfld,
+      disabledButton: true,
+      type: fileType,
+      findText: note.flds,
     };
   });
 };
