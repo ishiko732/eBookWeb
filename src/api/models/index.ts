@@ -128,6 +128,7 @@ export interface topic {
   createdAt: number;
   updateAt: number;
   uid: number;
+  name: string;
   data?: string;
   topicId?: string;
   fileId?: string;
@@ -158,8 +159,8 @@ export interface note {
 export interface queryNotesVo {
   uid?: number;
   topicId?: string;
-  firstField: string;
-  allField: string;
+  firstField?: string;
+  allField?: string;
 }
 
 export interface fsrsParameter {
