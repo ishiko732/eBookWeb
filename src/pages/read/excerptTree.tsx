@@ -90,58 +90,58 @@ const ExcerptTree = (props: {
 export default ExcerptTree;
 
 async function operation(type_id: string) {
-    let ret: { status: boolean; data: any } = { status: false, data: null };
-    const [type, id] = type_id.split("_");
-    const _type = type as TreeType;
-    if (_type === "Folder") {
-      await getChildByParentId(id)
+  let ret: { status: boolean; data: any } = { status: false, data: null };
+  const [type, id] = type_id.split("_");
+  const _type = type as TreeType;
+  if (_type === "Folder") {
+    await getChildByParentId(id)
+      .then((res) => {
+        ret = { status: true, data: toTreeData(res.data as folder[]) };
+      })
+      .catch((err) => {
+        ret = { status: false, data: err };
+      });
+  } else if (_type === "PDF") {
+    console.log(_type, id);
+    await queryTopics({ fileId: Number(id) })
+      .then((res) => {
+        if ((res.data as topic[]).length === 0) {
+          return;
+        }
+        ret = { status: true, data: topicsToTreeData(res.data as topic[]) };
+      })
+      .catch((err) => {
+        console.log(err);
+        ret = { status: false, data: err };
+      });
+  } else if (_type === "Topic") {
+    const data: TreeData[] = [];
+    await queryTopics({ topicId: id })
+      .then((res) => {
+        if ((res.data as topic[]).length === 0) {
+          return;
+        }
+        data.push(...topicsToTreeData(res.data as topic[]));
+      })
+      .catch((err) => {
+        console.log(err);
+        ret = { status: false, data: err };
+      });
+    !ret.data &&
+      (await queryNotes({ topicId: id })
         .then((res) => {
-          ret = { status: true, data: toTreeData(res.data as folder[]) };
-        })
-        .catch((err) => {
-          ret = { status: false, data: err };
-        });
-    } else if (_type === "PDF") {
-      console.log(_type, id);
-      await queryTopics({ fileId: Number(id) })
-        .then((res) => {
-          if ((res.data as topic[]).length === 0) {
+          if ((res.data as note[]).length === 0) {
             return;
           }
-          ret = { status: true, data: topicsToTreeData(res.data as topic[]) };
+          data.push(...notesToTreeData(res.data as note[]));
         })
         .catch((err) => {
           console.log(err);
           ret = { status: false, data: err };
-        });
-    } else if (_type === "Topic") {
-      const data: TreeData[] = [];
-      await queryTopics({ topicId: id })
-        .then((res) => {
-          if ((res.data as topic[]).length === 0) {
-            return;
-          }
-          data.push(...topicsToTreeData(res.data as topic[]));
-        })
-        .catch((err) => {
-          console.log(err);
-          ret = { status: false, data: err };
-        });
-      !ret.data &&
-        (await queryNotes({ topicId: id })
-          .then((res) => {
-            if ((res.data as note[]).length === 0) {
-              return;
-            }
-            data.push(...notesToTreeData(res.data as note[]));
-          })
-          .catch((err) => {
-            console.log(err);
-            ret = { status: false, data: err };
-          }));
-      if (!ret.data) {
-        ret = { status: true, data: data };
-      }
+        }));
+    if (!ret.data) {
+      ret = { status: true, data: data };
     }
-    return ret;
   }
+  return ret;
+}

@@ -138,7 +138,7 @@ const ReadControl = (props: any) => {
             top: 33,
           }}
         >
-          <ExcerptNotes file={file}/>
+          <ExcerptNotes file={file} />
         </RightBar>
       </React.Fragment>
     </RequiredRole>

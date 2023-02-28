@@ -1,11 +1,19 @@
 import "vditor/dist/index.css";
-import React from "react";
+import React, { useEffect } from "react";
 import Vditor from "vditor";
 import { defaultLanguage } from "../../config/config";
 import { uploadImage, viewFileURL } from "../../api/file";
+import { topic } from "../../api/models";
+import { updateTopic } from "../../api/note";
 
-const VditorEdit = (props: { style?: React.CSSProperties }) => {
+const VditorEdit = (props: {
+  style?: React.CSSProperties;
+  topic: topic;
+  setTopic: React.Dispatch<React.SetStateAction<topic | null | undefined>>;
+}) => {
   const [vd, setVd] = React.useState<Vditor>();
+  const editRef = React.createRef<HTMLDivElement>();
+  const first = React.useRef("");
   React.useEffect(() => {
     const vditor = new Vditor("vditor", {
       lang: localStorage.language || defaultLanguage,
@@ -83,7 +91,53 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
       },
     });
   }, []);
-  return <div id="vditor" className="vditor" style={props.style} />;
+
+  React.useEffect(() => {
+    const save = (event: KeyboardEvent) => {
+      // event.stopPropagation()
+      if (!vd) {
+        return;
+      }
+      if (!props.topic) {
+        return;
+      }
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        event.key.toLocaleLowerCase() === "s"
+      ) {
+        event.preventDefault();
+        updateTopic({
+          ...props.topic,
+          data: vd.getValue(),
+        })
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    };
+    window.addEventListener("keydown", save);
+    return () => {
+      window.removeEventListener("keydown", save);
+    };
+  });
+
+  useEffect(() => {
+    if (!props.topic) {
+      return;
+    }
+    if (first.current === props.topic.id) {
+      return;
+    }
+    first.current = props.topic.id;
+    console.log(props.topic.data);
+    vd && vd.setValue(props.topic.data || "");
+  }, [props.topic, vd]);
+  return (
+    <div id="vditor" className="vditor" style={props.style} ref={editRef} />
+  );
 };
 
 export default VditorEdit;
