@@ -97,6 +97,8 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
   const saveText = (topic: topic, vd: Vditor) => {
     updateTopic({
       ...topic,
+       // @ts-ignore
+      name:undefined,
       data: vd.getValue(),
     })
       .then((res) => {
