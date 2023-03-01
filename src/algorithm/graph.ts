@@ -170,9 +170,10 @@ export function DFS_Delete(
     if (!node) {
       return false;
     }
+    console.log(node);
     if (node[attribute] === path[cnt][attribute]) {
       if (path.length - 1 === cnt) {
-        nodes.splice(index, index + 1);
+        nodes.splice(index, 1);
         // delete nodes[index];
         return true;
       } else if (node[nextAttribute]?.length > 0) {
