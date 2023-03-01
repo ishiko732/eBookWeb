@@ -6,13 +6,13 @@ import { uploadImage, viewFileURL } from "../../api/file";
 import { topic } from "../../api/models";
 import { updateTopic } from "../../api/note";
 import { useReadContext } from "./ReadContext";
-import { Chip, Divider, SvgIcon } from "@mui/material";
+import { Chip, Divider } from "@mui/material";
 import { isMac } from "../../utils/getSystem";
 import SaveIcon from "@mui/icons-material/Save";
 import { timer } from "../../utils/sleep";
 import DoneIcon from "@mui/icons-material/Done";
 const VditorEdit = (props: { style?: React.CSSProperties }) => {
-  const { topic, setTopic, vd, setVd } = useReadContext();
+  const { topics, setTopics, topicIndex, vd, setVd } = useReadContext();
   const editRef = React.createRef<HTMLDivElement>();
   const [selected, setSelected] = React.useState(false);
   const first = React.useRef("");
@@ -88,21 +88,25 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
       icon: "material",
       after: () => {
         // vditor.setValue("`Vditor` 最小代码示例");
-        vditor.enableCache();
+        // vditor.enableCache();
         setVd(vditor);
       },
     });
   }, []);
 
-  const saveText = (topic: topic, vd: Vditor) => {
+  const saveText = (topics: topic[], topicIndex: number, vd: Vditor) => {
     updateTopic({
-      ...topic,
+      ...topics[topicIndex],
       // @ts-ignore
       name: undefined,
       data: vd.getValue(),
     })
       .then((res) => {
-        setTopic(res.data);
+        setTopics((pre) => {
+          const data = [...pre];
+          data[topicIndex] = res.data;
+          return data;
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -118,7 +122,7 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
       if (!vd) {
         return;
       }
-      if (!topic) {
+      if (topics.length < topicIndex) {
         return;
       }
       if (
@@ -126,7 +130,7 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
         event.key.toLocaleLowerCase() === "s"
       ) {
         event.preventDefault();
-        saveText(topic, vd);
+        saveText(topics, topicIndex, vd);
       } else if (
         (event.ctrlKey || event.metaKey) &&
         event.key.toLocaleLowerCase() === "v"
@@ -144,16 +148,16 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
   });
 
   useEffect(() => {
-    if (!topic) {
+    if (topics.length < topicIndex) {
       return;
     }
-    if (first.current === topic.id) {
+    if (first.current === topics[topicIndex].id) {
       return;
     }
-    first.current = topic.id;
-    console.log(topic.data);
-    vd && vd.setValue(topic.data || "");
-  }, [topic, vd]);
+    first.current = topics[topicIndex].id;
+    console.log(topics[topicIndex].data);
+    vd && vd.setValue(topics[topicIndex].data || "");
+  }, [topicIndex, topics, vd]);
   return (
     <Fragment>
       <div id="vditor" className="vditor" style={props.style} ref={editRef} />
@@ -163,10 +167,10 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
             if (!vd) {
               return;
             }
-            if (!topic) {
+            if (topics.length < topicIndex) {
               return;
             }
-            saveText(topic, vd);
+            saveText(topics, topicIndex, vd);
           }}
           color={selected ? "primary" : undefined}
           variant={selected ? "filled" : "outlined"}
