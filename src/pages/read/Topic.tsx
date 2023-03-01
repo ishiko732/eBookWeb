@@ -95,6 +95,8 @@ const Topic = (props: { file?: file | null }) => {
           onChange={handleChange}
           textColor="secondary"
           indicatorColor="secondary"
+          variant="scrollable"
+          scrollButtons="auto"
         >
           {topics.map((item, index) => (
             <Tab
