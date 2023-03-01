@@ -246,7 +246,7 @@ export function DFS_Delete2(
       return false;
     }
     if (node[attribute] === findValue) {
-      nodes.splice(index, index + 1);
+      nodes.splice(index, 1);
       return true;
     } else if (node[nextAttribute]?.length > 0) {
       ret = DFS_Delete2(

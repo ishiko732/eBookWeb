@@ -33,7 +33,7 @@ export const commentsSecondaryActionHelper = (
       if (!reload) {
         newdata[index] = !newdata[index];
       } else {
-        newdata.splice(index, index + 1);
+        newdata.splice(index, 1);
       }
       return newdata;
     });
