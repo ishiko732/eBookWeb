@@ -122,7 +122,7 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
       if (!vd) {
         return;
       }
-      if (topics.length < topicIndex) {
+      if (topics.length <= topicIndex) {
         return;
       }
       if (
@@ -148,7 +148,7 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
   });
 
   useEffect(() => {
-    if (topics.length < topicIndex) {
+    if (topics.length <= topicIndex) {
       return;
     }
     if (first.current === topics[topicIndex].id) {
@@ -167,7 +167,7 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
             if (!vd) {
               return;
             }
-            if (topics.length < topicIndex) {
+            if (topics.length <= topicIndex) {
               return;
             }
             saveText(topics, topicIndex, vd);
