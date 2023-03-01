@@ -280,6 +280,9 @@ const customChineseMessages = {
     addBook: "添加到书库",
     downloadBook: "下载图书",
   },
+  topic: {
+    default: "默认主题",
+  },
 };
 
 export default customChineseMessages;

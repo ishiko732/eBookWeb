@@ -12,15 +12,7 @@ export const createTopic = (vo: createTopicVo) =>
   request({
     method: "post",
     url: `fsrs/topic`,
-    data: vo.fileId
-      ? {
-          fileId: vo.fileId,
-          data: vo.data || "",
-        }
-      : {
-          topicId: vo.topicId,
-          data: vo.data || "",
-        },
+    data: vo,
     headers: { "Content-Type": "application/json" },
     transformRequest: [(data) => JSON.stringify(data)],
   });

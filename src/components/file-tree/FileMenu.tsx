@@ -58,7 +58,17 @@ export const FileMenu = ({
         >
           {t("TreeView.Copy", { name: node?.at(-1)?.name })}
         </MenuItem>
-        {node?.at(-1)?.type === "PDF" ? (
+        {["Topic", "Note"].indexOf(node?.at(-1)?.type || "File") === -1 && (
+          <MenuItem
+            onClick={(event) => {
+              event.preventDefault();
+              fileInput.current?.click();
+            }}
+          >
+            {t("TreeView.Upload", { type: t(`TreeView.File`) })}
+          </MenuItem>
+        )}
+        {node?.at(-1)?.type === "PDF" && (
           <MenuItem
             onClick={(event) => {
               handleClose("Open", event);
@@ -68,18 +78,8 @@ export const FileMenu = ({
               type: t(`TreeView.${node?.at(-1)?.type}`),
             })}
           </MenuItem>
-        ) : null}
-        <MenuItem
-          onClick={(event) => {
-            event.preventDefault();
-            fileInput.current?.click();
-            // handleClose("Upload", event);
-          }}
-        >
-          {t("TreeView.Upload", { type: t(`TreeView.File`) })}
-        </MenuItem>
-
-        {["File", "PDF"].indexOf(node?.at(-1)?.type || "File") !== -1 ? null : (
+        )}
+        {["File", "PDF"].indexOf(node?.at(-1)?.type || "File") === -1 && (
           <MenuItem
             onClick={(event) => {
               handleClose("Add", event);
@@ -128,6 +128,17 @@ export const FileMenu = ({
             type: t(`TreeView.${node?.at(-1)?.type}`),
           })}
         </MenuItem>
+        {node?.at(-1)?.type === "PDF" && (
+          <MenuItem
+            onClick={(event) => {
+              handleClose("Add", event);
+            }}
+          >
+            {t("TreeView.Add", {
+              type: t(`TreeView.Topic`),
+            })}
+          </MenuItem>
+        )}
       </Menu>
     </React.Fragment>
   );

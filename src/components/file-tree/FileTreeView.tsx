@@ -27,10 +27,15 @@ import {
   updateFolder,
 } from "../../api/file";
 import { useSnackbar } from "notistack";
-import { folder, topic } from "../../api/models";
+import { folder, topic, User } from "../../api/models";
 import UploadFile from "./UploadFile";
 import React from "react";
-import { createTopic, queryTopics } from "../../api/note";
+import {
+  createTopic,
+  deleteTopic,
+  queryTopics,
+  updateTopic,
+} from "../../api/note";
 
 export default function FileTreeView({
   data,
@@ -41,7 +46,7 @@ export default function FileTreeView({
 }: {
   data: TreeData[];
   operation: any;
-  loginUser: any;
+  loginUser: User;
   ram?: string;
   handleSelectNode?: (nodes: TreeData[]) => void;
 }) {
@@ -269,6 +274,59 @@ export default function FileTreeView({
                       variant: "error",
                     });
                   });
+              } else if (currentNode.type === "PDF") {
+                await createTopic({
+                  fileId: Number(currentNode.id.split("_").at(-1)),
+                  name: text as string,
+                })
+                  .then((res) => {
+                    const data: topic = res.data;
+                    setMessage((dates) => {
+                      const newData = toTree(
+                        dates,
+                        currentNode.id,
+                        topicsToTreeData([data])
+                      );
+                      ram && localStorage.setItem(ram, JSON.stringify(newData));
+                      return newData;
+                    });
+                    enqueueSnackbar(t("api.opt_success"), {
+                      variant: "success",
+                    });
+                  })
+                  .catch((err) => {
+                    enqueueSnackbar(t("api.opt_error", { data: err.msg }), {
+                      variant: "error",
+                    });
+                  });
+              } else if (currentNode.type === "Topic") {
+                const parentNode = selectedNode.at(-2);
+                parentNode &&
+                  (await createTopic({
+                    topicId: currentNode.id.split("_").at(-1),
+                    name: text as string,
+                  })
+                    .then((res) => {
+                      const data: topic = res.data;
+                      setMessage((dates) => {
+                        const newData = toTree(
+                          dates,
+                          parentNode.id,
+                          topicsToTreeData([data])
+                        );
+                        ram &&
+                          localStorage.setItem(ram, JSON.stringify(newData));
+                        return newData;
+                      });
+                      enqueueSnackbar(t("api.opt_success"), {
+                        variant: "success",
+                      });
+                    })
+                    .catch((err) => {
+                      enqueueSnackbar(t("api.opt_error", { data: err.msg }), {
+                        variant: "error",
+                      });
+                    }));
               }
             }
             break;
@@ -304,6 +362,23 @@ export default function FileTreeView({
                 });
             } else if (["File", "PDF"].indexOf(currentNode.type) !== -1) {
               await deleteFile(Number(currentNode.id.split("_").at(-1)))
+                .then((res) => {
+                  setMessage((dates) => {
+                    DFS_Delete(dates, "id", "children", selectedNode);
+                    ram && localStorage.setItem(ram, JSON.stringify(dates));
+                    return dates;
+                  });
+                  enqueueSnackbar(t("api.opt_success"), {
+                    variant: "success",
+                  });
+                })
+                .catch((err) => {
+                  enqueueSnackbar(t("api.opt_error", { data: err.msg }), {
+                    variant: "error",
+                  });
+                });
+            } else if (currentNode.type === "Topic") {
+              await deleteTopic(String(currentNode.id.split("_").at(-1)))
                 .then((res) => {
                   setMessage((dates) => {
                     DFS_Delete(dates, "id", "children", selectedNode);
@@ -359,6 +434,36 @@ export default function FileTreeView({
                 Number(currentNode.id.split("_").at(-1)),
                 currentNode.type === "PDF" ? text + ".pdf" : text
               )
+                .then((res) => {
+                  setMessage((dates) => {
+                    DFS_Rename(
+                      dates,
+                      "id",
+                      "name",
+                      "children",
+                      text,
+                      selectedNode
+                    );
+                    ram && localStorage.setItem(ram, JSON.stringify(dates));
+                    console.log(dates);
+                    return dates;
+                  });
+                  enqueueSnackbar(t("api.opt_success"), {
+                    variant: "success",
+                  });
+                })
+                .catch((err) => {
+                  enqueueSnackbar(t("api.opt_error", { data: err.msg }), {
+                    variant: "error",
+                  });
+                });
+            } else if (text && currentNode.type === "Topic") {
+              //@ts-ignore
+              await updateTopic({
+                id: String(currentNode.id.split("_").at(-1)),
+                uid: loginUser.id,
+                name: text,
+              })
                 .then((res) => {
                   setMessage((dates) => {
                     DFS_Rename(
