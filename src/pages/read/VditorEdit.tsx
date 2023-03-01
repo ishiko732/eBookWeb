@@ -1,18 +1,20 @@
 import "vditor/dist/index.css";
-import React, { useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import Vditor from "vditor";
 import { defaultLanguage } from "../../config/config";
 import { uploadImage, viewFileURL } from "../../api/file";
 import { topic } from "../../api/models";
 import { updateTopic } from "../../api/note";
-
-const VditorEdit = (props: {
-  style?: React.CSSProperties;
-  topic: topic;
-  setTopic: React.Dispatch<React.SetStateAction<topic | null | undefined>>;
-}) => {
-  const [vd, setVd] = React.useState<Vditor>();
+import { useReadContext } from "./ReadContext";
+import { Chip, Divider, SvgIcon } from "@mui/material";
+import { isMac } from "../../utils/getSystem";
+import SaveIcon from "@mui/icons-material/Save";
+import { timer } from "../../utils/sleep";
+import DoneIcon from "@mui/icons-material/Done";
+const VditorEdit = (props: { style?: React.CSSProperties }) => {
+  const { topic, setTopic, vd, setVd } = useReadContext();
   const editRef = React.createRef<HTMLDivElement>();
+  const [selected, setSelected] = React.useState(false);
   const first = React.useRef("");
   React.useEffect(() => {
     const vditor = new Vditor("vditor", {
@@ -92,13 +94,29 @@ const VditorEdit = (props: {
     });
   }, []);
 
+  const saveText = (topic: topic, vd: Vditor) => {
+    updateTopic({
+      ...topic,
+      data: vd.getValue(),
+    })
+      .then((res) => {
+        setTopic(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    setSelected(true);
+    timer(1000).then(() => {
+      setSelected(false);
+    });
+  };
   React.useEffect(() => {
     const save = (event: KeyboardEvent) => {
       // event.stopPropagation()
       if (!vd) {
         return;
       }
-      if (!props.topic) {
+      if (!topic) {
         return;
       }
       if (
@@ -106,16 +124,15 @@ const VditorEdit = (props: {
         event.key.toLocaleLowerCase() === "s"
       ) {
         event.preventDefault();
-        updateTopic({
-          ...props.topic,
-          data: vd.getValue(),
-        })
-          .then((res) => {
-            console.log(res);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        saveText(topic, vd);
+      } else if (
+        (event.ctrlKey || event.metaKey) &&
+        event.key.toLocaleLowerCase() === "v"
+      ) {
+        navigator.clipboard.readText().then((clipText) => {
+          event.preventDefault();
+          vd.insertValue(clipText);
+        });
       }
     };
     window.addEventListener("keydown", save);
@@ -125,18 +142,39 @@ const VditorEdit = (props: {
   });
 
   useEffect(() => {
-    if (!props.topic) {
+    if (!topic) {
       return;
     }
-    if (first.current === props.topic.id) {
+    if (first.current === topic.id) {
       return;
     }
-    first.current = props.topic.id;
-    console.log(props.topic.data);
-    vd && vd.setValue(props.topic.data || "");
-  }, [props.topic, vd]);
+    first.current = topic.id;
+    console.log(topic.data);
+    vd && vd.setValue(topic.data || "");
+  }, [topic, vd]);
   return (
-    <div id="vditor" className="vditor" style={props.style} ref={editRef} />
+    <Fragment>
+      <div id="vditor" className="vditor" style={props.style} ref={editRef} />
+      <Divider textAlign="right">
+        <Chip
+          onClick={() => {
+            if (!vd) {
+              return;
+            }
+            if (!topic) {
+              return;
+            }
+            saveText(topic, vd);
+          }}
+          color={selected ? "primary" : undefined}
+          variant={selected ? "filled" : "outlined"}
+          onDelete={selected ? () => {} : undefined}
+          icon={<SaveIcon />}
+          deleteIcon={<DoneIcon />}
+          label={isMac ? "⌘S" : "Ctrl-S"}
+        />
+      </Divider>
+    </Fragment>
   );
 };
 

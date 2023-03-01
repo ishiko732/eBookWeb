@@ -1,14 +1,14 @@
 import { Stack } from "@mui/material";
 import { file, topic } from "../../api/models";
 import AccordionItems from "../../components/AccordionItems";
-import Topic from "./Topic";
+import Topic, { TopicTitle } from "./Topic";
 
 const ExcerptNotes = (props: { file?: file | null; topic?: topic | null }) => {
   const { file } = props;
   const topicJSX = <Topic file={file} />;
   const items = [
     {
-      title: "Topic",
+      title: <TopicTitle />,
       details: topicJSX,
       defaultExpanded: true,
     },

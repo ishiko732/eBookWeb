@@ -1,11 +1,14 @@
 import React from "react";
 import { createContext, useContext } from "react";
-import { book } from "../../api/models";
+import Vditor from "vditor";
+import { book, topic } from "../../api/models";
 export interface ProviderContext {
   book: book | null;
   setBook: React.Dispatch<React.SetStateAction<book | null>>;
-  selectText: string;
-  setSelectText: React.Dispatch<React.SetStateAction<string>>;
+  topic: topic | null;
+  setTopic: React.Dispatch<React.SetStateAction<topic | null>>;
+  vd: Vditor | undefined;
+  setVd: React.Dispatch<React.SetStateAction<Vditor | undefined>>;
 }
 
 // @ts-ignore
@@ -18,12 +21,17 @@ export function useReadContext() {
 export const ReadProvider = (props: { children: JSX.Element }) => {
   const [book, setBook] = React.useState<book | null>(null);
   const [selectText, setSelectText] = React.useState<string>("");
+  const [topic, setTopic] = React.useState<topic | null>(null);
+  const [vd, setVd] = React.useState<Vditor>();
   const value = {
     book,
     setBook,
-    selectText,
-    setSelectText,
+    topic,
+    setTopic,
+    vd,
+    setVd,
   };
+
   return (
     <ReadContext.Provider value={value}>{props.children}</ReadContext.Provider>
   );
