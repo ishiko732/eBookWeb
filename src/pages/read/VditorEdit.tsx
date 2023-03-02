@@ -4,20 +4,24 @@ import Vditor from "vditor";
 import { defaultLanguage } from "../../config/config";
 import { uploadImage, viewFileURL } from "../../api/file";
 import { topic } from "../../api/models";
-import { updateTopic } from "../../api/note";
+import { createNote, deleteNote, updateTopic } from "../../api/note";
 import { useReadContext } from "./ReadContext";
 import { Chip, Divider } from "@mui/material";
 import { isMac } from "../../utils/getSystem";
 import SaveIcon from "@mui/icons-material/Save";
 import { timer } from "../../utils/sleep";
 import DoneIcon from "@mui/icons-material/Done";
+import { useUserContext } from "../../UserContext";
 const VditorEdit = (props: { style?: React.CSSProperties }) => {
-  const { topics, setTopics, topicIndex, vd, setVd } = useReadContext();
+  const { topics, setTopics, topicIndex, vd, setVd,notes,setNotes } = useReadContext();
+  const {user}=useUserContext();
   const editRef = React.createRef<HTMLDivElement>();
   const [selected, setSelected] = React.useState(false);
   const first = React.useRef("");
   React.useEffect(() => {
     const vditor = new Vditor("vditor", {
+      // mode:"ir",
+      mode: 'wysiwyg',
       lang: localStorage.language || defaultLanguage,
       toolbarConfig: {
         hide: true,
@@ -29,7 +33,11 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
       preview: {
         hljs: {
           lineNumber: true,
+          enable:true
         },
+        math:{
+          inlineDigit:true
+        }
       },
       counter: {
         enable: true,
@@ -37,27 +45,6 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
       },
       upload: {
         accept: "image/*",
-        // headers:{
-        //   "Authorization":`Bearer ${localstorage.getItem(access_token)}`,
-        //   // "Content-Type": "multipart/form-data"
-        // },
-        // url: BaseURL+"file/uploadImage",
-        // linkToImgUrl: BaseURL+"file/uploadImage",
-        // linkToImgCallback(responseText) {
-        //   console.log(responseText)
-        // },
-        // success(editor, msg) {
-        //   const json=JSON.parse(msg);
-        //   Array.from(json.data.succMap).map((item:any)=>{
-        //     const key:string=Object.keys(item)[0]
-        //     const value:string=Object.values(item)[0] as string
-        //     console.log(item,key);
-        //     vditor.insertValue(`![${key}](${viewFileURL(value)})`)
-        //   })
-        // },
-        // error(msg) {
-        //     console.log("error",msg)
-        // },
         fieldName: "file",
         linkToImgFormat: (responseText: string) => {
           console.log(responseText);
@@ -86,6 +73,63 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
         },
       },
       icon: "material",
+      hint: {
+        emojiPath:
+          "https://cdn.jsdelivr.net/npm/vditor@3.2.0/dist/images/emoji",
+        // extend: [
+        //   {
+        //     key: "#",
+        //     hint: (key) => {
+        //       if ("vditor".indexOf(key.toLocaleLowerCase()) > -1) {
+        //         return [
+        //           {
+        //             value: "#Card",
+        //             html: "#Card 生成卡片",
+        //           },
+        //         ];
+        //       }
+        //       return [];
+        //     },
+        //   },
+        // ],
+      },
+      comment: {
+        enable: true,
+        add(id, text) {
+          createNote({
+            topicId:topics[topicIndex].id,
+            uid:user.id,
+            comment:JSON.stringify({
+              id:id,
+              text:text
+            })
+          }).then(res=>{
+            setNotes(pre=>{
+              const data=[...pre];
+              data.push(res.data)
+              return data;
+            })
+          }).catch(err=>{
+            vd&&vd.removeCommentIds([id])
+          })
+        },
+        remove(ids) {
+          console.log(ids);
+          setNotes(pre=>{
+            const data=[...pre]
+            const t=data.filter(note=>{
+              const comment=note.data!==""?JSON.parse(note.data):null
+              return comment&&comment["id"]&&ids.indexOf(comment["id"])!==-1
+            });
+            t.forEach(note=>{
+              console.log(note);
+              deleteNote(note.id)
+            })
+            console.log(data.filter(node=>t.indexOf(node)===-1))
+            return data.filter(node=>t.indexOf(node)===-1)
+          })
+        },
+      },
       after: () => {
         // vditor.setValue("`Vditor` 最小代码示例");
         // vditor.enableCache();
@@ -155,7 +199,6 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
       return;
     }
     first.current = topics[topicIndex].id;
-    console.log(topics[topicIndex].data);
     vd && vd.setValue(topics[topicIndex].data || "");
   }, [topicIndex, topics, vd]);
   return (

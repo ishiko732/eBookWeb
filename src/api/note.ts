@@ -39,9 +39,8 @@ export const createNote = (vo: createNoteVo) =>
     method: "post",
     url: `fsrs/note`,
     data: {
+      ...vo,
       data: vo.data || "",
-      uid: vo.uid,
-      topicId: vo.topicId,
     },
     headers: { "Content-Type": "application/json" },
     transformRequest: [(data) => JSON.stringify(data)],

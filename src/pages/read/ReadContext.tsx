@@ -1,7 +1,7 @@
 import React from "react";
 import { createContext, useContext } from "react";
 import Vditor from "vditor";
-import { book, topic } from "../../api/models";
+import { book, note, topic } from "../../api/models";
 export interface ProviderContext {
   book: book | null;
   setBook: React.Dispatch<React.SetStateAction<book | null>>;
@@ -11,6 +11,8 @@ export interface ProviderContext {
   setTopicIndex: React.Dispatch<React.SetStateAction<number>>;
   vd: Vditor | undefined;
   setVd: React.Dispatch<React.SetStateAction<Vditor | undefined>>;
+  notes: note[];
+  setNotes: React.Dispatch<React.SetStateAction<note[]>>;
 }
 
 // @ts-ignore
@@ -25,6 +27,7 @@ export const ReadProvider = (props: { children: JSX.Element }) => {
   const [topics, setTopics] = React.useState<topic[]>([]);
   const [topicIndex, setTopicIndex] = React.useState(0);
   const [vd, setVd] = React.useState<Vditor>();
+  const [notes,setNotes]=React.useState<note[]>([]);
 
   const value = {
     book,
@@ -35,6 +38,8 @@ export const ReadProvider = (props: { children: JSX.Element }) => {
     setTopicIndex,
     vd,
     setVd,
+    notes,
+    setNotes
   };
 
   return (
