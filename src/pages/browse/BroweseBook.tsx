@@ -19,10 +19,7 @@ import LibraryAddOutlinedIcon from "@mui/icons-material/LibraryAddOutlined";
 import LibraryAddCheckOutlinedIcon from "@mui/icons-material/LibraryAddCheckOutlined";
 import { addbrowse, addLove, copyBookToUser } from "../../api/share";
 import Search from "../../components/search-bar/search";
-import {
-  SwipeableDrawerProvider,
-  useSwipeableDrawerContext,
-} from "../../components/PositionSwipeableDrawer";
+import { useSwipeableDrawerContext } from "../../components/PositionSwipeableDrawer";
 import { BookContent } from "../../components/BookContent";
 import { CommentContent } from "../../components/comment-view";
 import { queryBook } from "./query";
