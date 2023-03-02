@@ -9,7 +9,6 @@ import {
   queryTopicsVo,
   topic,
 } from "./models";
-import { defaultDateFormat } from "../config/config";
 
 export const createTopic = (vo: createTopicVo) =>
   request({

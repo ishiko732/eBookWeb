@@ -283,6 +283,14 @@ const customChineseMessages = {
   topic: {
     default: "默认主题",
   },
+  note: {
+    title: "笔记",
+    question: "问题",
+    answer: "答案",
+    label: "标签",
+    cancel: "取消",
+    save: "保存",
+  },
 };
 
 export default customChineseMessages;
