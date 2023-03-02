@@ -36,6 +36,8 @@ export const deleteTopic = (tid: string) =>
 export const queryTopics = (vo: queryTopicsVo) =>
   request.get(`fsrs/topics`, { params: vo });
 
+export const noteFieldSplitCode = String.fromCharCode(0x1f);
+
 export const createNote = (vo: createNoteVo) =>
   request({
     method: "post",
