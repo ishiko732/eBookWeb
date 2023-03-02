@@ -119,10 +119,14 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
             return data.filter((node) => t.indexOf(node) === -1);
           });
         },
+        scroll(top) {
+          console.log(top, "scroll");
+        },
+        adjustTop(commentsData) {
+          console.log(commentsData, "adjustTop");
+        },
       },
       after: () => {
-        // vditor.setValue("`Vditor` 最小代码示例");
-        // vditor.enableCache();
         setVd(vditor);
       },
     });

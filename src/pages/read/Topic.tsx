@@ -9,15 +9,10 @@ import {
 } from "@mui/material";
 import { Fragment, useCallback, useEffect, useState } from "react";
 import { file, topic } from "../../api/models";
-import {
-  createTopic,
-  queryNotes,
-  queryTopics,
-  updateTopic,
-} from "../../api/note";
+import { createTopic, queryTopics, updateTopic } from "../../api/note";
 import { Loading } from "../../components/Loading";
 import { useReadContext } from "./ReadContext";
-import VditorEdit from "./VditorEdit";
+import VditorEdit from "./VditorTopicEdit";
 import FiberManualRecordRoundedIcon from "@mui/icons-material/FiberManualRecordRounded";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
@@ -64,16 +59,6 @@ const Topic = (props: { file?: file | null }) => {
       return;
     }
     setTopicIndex(newValue);
-    queryNotes({
-      topicId: topics[newValue].id,
-    })
-      .then((res) => {
-        setNotes(res.data);
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
   useEffect(() => {
     file &&
