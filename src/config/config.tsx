@@ -1,7 +1,6 @@
 import Login from "../pages/auth/Login";
 import SignUp from "../pages/auth/register";
 import Dashboard from "../pages/dashboard/Dashboard";
-import Home from "../pages/dashboard/Home/Home";
 import MyHome from "../pages/home";
 import Stile from "../components/OutletStile";
 import NotFound from "../pages/exception/404";
@@ -51,11 +50,11 @@ export const routes = (props: any): route[] => {
     {
       path: "/",
       element: <Dashboard {...props} />,
-      redirect: "MyHome",
+      redirect: "home",
       //开头不能添加/,不然得从根目录写起'/dashboard/home'
       children: [
         {
-          path: "MyHome",
+          path: "home",
           element: <MyHome {...props} />,
         },
         {
@@ -87,10 +86,6 @@ export const routes = (props: any): route[] => {
               element: <ShareControl {...props} />,
             },
           ],
-        },
-        {
-          path: "home",
-          element: <Home {...props} />,
         },
         {
           path: "browse",
