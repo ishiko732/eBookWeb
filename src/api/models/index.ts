@@ -141,7 +141,7 @@ export interface queryTopicsVo {
 }
 
 export interface createNoteVo {
-  data?: number;
+  data?: string;
   uid: number;
   topicId: string;
   comment: string;
