@@ -77,22 +77,6 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
       hint: {
         emojiPath:
           "https://cdn.jsdelivr.net/npm/vditor@3.2.0/dist/images/emoji",
-        // extend: [
-        //   {
-        //     key: "#",
-        //     hint: (key) => {
-        //       if ("vditor".indexOf(key.toLocaleLowerCase()) > -1) {
-        //         return [
-        //           {
-        //             value: "#Card",
-        //             html: "#Card 生成卡片",
-        //           },
-        //         ];
-        //       }
-        //       return [];
-        //     },
-        //   },
-        // ],
       },
       comment: {
         enable: true,
@@ -106,6 +90,7 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
             }),
           })
             .then((res) => {
+              vd && saveText(topics, topicIndex, vd);
               setNotes((pre) => {
                 const data = [...pre];
                 data.push(res.data);
@@ -130,7 +115,7 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
               console.log(note);
               deleteNote(note.id);
             });
-            console.log(data.filter((node) => t.indexOf(node) === -1));
+            vd && saveText(topics, topicIndex, vd);
             return data.filter((node) => t.indexOf(node) === -1);
           });
         },

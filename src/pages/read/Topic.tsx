@@ -9,7 +9,12 @@ import {
 } from "@mui/material";
 import { Fragment, useCallback, useEffect, useState } from "react";
 import { file, topic } from "../../api/models";
-import { createTopic, queryTopics, updateTopic } from "../../api/note";
+import {
+  createTopic,
+  queryNotes,
+  queryTopics,
+  updateTopic,
+} from "../../api/note";
 import { Loading } from "../../components/Loading";
 import { useReadContext } from "./ReadContext";
 import VditorEdit from "./VditorEdit";
@@ -51,13 +56,24 @@ export const TopicTitle = () => {
 
 const Topic = (props: { file?: file | null }) => {
   const { file } = props;
-  const { topics, setTopics, setTopicIndex, topicIndex, vd } = useReadContext();
+  const { topics, setTopics, setTopicIndex, topicIndex, vd, setNotes } =
+    useReadContext();
   const [vditorJSX, setVditorJSX] = useState(<Fragment></Fragment>);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     if (topics.length === 0) {
       return;
     }
     setTopicIndex(newValue);
+    queryNotes({
+      topicId: topics[newValue].id,
+    })
+      .then((res) => {
+        setNotes(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   useEffect(() => {
     file &&
