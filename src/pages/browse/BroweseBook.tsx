@@ -195,24 +195,22 @@ export default function BroweseBook(props: { books: shareBook[] }) {
   }, [query]);
 
   return (
-    <SwipeableDrawerProvider>
-      <Box sx={{ overflow: "hidden" }} mt={2}>
-        {props.books.length > 0 ? (
-          <React.Fragment>
-            <Stack direction="row" justifyContent="space-between" spacing={0}>
-              <Search
-                value={query}
-                setValue={setQuery}
-                handleKeyUp={handleKeyUp}
-              />
-            </Stack>
-            <Divider />
-            <Media books={queryBooks || props.books} />
-          </React.Fragment>
-        ) : (
-          <CircularProgress />
-        )}
-      </Box>
-    </SwipeableDrawerProvider>
+    <Box sx={{ overflow: "hidden" }} mt={2}>
+      {props.books.length > 0 ? (
+        <React.Fragment>
+          <Stack direction="row" justifyContent="space-between" spacing={0}>
+            <Search
+              value={query}
+              setValue={setQuery}
+              handleKeyUp={handleKeyUp}
+            />
+          </Stack>
+          <Divider />
+          <Media books={queryBooks || props.books} />
+        </React.Fragment>
+      ) : (
+        <CircularProgress />
+      )}
+    </Box>
   );
 }
