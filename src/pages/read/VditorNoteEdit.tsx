@@ -13,6 +13,18 @@ const VditorNoteEdit = (props: {
   const { vd, setVd, defaultText, id } = props;
   const editRef = React.createRef<HTMLDivElement>();
   React.useEffect(() => {
+    vd && vd.setValue(defaultText || "");
+  }, [defaultText, vd]);
+  React.useEffect(() => {
+    const _target = editRef.current
+      ?.querySelector("div.vditor-ir")
+      ?.querySelector("pre.vditor-reset");
+    if (_target) {
+      (_target as HTMLPreElement).setAttribute("style", "padding:4px");
+    }
+  });
+
+  React.useEffect(() => {
     const vditor = new Vditor(`vditor-${id}`, {
       mode: "ir",
       lang: localStorage.language || defaultLanguage,
@@ -73,15 +85,9 @@ const VditorNoteEdit = (props: {
           "https://cdn.jsdelivr.net/npm/vditor@3.2.0/dist/images/emoji",
       },
       after: () => {
+        vditor.disabledCache();
         defaultText && vditor.setValue(defaultText);
         setVd(vditor);
-        const _target = editRef.current
-          ?.querySelector("div.vditor-ir")
-          ?.querySelector("pre.vditor-reset");
-        console.log(_target);
-        if (_target) {
-          (_target as HTMLPreElement).setAttribute("style", "padding:4px");
-        }
       },
     });
   }, []);

@@ -67,10 +67,13 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
         multiple: true,
         withCredentials: true,
         filename(name) {
-          return name
-            .replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, "")
-            .replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, "")
-            .replace("/\\s/g", "");
+          return (
+            name
+              .replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, "")
+              // eslint-disable-next-line no-useless-escape
+              .replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, "")
+              .replace("/\\s/g", "")
+          );
         },
       },
       icon: "material",
