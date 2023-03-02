@@ -13,15 +13,16 @@ import { timer } from "../../utils/sleep";
 import DoneIcon from "@mui/icons-material/Done";
 import { useUserContext } from "../../UserContext";
 const VditorEdit = (props: { style?: React.CSSProperties }) => {
-  const { topics, setTopics, topicIndex, vd, setVd,notes,setNotes } = useReadContext();
-  const {user}=useUserContext();
+  const { topics, setTopics, topicIndex, vd, setVd, notes, setNotes } =
+    useReadContext();
+  const { user } = useUserContext();
   const editRef = React.createRef<HTMLDivElement>();
   const [selected, setSelected] = React.useState(false);
   const first = React.useRef("");
   React.useEffect(() => {
     const vditor = new Vditor("vditor", {
       // mode:"ir",
-      mode: 'wysiwyg',
+      mode: "wysiwyg",
       lang: localStorage.language || defaultLanguage,
       toolbarConfig: {
         hide: true,
@@ -33,11 +34,11 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
       preview: {
         hljs: {
           lineNumber: true,
-          enable:true
+          enable: true,
         },
-        math:{
-          inlineDigit:true
-        }
+        math: {
+          inlineDigit: true,
+        },
       },
       counter: {
         enable: true,
@@ -97,37 +98,41 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
         enable: true,
         add(id, text) {
           createNote({
-            topicId:topics[topicIndex].id,
-            uid:user.id,
-            comment:JSON.stringify({
-              id:id,
-              text:text
-            })
-          }).then(res=>{
-            setNotes(pre=>{
-              const data=[...pre];
-              data.push(res.data)
-              return data;
-            })
-          }).catch(err=>{
-            vd&&vd.removeCommentIds([id])
+            topicId: topics[topicIndex].id,
+            uid: user.id,
+            comment: JSON.stringify({
+              id: id,
+              text: text,
+            }),
           })
+            .then((res) => {
+              setNotes((pre) => {
+                const data = [...pre];
+                data.push(res.data);
+                return data;
+              });
+            })
+            .catch((err) => {
+              vd && vd.removeCommentIds([id]);
+            });
         },
         remove(ids) {
           console.log(ids);
-          setNotes(pre=>{
-            const data=[...pre]
-            const t=data.filter(note=>{
-              const comment=note.data!==""?JSON.parse(note.data):null
-              return comment&&comment["id"]&&ids.indexOf(comment["id"])!==-1
+          setNotes((pre) => {
+            const data = [...pre];
+            const t = data.filter((note) => {
+              const comment = note.data !== "" ? JSON.parse(note.data) : null;
+              return (
+                comment && comment["id"] && ids.indexOf(comment["id"]) !== -1
+              );
             });
-            t.forEach(note=>{
+            t.forEach((note) => {
               console.log(note);
-              deleteNote(note.id)
-            })
-            console.log(data.filter(node=>t.indexOf(node)===-1))
-            return data.filter(node=>t.indexOf(node)===-1)
-          })
+              deleteNote(note.id);
+            });
+            console.log(data.filter((node) => t.indexOf(node) === -1));
+            return data.filter((node) => t.indexOf(node) === -1);
+          });
         },
       },
       after: () => {

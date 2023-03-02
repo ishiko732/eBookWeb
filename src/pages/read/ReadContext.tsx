@@ -27,7 +27,7 @@ export const ReadProvider = (props: { children: JSX.Element }) => {
   const [topics, setTopics] = React.useState<topic[]>([]);
   const [topicIndex, setTopicIndex] = React.useState(0);
   const [vd, setVd] = React.useState<Vditor>();
-  const [notes,setNotes]=React.useState<note[]>([]);
+  const [notes, setNotes] = React.useState<note[]>([]);
 
   const value = {
     book,
@@ -39,7 +39,7 @@ export const ReadProvider = (props: { children: JSX.Element }) => {
     vd,
     setVd,
     notes,
-    setNotes
+    setNotes,
   };
 
   return (

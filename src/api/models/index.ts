@@ -144,7 +144,7 @@ export interface createNoteVo {
   data?: number;
   uid: number;
   topicId: string;
-  comment:string;
+  comment: string;
 }
 export interface note {
   id: string;
@@ -155,7 +155,7 @@ export interface note {
   tags: string;
   flds: string;
   sfld: string;
-  data:string;
+  data: string;
 }
 
 export interface queryNotesVo {

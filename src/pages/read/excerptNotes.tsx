@@ -8,17 +8,17 @@ import Topic, { TopicTitle } from "./Topic";
 
 const ExcerptNotes = (props: { file?: file | null; topic?: topic | null }) => {
   const { file } = props;
-  const topicItem:AccordionItem = {
-      title: <TopicTitle />,
-      details: <Topic file={file} />,
-      defaultExpanded: true,
-  };
-  const notesItem={
-    title:"notes",
-    details: <Notes/>,
+  const topicItem: AccordionItem = {
+    title: <TopicTitle />,
+    details: <Topic file={file} />,
     defaultExpanded: true,
-  }
-  const [items]=useState<AccordionItem[]>([topicItem,notesItem]);
+  };
+  const notesItem = {
+    title: "notes",
+    details: <Notes />,
+    defaultExpanded: true,
+  };
+  const [items] = useState<AccordionItem[]>([topicItem, notesItem]);
 
   return (
     <Stack
