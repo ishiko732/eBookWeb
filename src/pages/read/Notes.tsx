@@ -13,11 +13,16 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { useReadContext } from "./ReadContext";
 import { Fragment, useEffect, useState } from "react";
-import { createNote, deleteNote, queryNotes, updateNote } from "../../api/note";
+import {
+  createNote,
+  deleteNote,
+  noteFieldSplitCode,
+  queryNotes,
+  updateNote,
+} from "../../api/note";
 import { useSwipeableDrawerContext } from "../../components/PositionSwipeableDrawer";
 import VditorNoteEdit from "./VditorNoteEdit";
 import Vditor from "vditor";
-import { t } from "i18next";
 import { MuiChipsInput, MuiChipsInputChip } from "mui-chips-input";
 import { LoadingButton } from "@mui/lab";
 import Title from "../../components/Title";
@@ -62,7 +67,7 @@ export const Notes = () => {
 const Note = ({ note }: { note: note }) => {
   const commnet = note.data !== "" ? JSON.parse(note.data) : null;
   const { setOpen, setDrawerContent } = useSwipeableDrawerContext();
-  const { topics, topicIndex } = useReadContext();
+  const { topics, topicIndex, setNotes } = useReadContext();
   const topicId = topics.length > topicIndex && topics[topicIndex].id;
 
   return (
@@ -84,7 +89,9 @@ const Note = ({ note }: { note: note }) => {
       >
         <ListItemButton
           onClick={(event) => {
-            setDrawerContent(<NoteEdit note={note} topicId={topicId} />);
+            setDrawerContent(
+              <NoteEdit note={note} topicId={topicId} setNotes={setNotes} />
+            );
             setOpen(true);
           }}
         >
@@ -106,28 +113,103 @@ const Note = ({ note }: { note: note }) => {
 const NoteEdit = ({
   note,
   topicId,
+  setNotes,
 }: {
   note?: note;
   topicId: string | false;
+  setNotes: React.Dispatch<React.SetStateAction<note[]>>;
 }) => {
   const isUpdate = Boolean(note);
   const [isLoading, setLoading] = useState(false);
   const [questionVd, setQuestionVd] = useState<Vditor>();
   const [answerVd, setAnswerVd] = useState<Vditor>();
-  const commnet = isUpdate
-    ? note && note?.data !== ""
-      ? JSON.parse(note.data)
-      : null
-    : null;
-  const [tags, setTags] = useState<string[]>(note?.tags?.split(";") || []);
+  const [tags, setTags] = useState<string[]>([]);
   const { setOpen } = useSwipeableDrawerContext();
   const { t, user } = useUserContext();
-
+  const [defaultQuestion, setDefaultQuestion] = useState("");
+  const [defaultAnswer, setDefaultAnswer] = useState("");
   const handleChange = (newValue: MuiChipsInputChip[]) => {
     const setData: Set<string> = new Set();
     newValue.forEach((value) => setData.add(value));
     setTags(Array.from(setData));
   };
+  const handleSubmit = () => {
+    setLoading(true);
+    const data = `${questionVd
+      ?.getValue()
+      .trim()}${noteFieldSplitCode}${answerVd?.getValue().trim()}`;
+    if (isUpdate) {
+      note &&
+        //@ts-ignore
+        updateNote({
+          id: note!.id,
+          flds: data,
+          tags: tags.join(";"),
+          tid: note!.tid,
+        })
+          .then((res) => {
+            setOpen(false);
+            setNotes((pre) => {
+              const newdata = [...pre];
+              const index = newdata.indexOf(note);
+              newdata[index] = res.data;
+              return newdata;
+            });
+            setLoading(false);
+          })
+          .catch((err) => {
+            console.log(err);
+            setLoading(false);
+          });
+    } else {
+      typeof topicId === "string" &&
+        //@ts-ignore
+        createNote({
+          topicId: topicId,
+          uid: user.id,
+          data: data,
+        })
+          .then((res) => {
+            setOpen(false);
+            setNotes((pre) => {
+              const newdata = [...pre];
+              newdata.push(res.data);
+              return newdata;
+            });
+            setLoading(false);
+          })
+          .catch((err) => {
+            console.log(err);
+            setLoading(false);
+          });
+    }
+  };
+
+  useEffect(() => {
+    const commnet = note && note?.data !== "" ? JSON.parse(note.data) : null;
+    const fields = note?.flds.split(noteFieldSplitCode);
+    setDefaultQuestion(
+      note?.sfld ? note.sfld : commnet && commnet.text ? commnet.text : ""
+    );
+    console.log(fields);
+    setDefaultAnswer(fields && fields.length >= 2 ? fields[1] : "");
+    setTags(note?.tags?.split(";") || []);
+  }, [note]);
+
+  useEffect(() => {
+    const copyText = (event: KeyboardEvent) => {
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        event.key.toLocaleLowerCase() === "enter"
+      ) {
+        handleSubmit();
+      }
+    };
+    window.addEventListener("keyup", copyText);
+    return () => {
+      window.removeEventListener("keyup", copyText);
+    };
+  });
   return (
     <Stack
       direction="column"
@@ -135,7 +217,6 @@ const NoteEdit = ({
       alignItems="center"
       spacing={2}
     >
-      {JSON.stringify(note)}
       <Title>{t("note.title")}</Title>
       <Stack
         direction="row"
@@ -147,7 +228,12 @@ const NoteEdit = ({
         <Typography variant="body1" gutterBottom>
           {t("note.question")}
         </Typography>
-        <VditorNoteEdit id={"question"} vd={questionVd} setVd={setQuestionVd} />
+        <VditorNoteEdit
+          id={"question"}
+          vd={questionVd}
+          setVd={setQuestionVd}
+          defaultText={defaultQuestion}
+        />
       </Stack>
       <Stack
         direction="row"
@@ -159,7 +245,12 @@ const NoteEdit = ({
         <Typography variant="body1" gutterBottom>
           {t("note.answer")}
         </Typography>
-        <VditorNoteEdit id={"answer"} vd={answerVd} setVd={setAnswerVd} />
+        <VditorNoteEdit
+          id={"answer"}
+          vd={answerVd}
+          setVd={setAnswerVd}
+          defaultText={defaultAnswer}
+        />
       </Stack>
       <Stack
         direction="row"
@@ -205,49 +296,12 @@ const NoteEdit = ({
           {t("note.cancel")}
         </LoadingButton>
         <LoadingButton
-          // loading
+          loading={isLoading}
           loadingPosition="end"
           endIcon={<SaveIcon />}
           variant="outlined"
           onClick={() => {
-            console.log(questionVd?.getValue());
-            console.log(answerVd?.getValue());
-            console.log(tags);
-            setLoading(true);
-            const data = `${questionVd?.getValue()}${String.fromCharCode(
-              0x31
-            )}${answerVd?.getValue()}`;
-            if (isUpdate) {
-              //@ts-ignore
-              updateNote({
-                id: note!.id,
-                sfld: data,
-                tags: tags.join(","),
-                tid: note!.tid,
-              })
-                .then((res) => {
-                  setLoading(false);
-                })
-                .catch((err) => {
-                  console.log(err);
-                  setLoading(false);
-                });
-            } else {
-              typeof topicId === "string" &&
-                //@ts-ignore
-                createNote({
-                  topicId: topicId,
-                  uid: user.id,
-                  data: data,
-                })
-                  .then((res) => {
-                    setLoading(false);
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                    setLoading(false);
-                  });
-            }
+            handleSubmit();
           }}
         >
           {t("note.save")}
