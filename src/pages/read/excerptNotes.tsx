@@ -3,7 +3,7 @@ import { Fragment, useEffect, useState } from "react";
 import { file, topic } from "../../api/models";
 import AccordionItems, { AccordionItem } from "../../components/AccordionItems";
 import { Notes } from "./Notes";
-import { useReadContext } from "./ReadContext";
+import { useReadContext } from "../../ReadContext";
 import Topic, { TopicTitle } from "./Topic";
 
 const ExcerptNotes = (props: { file?: file | null; topic?: topic | null }) => {

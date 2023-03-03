@@ -11,7 +11,7 @@ import {
 import { note } from "../../api/models";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-import { useReadContext } from "./ReadContext";
+import { useReadContext } from "../../ReadContext";
 import { Fragment, useEffect, useState } from "react";
 import {
   createNote,

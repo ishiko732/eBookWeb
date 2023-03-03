@@ -14,7 +14,7 @@ import { SnackbarProvider } from "notistack";
 import { useTranslation } from "react-i18next";
 import { UserContext } from "./UserContext";
 import { User } from "./api/models";
-import { ReadProvider } from "./pages/read/ReadContext";
+import { ReadProvider } from "./ReadContext";
 import { SwipeableDrawerProvider } from "./components/PositionSwipeableDrawer";
 const rotuerViews = (routerItems: route[], parent?: string) => {
   return routerItems.map((item: route) => {

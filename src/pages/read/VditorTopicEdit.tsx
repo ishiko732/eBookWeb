@@ -5,7 +5,7 @@ import { defaultLanguage } from "../../config/config";
 import { uploadImage, viewFileURL } from "../../api/file";
 import { topic } from "../../api/models";
 import { createNote, deleteNote, updateTopic } from "../../api/note";
-import { useReadContext } from "./ReadContext";
+import { useReadContext } from "../../ReadContext";
 import { Chip, Divider } from "@mui/material";
 import { isMac } from "../../utils/getSystem";
 import SaveIcon from "@mui/icons-material/Save";

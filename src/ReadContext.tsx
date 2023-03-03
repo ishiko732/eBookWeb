@@ -1,7 +1,7 @@
 import React from "react";
 import { createContext, useContext } from "react";
 import Vditor from "vditor";
-import { book, note, topic } from "../../api/models";
+import { book, note, topic } from "./api/models";
 export interface ProviderContext {
   book: book | null;
   setBook: React.Dispatch<React.SetStateAction<book | null>>;
