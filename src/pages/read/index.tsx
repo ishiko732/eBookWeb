@@ -93,12 +93,7 @@ const ReadControl = (props: any) => {
   });
 
   return (
-    <RequiredRole
-      user={user}
-      requireRole={[role.SUPERADMIN]}
-      status={status}
-      setStatus={setStatus}
-    >
+    <RequiredRole user={user} status={status} setStatus={setStatus}>
       <React.Fragment>
         <CssBaseline />
         <LeftBar alway_children={true}>

@@ -98,7 +98,7 @@ export const routes = (props: any): route[] => {
         },
         {
           path: "review",
-          element: <ReviewHome/>,
+          element: <ReviewHome />,
         },
       ],
     },
