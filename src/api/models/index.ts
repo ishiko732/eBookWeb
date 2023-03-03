@@ -206,7 +206,7 @@ export interface card {
   scheduled_days: number;
   reps: number;
   lapses: number;
-  state: State;
+  state: State | string;
   last_review?: string;
   note: note;
 }

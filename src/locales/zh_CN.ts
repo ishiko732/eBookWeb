@@ -291,6 +291,26 @@ const customChineseMessages = {
     cancel: "取消",
     save: "保存",
   },
+  fsrs: {
+    config: "FSRS 调度配置",
+    request_retention: "记忆概率",
+    request_retention_full:
+      "代表你想要的目标记忆的概率。注意，在较高的保留率和较高的重复次数之间有一个权衡。建议你把这个值设置在0.8和0.9之间。",
+    enable_fuzz: "启用抖动",
+    enable_fuzz_full:
+      "当启用时，这将为新的间隔时间增加一个小的随机延迟，以防止卡片粘在一起，总是在同一天被审查。",
+    on: "开启",
+    off: "关闭",
+    maximum_interval: "最大间隔天数",
+    maximum_interval_full: "重复的最大间隔天数。",
+    easy_bonus: "简单系数",
+    easy_bonus_full: `当复习卡被回答为 "容易"时，会有一个额外的乘数应用于间隔时间。`,
+    hard_factor: "困难系数",
+    hard_factor_full: `当复习卡被回答为 "困难"时，会有一个额外的乘数应用于间隔时间。`,
+    w: "FSRS优化器权重",
+    w_full:
+      "通过运行FSRS优化器创建的权重。默认情况下，这些是由样本数据集计算出来的权重。即将推出。你将能够通过FSRS优化器运行你的重复历史来创建适应你自己的知识库的权重",
+  },
 };
 
 export default customChineseMessages;
