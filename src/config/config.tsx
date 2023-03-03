@@ -29,6 +29,7 @@ import { role, userStatus } from "../api/entity/auth";
 import ReadControl from "../pages/read";
 import PDFBrowse from "../pages/viewer/PDFBrowse";
 import BrowseShareBook from "../pages/browse";
+import ReviewHome from "../pages/review/inedx";
 
 // import PDFViewRangeBorwse from "../pages/pdf/PDFViewRangeBorwse";
 export interface route {
@@ -96,8 +97,8 @@ export const routes = (props: any): route[] => {
           element: <ReadControl {...props} />,
         },
         {
-          path: "note",
-          element: <MyHome {...props} />,
+          path: "review",
+          element: <ReviewHome/>,
         },
       ],
     },
@@ -190,7 +191,7 @@ export const menus = (r: role): ListBarData[] => {
       {
         icon: <EventNoteIcon sx={{ color: "#3f51b5" }} />,
         label: "menu.Browse-Notes",
-        link: "note",
+        link: "review",
       },
     ],
   });
