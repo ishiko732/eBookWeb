@@ -111,8 +111,8 @@ const App = () => {
         anchorOrigin={defaultSnackBarAnchorOrigin}
       >
         <UserContext.Provider value={value}>
-          <SwipeableDrawerProvider>
-            <ReadProvider>
+          <ReadProvider>
+            <SwipeableDrawerProvider>
               <Routes>
                 {rotuerViews(
                   routes({
@@ -129,8 +129,8 @@ const App = () => {
                   })
                 )}
               </Routes>
-            </ReadProvider>
-          </SwipeableDrawerProvider>
+            </SwipeableDrawerProvider>
+          </ReadProvider>
         </UserContext.Provider>
       </SnackbarProvider>
     </BrowserRouter>

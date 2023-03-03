@@ -1,7 +1,8 @@
 import React from "react";
 import { createContext, useContext } from "react";
 import Vditor from "vditor";
-import { book, note, topic } from "./api/models";
+import { generatorParameters } from "./algorithm/fsrs/models";
+import { book, card, fsrsParameter, note, topic } from "./api/models";
 export interface ProviderContext {
   book: book | null;
   setBook: React.Dispatch<React.SetStateAction<book | null>>;
@@ -13,6 +14,10 @@ export interface ProviderContext {
   setVd: React.Dispatch<React.SetStateAction<Vditor | undefined>>;
   notes: note[];
   setNotes: React.Dispatch<React.SetStateAction<note[]>>;
+  cards: card[];
+  setCards: React.Dispatch<React.SetStateAction<card[]>>;
+  parameter: fsrsParameter;
+  setParameter: React.Dispatch<React.SetStateAction<fsrsParameter>>;
 }
 
 // @ts-ignore
@@ -28,6 +33,13 @@ export const ReadProvider = (props: { children: JSX.Element }) => {
   const [topicIndex, setTopicIndex] = React.useState(0);
   const [vd, setVd] = React.useState<Vditor>();
   const [notes, setNotes] = React.useState<note[]>([]);
+  const [cards, setCards] = React.useState<card[]>([]);
+  const [parameter, setParameter] = React.useState<fsrsParameter>({
+    ...generatorParameters(),
+    uid: 0,
+    createdAt: 0,
+    updateAt: 0,
+  });
 
   const value = {
     book,
@@ -40,6 +52,10 @@ export const ReadProvider = (props: { children: JSX.Element }) => {
     setVd,
     notes,
     setNotes,
+    cards,
+    setCards,
+    parameter,
+    setParameter,
   };
 
   return (
