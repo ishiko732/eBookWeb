@@ -1,22 +1,20 @@
 import {
+  Button,
   Divider,
   InputBaseComponentProps,
   Paper,
   Stack,
   Switch,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { createCard, FSRS } from "../../algorithm/fsrs/fsrs";
 import {
   generatorParameters,
   Parameters,
   Rating,
-  SchedulingLog,
   State,
-  Card,
-  ReviewLog,
 } from "../../algorithm/fsrs/models";
 import { useSwipeableDrawerContext } from "../../components/PositionSwipeableDrawer";
 import Title from "../../components/Title";
@@ -31,7 +29,15 @@ import StepConnector, {
   stepConnectorClasses,
 } from "@mui/material/StepConnector";
 import { StepIconProps } from "@mui/material/StepIcon";
-import dayjs from "dayjs";
+import {
+  example,
+  generatorExample1,
+  generatorExample2,
+  generatorExample3,
+  generatorExample4,
+} from "../../algorithm/fsrs/example";
+import { FSRS_Version } from "../../algorithm/fsrs";
+import { updateParameter } from "../../api/fsrs";
 
 interface configField {
   label: string;
@@ -44,16 +50,12 @@ interface configField {
   props?: InputBaseComponentProps | undefined;
 }
 
-interface example {
-  card: Card;
-  log: ReviewLog;
-}
-
 const FSRSConfig = () => {
-  const { setWidth } = useSwipeableDrawerContext();
+  const { setWidth, setOpen } = useSwipeableDrawerContext();
   setWidth(document.body.clientWidth * 0.7);
   const { t } = useUserContext();
-  const { parameter } = useReadContext();
+  const { parameter, setParameter } = useReadContext();
+  const { user } = useUserContext();
   const [request_retention, set_request_retention] = useState<number>(0.9);
   const [maximum_interval, set_maximum_interval] = useState<number>(36500);
   const [easy_bonus, set_easy_bonus] = useState<number>(1.3);
@@ -72,74 +74,34 @@ const FSRSConfig = () => {
     set_hard_factor(fsrsParameter.hard_factor);
     set_w(fsrsParameter.w);
     set_enable_fuzz(fsrsParameter.enable_fuzz);
+    setExample1(generatorExample1(fsrsParameter));
+    setExample2(generatorExample2(fsrsParameter));
+    setExample3(generatorExample3(fsrsParameter));
+    setExample4(generatorExample4(fsrsParameter));
   };
-  //   useEffect(()=>{
-  //     const fsrsParameter = generatorParameters({
-  //         request_retention:request_retention,
-  //         maximum_interval:maximum_interval,
-  //         easy_bonus:easy_bonus,
-  //         hard_factor:hard_factor,
-  //         w:w,
-  //         enable_fuzz:enable_fuzz
-  //     });
-  //     handleSet(fsrsParameter);
-  //     setExample1( generatorExample1(fsrsParameter))
-
-  //   },[easy_bonus, enable_fuzz, hard_factor, maximum_interval, request_retention, w])
+  useEffect(() => {
+    const fsrsParameter = generatorParameters({
+      request_retention: request_retention,
+      maximum_interval: maximum_interval,
+      easy_bonus: easy_bonus,
+      hard_factor: hard_factor,
+      w: w,
+      enable_fuzz: enable_fuzz,
+    });
+    handleSet(fsrsParameter);
+  }, [
+    easy_bonus,
+    enable_fuzz,
+    hard_factor,
+    maximum_interval,
+    request_retention,
+    w,
+  ]);
 
   useEffect(() => {
     const fsrsParameter = generatorParameters({ ...parameter });
     handleSet(fsrsParameter);
-    setExample1(generatorExample1(fsrsParameter));
   }, [parameter]);
-
-  const generatorExample1 = (fsrsParameter: Parameters): example[] => {
-    // new -> again -> hard->good->easy->easy->again->good->hard
-    const fsrs = new FSRS(fsrsParameter);
-    const newCard = createCard();
-    let card = newCard;
-    let now = dayjs();
-    let scheduling_cards = fsrs.repeat(card, now);
-    const again = scheduling_cards[Rating.Again];
-
-    card = again.card;
-    now = card.due;
-    scheduling_cards = fsrs.repeat(card, now);
-    const hard = scheduling_cards[Rating.Hard];
-
-    card = hard.card;
-    now = card.due;
-    scheduling_cards = fsrs.repeat(card, now);
-    const good = scheduling_cards[Rating.Good];
-
-    card = good.card;
-    now = card.due;
-    scheduling_cards = fsrs.repeat(card, now);
-    const easy1 = scheduling_cards[Rating.Easy];
-
-    card = easy1.card;
-    now = card.due;
-    scheduling_cards = fsrs.repeat(card, now);
-    const easy2 = scheduling_cards[Rating.Easy];
-
-    card = easy2.card;
-    now = card.due;
-    scheduling_cards = fsrs.repeat(card, now);
-    const again2 = scheduling_cards[Rating.Again];
-
-    card = again2.card;
-    now = card.due;
-    scheduling_cards = fsrs.repeat(card, now);
-    const good2 = scheduling_cards[Rating.Good];
-
-    card = good2.card;
-    now = card.due;
-    scheduling_cards = fsrs.repeat(card, now);
-    const hard2 = scheduling_cards[Rating.Hard];
-
-    const data = [again, hard, good, easy1, easy2, again2, good2, hard2];
-    return data;
-  };
 
   const ConfigFields: configField[] = [
     {
@@ -218,6 +180,47 @@ const FSRSConfig = () => {
     },
   ];
 
+  const handleButton = (op: "Reset" | "Cancel" | "Save") => {
+    switch (op) {
+      case "Reset":
+        setParameter({
+          uid: user.id,
+          ...generatorParameters(),
+          createdAt: 0,
+          updateAt: 0,
+        });
+        break;
+      case "Cancel":
+        setOpen(false);
+        break;
+      case "Save":
+        const fsrsParameter = generatorParameters({
+          request_retention: request_retention,
+          maximum_interval: maximum_interval,
+          easy_bonus: easy_bonus,
+          hard_factor: hard_factor,
+          w: w,
+          enable_fuzz: enable_fuzz,
+        });
+        updateParameter({
+          uid: user.id,
+          ...fsrsParameter,
+          createdAt: 0,
+          updateAt: 0,
+        })
+          .then((res) => {
+            console.log(res.data);
+            setParameter(res.data);
+            setOpen(false);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        break;
+      default:
+        break;
+    }
+  };
   return (
     <Stack
       direction="row"
@@ -230,23 +233,23 @@ const FSRSConfig = () => {
         enable_fuzz={enable_fuzz}
         set_enable_fuzz={set_enable_fuzz}
         ConfigFields={ConfigFields}
+        handleButton={handleButton}
       />
       <Paper elevation={0} sx={{ width: "70%" }}>
         <Stack
           direction="column"
           justifyContent="center"
           alignItems="center"
-          // width="60%"
           spacing={4}
         >
-          <Title>Example1</Title>
+          {example1.length > 0 && <Title>Example1</Title>}
           <CustomizedSteppers example={example1} />
-          <Title>Example2</Title>
-          <CustomizedSteppers example={example1} />
-          <Title>Example3</Title>
-          <CustomizedSteppers example={example1} />
-          <Title>Example4</Title>
-          <CustomizedSteppers example={example1} />
+          {example2.length > 0 && <Title>Example2</Title>}
+          <CustomizedSteppers example={example2} />
+          {example3.length > 0 && <Title>Example3</Title>}
+          <CustomizedSteppers example={example3} />
+          {example4.length > 0 && <Title>Example4</Title>}
+          <CustomizedSteppers example={example4} />
         </Stack>
       </Paper>
     </Stack>
@@ -260,16 +263,18 @@ const FSRSParameterConfig = ({
   enable_fuzz,
   set_enable_fuzz,
   ConfigFields,
+  handleButton,
 }: {
   t: TFunction<"translation", undefined, "translation">;
   enable_fuzz: boolean;
   set_enable_fuzz: React.Dispatch<React.SetStateAction<boolean>>;
   ConfigFields: configField[];
+  handleButton: (op: "Reset" | "Cancel" | "Save") => void;
 }) => {
   return (
     <Paper elevation={0} sx={{ width: "30%" }}>
       <Title>{t("fsrs.config")}</Title>
-      <Stack direction="column" spacing={2}>
+      <Stack direction="column" spacing={1}>
         {ConfigFields.map((field) => (
           <TextField
             type={field.type}
@@ -298,6 +303,38 @@ const FSRSParameterConfig = ({
         <Typography variant="caption" color={"rgba(0, 0, 0, 0.6)"}>
           {t("fsrs.enable_fuzz_full")}
         </Typography>
+      </Stack>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        spacing={2}
+      >
+        {/* <Button variant="outlined">Update</Button> */}
+        <Button
+          variant="outlined"
+          onClick={() => {
+            handleButton("Cancel");
+          }}
+        >
+          Cancel
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            handleButton("Reset");
+          }}
+        >
+          Rest
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            handleButton("Save");
+          }}
+        >
+          SAVE
+        </Button>
       </Stack>
     </Paper>
   );
@@ -360,7 +397,6 @@ function QontoStepIcon(props: StepIconProps) {
 }
 
 function CustomizedSteppers({ example }: { example: example[] }) {
-  console.log(example);
   return (
     <Stack sx={{ width: "100%" }} spacing={4}>
       <Stepper
@@ -371,14 +407,25 @@ function CustomizedSteppers({ example }: { example: example[] }) {
         {example.map((step, index) => {
           return (
             <Step key={`${index}-${State[step.log.state]}`}>
-              <StepLabel
-                StepIconComponent={QontoStepIcon}
-                optional={Rating[step.log.rating]}
+              <Tooltip
+                title={
+                  <div>
+                    <div>{`S:${step.card.stability.toFixed(2)}`}</div>
+                    <div>{`D:${step.card.difficulty.toFixed(2)}`}</div>
+                    <div>{`V:${FSRS_Version}`}</div>
+                  </div>
+                }
               >
-                {step.card.due.diff(step.card.last_review, "day") !== 0
-                  ? step.card.due.diff(step.card.last_review, "day") + `day`
-                  : step.card.due.diff(step.card.last_review, "minute") + "min"}
-              </StepLabel>
+                <StepLabel
+                  StepIconComponent={QontoStepIcon}
+                  optional={Rating[step.log.rating]}
+                >
+                  {step.card.due.diff(step.card.last_review, "day") !== 0
+                    ? step.card.due.diff(step.card.last_review, "day") + `day`
+                    : step.card.due.diff(step.card.last_review, "minute") +
+                      "min"}
+                </StepLabel>
+              </Tooltip>
             </Step>
           );
         })}
