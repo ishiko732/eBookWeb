@@ -162,7 +162,6 @@ export class FSRS {
     ivl = Math.round(ivl);
     const min_ivl = Math.max(2, Math.round(ivl * 0.95 - 1));
     const max_ivl = Math.round(ivl * 1.05 + 1);
-    console.log(ivl, min_ivl, max_ivl, fuzz_factor);
     return Math.floor(fuzz_factor * (max_ivl - min_ivl + 1) + min_ivl);
   }
 
