@@ -1,4 +1,4 @@
-import { Card, Parameters, Rating, State } from "./models";
+import { Card, generatorParameters, Parameters, Rating, State } from "./models";
 import dayjs from "dayjs";
 import { SchedulingCard } from "./Scheduler";
 import seedrandom from "seedrandom";
@@ -22,7 +22,7 @@ export class FSRS {
   private seed: string;
 
   constructor(param?: Parameters) {
-    this.param = param || new Parameters();
+    this.param = param || generatorParameters();
     this.intervalModifier =
       Math.log(this.param.request_retention) / Math.log(0.9);
     this.seed = "";
