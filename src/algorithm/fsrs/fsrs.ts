@@ -29,6 +29,10 @@ export class FSRS {
   }
 
   repeat = (card: Card, now: dayjs.Dayjs) => {
+    card = {
+      ...card,
+    };
+    now = now.clone();
     card.elapsed_days =
       card.state === State.New ? 0 : now.diff(card.last_review, "days"); //相距时间
     card.last_review = now; // 上次复习时间
