@@ -75,8 +75,8 @@ interface ProviderContext {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   anchorEl: HTMLButtonElement | null;
   setAnchorEl: React.Dispatch<React.SetStateAction<HTMLButtonElement | null>>;
-  width: number;
-  setWidth: React.Dispatch<React.SetStateAction<number>>;
+  width: string | number;
+  setWidth: React.Dispatch<React.SetStateAction<string | number>>;
   drawerContent: JSX.Element | undefined;
   setDrawerContent: React.Dispatch<
     React.SetStateAction<JSX.Element | undefined>
@@ -95,7 +95,7 @@ export const SwipeableDrawerProvider = (props: { children: JSX.Element }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
-  const [width, setWidth] = React.useState(250);
+  const [width, setWidth] = React.useState<string | number>(250);
   const [drawerContent, setDrawerContent] = React.useState<JSX.Element>();
   const value = {
     position,
