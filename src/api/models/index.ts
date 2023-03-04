@@ -224,7 +224,7 @@ export interface updateCardVo {
 }
 
 export interface reviewLog {
-  id: string;
+  id?: string;
 }
 
 export interface reviewLog {

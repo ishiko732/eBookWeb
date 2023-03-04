@@ -61,3 +61,6 @@ export const queryCards = (vo: queryCardsVo) =>
 
 export const queryCardLog = (vo: queryCardVo) =>
   request.get(`fsrs/log`, { params: vo });
+
+export const deleteCardLog = (logId: string) =>
+  request.delete(`fsrs/log`, { params: logId });
