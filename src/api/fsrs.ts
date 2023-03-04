@@ -4,6 +4,7 @@ import {
   fsrsParameter,
   queryCardsVo,
   queryCardVo,
+  queryLogVo,
   updateCardVo,
 } from "./models";
 
@@ -59,7 +60,7 @@ export const deleteCard = (vo: queryCardVo) =>
 export const queryCards = (vo: queryCardsVo) =>
   request.get(`fsrs/cards`, { params: vo });
 
-export const queryCardLog = (vo: queryCardVo) =>
+export const queryCardLog = (vo: queryLogVo) =>
   request.get(`fsrs/log`, { params: vo });
 
 export const deleteCardLog = (logId: string) =>

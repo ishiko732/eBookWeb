@@ -232,7 +232,7 @@ export interface reviewLog {
   state: State;
   elapsed_days: number;
   scheduled_days: number;
-  review: string;
+  review: string | number;
 }
 
 export interface queryCardsVo {
@@ -242,4 +242,9 @@ export interface queryCardsVo {
   beforeTime?: string;
   start?: string;
   end?: string;
+}
+
+export interface queryLogVo {
+  cid: string;
+  type: number;
 }
