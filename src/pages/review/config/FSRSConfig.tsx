@@ -48,10 +48,11 @@ interface configField {
   ) => void;
   message?: string;
   props?: InputBaseComponentProps | undefined;
+  error?: boolean;
 }
 
 const FSRSConfig = () => {
-  const { setWidth, setOpen } = useSwipeableDrawerContext();
+  const { setWidth, setOpen, open } = useSwipeableDrawerContext();
   setWidth(document.body.clientWidth * 0.7);
   const { t } = useUserContext();
   const { parameter, setParameter } = useReadContext();
@@ -61,6 +62,8 @@ const FSRSConfig = () => {
   const [easy_bonus, set_easy_bonus] = useState<number>(1.3);
   const [hard_factor, set_hard_factor] = useState<number>(1.2);
   const [w, set_w] = useState<number[]>([]);
+  const [w_text, set_w_text] = useState("");
+  const [w_error, set_w_error] = useState(false);
   const [enable_fuzz, set_enable_fuzz] = useState(false);
   const [example1, setExample1] = useState<example[]>([]);
   const [example2, setExample2] = useState<example[]>([]);
@@ -73,6 +76,8 @@ const FSRSConfig = () => {
     set_easy_bonus(fsrsParameter.easy_bonus);
     set_hard_factor(fsrsParameter.hard_factor);
     set_w(fsrsParameter.w);
+    set_w_text(`[${fsrsParameter.w.join(",")}]`);
+    set_w_error(false);
     set_enable_fuzz(fsrsParameter.enable_fuzz);
     setExample1(generatorExample1(fsrsParameter));
     setExample2(generatorExample2(fsrsParameter));
@@ -99,9 +104,10 @@ const FSRSConfig = () => {
   ]);
 
   useEffect(() => {
+    if (!open) return;
     const fsrsParameter = generatorParameters({ ...parameter });
     handleSet(fsrsParameter);
-  }, [parameter]);
+  }, [parameter, open]);
 
   const ConfigFields: configField[] = [
     {
@@ -115,7 +121,7 @@ const FSRSConfig = () => {
       },
       message: t("fsrs.request_retention_full") as string,
       props: {
-        step: "0.1",
+        step: "0.01",
         max: 1,
         min: 0,
       },
@@ -163,20 +169,28 @@ const FSRSConfig = () => {
     },
     {
       label: t("fsrs.w"),
-      value: `[${w}]`,
+      value: w_text,
       type: "text",
       handleChangle: (
         event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
       ) => {
+        set_w_text(event.target.value);
         const new_w = event.target.value
           .replaceAll("，", ",")
           .replaceAll("[", "")
           .replaceAll("]", "")
+          .replaceAll(";", "")
           .split(",")
           .map((v) => Number(v));
-        set_w(new_w);
+        if (new_w.length === 13) {
+          set_w(new_w);
+          set_w_error(false);
+        } else {
+          set_w_error(true);
+        }
       },
       message: t("fsrs.w_full") as string,
+      error: w_error,
     },
   ];
 
@@ -284,6 +298,7 @@ const FSRSParameterConfig = ({
             value={field.value}
             onChange={field.handleChangle}
             helperText={field.message}
+            error={field.error}
           />
         ))}
         <Stack
