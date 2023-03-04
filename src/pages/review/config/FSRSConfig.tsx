@@ -15,11 +15,11 @@ import {
   Parameters,
   Rating,
   State,
-} from "../../algorithm/fsrs/models";
-import { useSwipeableDrawerContext } from "../../components/PositionSwipeableDrawer";
-import Title from "../../components/Title";
-import { useReadContext } from "../../ReadContext";
-import { useUserContext } from "../../UserContext";
+} from "../../../algorithm/fsrs/models";
+import { useSwipeableDrawerContext } from "../../../components/PositionSwipeableDrawer";
+import Title from "../../../components/Title";
+import { useReadContext } from "../../../ReadContext";
+import { useUserContext } from "../../../UserContext";
 import { TFunction } from "i18next";
 import { styled } from "@mui/material/styles";
 import Stepper from "@mui/material/Stepper";
@@ -35,9 +35,9 @@ import {
   generatorExample2,
   generatorExample3,
   generatorExample4,
-} from "../../algorithm/fsrs/example";
-import { FSRS_Version } from "../../algorithm/fsrs";
-import { updateParameter } from "../../api/fsrs";
+} from "../../../algorithm/fsrs/example";
+import { FSRS_Version } from "../../../algorithm/fsrs";
+import { updateParameter } from "../../../api/fsrs";
 
 interface configField {
   label: string;

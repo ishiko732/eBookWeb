@@ -5,10 +5,10 @@ import PermDataSettingOutlinedIcon from "@mui/icons-material/PermDataSettingOutl
 import AnimationSharpIcon from "@mui/icons-material/AnimationSharp";
 // import AddIcon from "@mui/icons-material/Add";
 import GetAppIcon from "@mui/icons-material/GetApp";
-import { useSwipeableDrawerContext } from "../../components/PositionSwipeableDrawer";
+import { useSwipeableDrawerContext } from "../../../components/PositionSwipeableDrawer";
 import FSRSConfig from "./FSRSConfig";
 import useExportCards from "./ExportCards";
-import { useUserContext } from "../../UserContext";
+import { useUserContext } from "../../../UserContext";
 const ReviewConfig = () => {
   const [openDial, setOpenDial] = React.useState(false);
   const handleOpen = () => setOpenDial(true);

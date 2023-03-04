@@ -1,5 +1,5 @@
-import { note, User } from "../../api/models";
-import { noteFieldSplitCode, queryNotes } from "../../api/note";
+import { note, User } from "../../../api/models";
+import { noteFieldSplitCode, queryNotes } from "../../../api/note";
 
 const useExportCards = (user: User) => {
   return queryNotes({

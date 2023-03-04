@@ -6,7 +6,7 @@ import { queryCards, queryParameter } from "../../api/fsrs";
 import RequiredRole from "../../config/requiredRole";
 import { useReadContext } from "../../ReadContext";
 import { useUserContext } from "../../UserContext";
-import ReviewConfig from "./ReviewConfig";
+import ReviewConfig from "./config/ReviewConfig";
 
 const ReviewHome = () => {
   const { cards, setCards, setParameter } = useReadContext();
