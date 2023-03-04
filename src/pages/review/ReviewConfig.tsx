@@ -3,27 +3,30 @@ import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import PermDataSettingOutlinedIcon from "@mui/icons-material/PermDataSettingOutlined";
 import AnimationSharpIcon from "@mui/icons-material/AnimationSharp";
-import AddIcon from "@mui/icons-material/Add";
+// import AddIcon from "@mui/icons-material/Add";
+import GetAppIcon from "@mui/icons-material/GetApp";
 import { useSwipeableDrawerContext } from "../../components/PositionSwipeableDrawer";
 import FSRSConfig from "./FSRSConfig";
-const actions = [
-  {
-    icon: <PermDataSettingOutlinedIcon />,
-    name: "FSRSConfig",
-    JSX: <FSRSConfig />,
-  },
-  {
-    icon: <AddIcon />,
-    name: "add Card",
-  },
-];
+import useExportCards from "./ExportCards";
+import { useUserContext } from "../../UserContext";
 const ReviewConfig = () => {
   const [openDial, setOpenDial] = React.useState(false);
   const handleOpen = () => setOpenDial(true);
   const handleClose = () => setOpenDial(false);
-  const { open, setOpen, setDrawerContent, setWidth, setPostion } =
-    useSwipeableDrawerContext();
-
+  const { user } = useUserContext();
+  const { setOpen, setDrawerContent, setPostion } = useSwipeableDrawerContext();
+  const actions = [
+    {
+      icon: <PermDataSettingOutlinedIcon />,
+      name: "FSRSConfig",
+      JSX: <FSRSConfig />,
+    },
+    {
+      icon: <GetAppIcon />,
+      name: "Export",
+      use: useExportCards,
+    },
+  ];
   return (
     <SpeedDial
       ariaLabel="review config speed dial"
@@ -43,8 +46,9 @@ const ReviewConfig = () => {
             if (action.JSX) {
               setDrawerContent(action.JSX);
               setPostion("right");
-              // setWidth("500px")
               setOpen(true);
+            } else if (action.use) {
+              action.use(user);
             }
           }}
         />
