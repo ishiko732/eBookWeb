@@ -1,5 +1,6 @@
 import { Dayjs } from "dayjs";
 
+export type StateType = "Learning" | "New" | "Review" | "Relearning";
 export enum State {
   New,
   Learning,
