@@ -1,5 +1,3 @@
-import { styled } from "@mui/material/styles";
-import { Stack, Paper, Chip, Typography } from "@mui/material";
 import { Fragment, useEffect, useState } from "react";
 import { State } from "../../algorithm/fsrs/models";
 import { queryCards, queryParameter } from "../../api/fsrs";
@@ -9,15 +7,14 @@ import { useUserContext } from "../../UserContext";
 import ReviewConfig from "./config/ReviewConfig";
 import { card } from "../../api/models";
 import dayjs from "dayjs";
-import Title from "../../components/Title";
 import ViewCardMessagePage from "./ViewCardMessagePage";
-import LearingPage from "./LearingPage";
+import LearningPage from "./LearningPage";
 
 const ReviewHome = () => {
   const { cards, setCards, setParameter } = useReadContext();
   const [status, setStatus] = useState(false);
   const [newCard, setNewCard] = useState<card[]>([]);
-  const [learingCard, setLearingCard] = useState<card[]>([]);
+  const [learningCard, setLearningCard] = useState<card[]>([]);
   const [reviewCard, setReviewCard] = useState<card[]>([]);
   const [openCard, setOpenCard] = useState(false);
 
@@ -54,7 +51,7 @@ const ReviewHome = () => {
               break;
           }
           setNewCard(_new.sort((a, b) => Number(a.due) - Number(b.due)));
-          setLearingCard(
+          setLearningCard(
             _learing.sort((a, b) => Number(a.due) - Number(b.due))
           );
           setReviewCard(_review.sort((a, b) => Number(a.due) - Number(b.due)));
@@ -68,9 +65,9 @@ const ReviewHome = () => {
       <Fragment>
         <ReviewConfig />
         {openCard ? (
-          <LearingPage
+          <LearningPage
             newCard={newCard}
-            learingCard={learingCard}
+            learningCard={learningCard}
             reviewCard={reviewCard}
             setOpen={setOpenCard}
             setCards={setCards}
@@ -78,7 +75,7 @@ const ReviewHome = () => {
         ) : (
           <ViewCardMessagePage
             newCard={newCard}
-            learingCard={learingCard}
+            learningCard={learningCard}
             reviewCard={reviewCard}
             setOpen={setOpenCard}
           />

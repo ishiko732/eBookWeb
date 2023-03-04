@@ -315,8 +315,8 @@ const customChineseMessages = {
   card: {
     title: "FSRS间隔重复记忆系统",
     new: "未学习",
-    learing: "学习中",
-    relearing: "重新学习",
+    learning: "学习中",
+    relearning: "重新学习",
     review: "待复习",
     again: "重新学习",
     hard: "困难",
@@ -339,6 +339,18 @@ const customChineseMessages = {
       Hard: "warning",
       Good: "success",
       Easy: "info",
+    },
+    State_color: {
+      New: "inherit",
+      Learning: "info",
+      Relearning: "error",
+      Review: "success",
+    },
+    log: {
+      review_day: "复习日期",
+      state: "状态",
+      rating: "评分",
+      scheduled_day: "间隔天数",
     },
   },
 };

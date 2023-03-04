@@ -5,11 +5,11 @@ import { useUserContext } from "../../UserContext";
 
 const ViewCardMessagePage = (props: {
   newCard: card[];
-  learingCard: card[];
+  learningCard: card[];
   reviewCard: card[];
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const { newCard, learingCard, reviewCard, setOpen } = props;
+  const { newCard, learningCard, reviewCard, setOpen } = props;
   const { t } = useUserContext();
 
   return (
@@ -53,8 +53,8 @@ const ViewCardMessagePage = (props: {
               alignItems="center"
               spacing={2}
             >
-              <Typography>{`${t("card.learing")}`}</Typography>
-              <Chip color="error" label={learingCard.length} />
+              <Typography>{`${t("card.learning")}`}</Typography>
+              <Chip color="error" label={learningCard.length} />
             </Stack>
             <Stack
               direction="row"

@@ -1,6 +1,6 @@
-import { Paper, Stack, Typography, Chip, Button } from "@mui/material";
+import { Paper, Stack, Typography, Button } from "@mui/material";
 import dayjs from "dayjs";
-import { createRef, Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import seedrandom from "seedrandom";
 import {
   FSRS,
@@ -10,22 +10,23 @@ import {
   Card,
   ReviewLog,
 } from "../../algorithm/fsrs";
-import { deleteCardLog, updateCard } from "../../api/fsrs";
+import { deleteCardLog, queryCardLog, updateCard } from "../../api/fsrs";
 import { card, cardVo, fsrsParameter, note, reviewLog } from "../../api/models";
 import { noteFieldSplitCode } from "../../api/note";
-import Title from "../../components/Title";
+import { useSwipeableDrawerContext } from "../../components/PositionSwipeableDrawer";
 import { useReadContext } from "../../ReadContext";
 import { useUserContext } from "../../UserContext";
-import { fetchMockData, timer } from "../../utils/sleep";
+import { fetchMockData } from "../../utils/sleep";
+import ReviewLogContent from "./ReviewLogContent";
 
-const LearingPage = (props: {
+const LearningPage = (props: {
   newCard: card[];
-  learingCard: card[];
+  learningCard: card[];
   reviewCard: card[];
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setCards: React.Dispatch<React.SetStateAction<card[]>>;
 }) => {
-  const { newCard, learingCard, reviewCard, setOpen, setCards } = props;
+  const { newCard, learningCard, reviewCard, setOpen, setCards } = props;
   const { parameter } = useReadContext();
   const [queueCard, setQueCard] = useState<card[]>([]);
   const [show, setShow] = useState(false);
@@ -47,8 +48,9 @@ const LearingPage = (props: {
       queueCard.push(...reviewCard);
       queueCard.sort(() => generator() - 0.5);
       //优先插入learing在前面
-      queueCard.unshift(...learingCard);
+      queueCard.unshift(...learningCard);
       setcurrentCard(queueCard.shift());
+      setDone(queueCard.length === 0);
       return queueCard;
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -67,7 +69,6 @@ const LearingPage = (props: {
             setWaitCard((pre) => pre.filter((id) => id !== repeal_log.card.id));
           }
           if (repeal_log && repeal_log.log.id) {
-            debugger;
             deleteCardLog(repeal_log.log.id);
             done && setDone(false);
             currentCard &&
@@ -79,7 +80,10 @@ const LearingPage = (props: {
             setcurrentCard(repeal_log.card);
           }
         }
-        debugger;
+      } else if (" " === event.key.toLocaleLowerCase()) {
+        event.preventDefault();
+        !show && setShow(true);
+        console.log(event.ctrlKey, event.metaKey, event.key);
       }
     };
     window.addEventListener("keydown", repeal);
@@ -89,18 +93,26 @@ const LearingPage = (props: {
   });
 
   const handleRecovery = (data: card) => {
-    if (waitCard.indexOf(data.id) !== -1) {
-      setQueCard((pre) => {
-        const newdata = [...pre];
-        newdata.push(data);
+    setWaitCard((pre) => {
+      console.log(pre, data);
+      const newdata = pre.filter((id) => id !== data.id);
+      if (pre.length !== newdata.length) {
+        setQueCard((pre) => {
+          const newdata = [...pre];
+          if (newdata.length === 0) {
+            newdata.push(data);
+            setcurrentCard(newdata.shift());
+          } else {
+            newdata.splice(0, 0, data);
+          }
+          console.log("滞后回复数据", data, newdata);
+          return newdata;
+        });
+        setDone((preDone) => (preDone ? false : preDone));
         return newdata;
-      });
-      setWaitCard((pre) => pre.filter((id) => id !== data.id));
-      debugger;
-      if (done) {
-        setDone(false);
       }
-    }
+      return pre;
+    });
   };
   const handleRate = (card: Card, rating: Rating, log: ReviewLog) => {
     const _card = card as unknown as card;
@@ -113,13 +125,11 @@ const LearingPage = (props: {
         newdata.push(_card.id);
         return newdata;
       });
-      console.log("等待滞后回复数据");
       fetchMockData(
         { ..._card },
         card.due.diff(card.last_review, "milliseconds")
       )
         .then((data: card) => {
-          console.log("滞后回复数据", data);
           handleRecovery(data);
         })
         .catch((err) => {
@@ -196,7 +206,7 @@ const LearingPage = (props: {
   );
 };
 
-export default LearingPage;
+export default LearningPage;
 
 const ShowAnswer = ({
   show,
@@ -214,6 +224,7 @@ const ShowAnswer = ({
   const { t } = useUserContext();
   const fsrsRef = useRef<FSRS>();
   const [schedulingLog, setSchedulingLog] = useState<SchedulingLog>();
+  const { setOpen, setDrawerContent } = useSwipeableDrawerContext();
   useEffect(() => {
     fsrsRef.current = new FSRS(parameter);
   }, [parameter]);
@@ -236,8 +247,71 @@ const ShowAnswer = ({
       dayjs()
     );
     setSchedulingLog(_log);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [show]);
+  }, [show, card, parameter]);
+  useEffect(() => {
+    const repeal = (event: KeyboardEvent) => {
+      if (!schedulingLog) {
+        return;
+      }
+      switch (event.key.toLocaleLowerCase()) {
+        case "1":
+          event.preventDefault();
+          handleRate(
+            schedulingLog[Rating.Again].card,
+            Rating.Again,
+            schedulingLog[Rating.Again].log
+          );
+          break;
+        case "2":
+          event.preventDefault();
+          handleRate(
+            schedulingLog[Rating.Hard].card,
+            Rating.Hard,
+            schedulingLog[Rating.Hard].log
+          );
+          break;
+        case "3":
+          event.preventDefault();
+          handleRate(
+            schedulingLog[Rating.Good].card,
+            Rating.Good,
+            schedulingLog[Rating.Good].log
+          );
+          break;
+        case "4":
+          event.preventDefault();
+          handleRate(
+            schedulingLog[Rating.Easy].card,
+            Rating.Easy,
+            schedulingLog[Rating.Easy].log
+          );
+          break;
+        case "i":
+          card &&
+            queryCardLog({
+              cid: card.id,
+              type: card.type,
+            })
+              .then((res) => {
+                setDrawerContent(
+                  <ReviewLogContent logs={res.data as reviewLog[]} />
+                );
+                setOpen(true);
+                console.log(res.data);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          break;
+        default:
+          break;
+      }
+    };
+    window.addEventListener("keydown", repeal);
+    return () => {
+      window.removeEventListener("keydown", repeal);
+    };
+  });
   if (!card) {
     return null;
   }
