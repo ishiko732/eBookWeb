@@ -1,5 +1,5 @@
 import { styled } from "@mui/material/styles";
-import { Stack, Paper } from "@mui/material";
+import { Stack, Paper, Chip, Typography } from "@mui/material";
 import { Fragment, useEffect, useState } from "react";
 import { State } from "../../algorithm/fsrs/models";
 import { queryCards, queryParameter } from "../../api/fsrs";
@@ -9,15 +9,17 @@ import { useUserContext } from "../../UserContext";
 import ReviewConfig from "./config/ReviewConfig";
 import { card } from "../../api/models";
 import dayjs from "dayjs";
+import Title from "../../components/Title";
+import ViewCardMessagePage from "./ViewCardMessagePage";
+import LearingPage from "./LearingPage";
 
 const ReviewHome = () => {
   const { cards, setCards, setParameter } = useReadContext();
-  const { t } = useUserContext();
-
   const [status, setStatus] = useState(false);
   const [newCard, setNewCard] = useState<card[]>([]);
   const [learingCard, setLearingCard] = useState<card[]>([]);
   const [reviewCard, setReviewCard] = useState<card[]>([]);
+  const [openCard, setOpenCard] = useState(false);
 
   const { user } = useUserContext();
   useEffect(() => {
@@ -65,24 +67,25 @@ const ReviewHome = () => {
     <RequiredRole user={user} status={status} setStatus={setStatus}>
       <Fragment>
         <ReviewConfig />
-        <Stack direction="column" spacing={2}>
-          <Item>{`${t("card.new")}:${newCard.length}-${JSON.stringify(
-            newCard
-          )}`}</Item>
-          <Item>{`${t("card.learing")}:${learingCard.length}`}</Item>
-          <Item>{`${t("card.review")}:${reviewCard.length}`}</Item>
-        </Stack>
+        {openCard ? (
+          <LearingPage
+            newCard={newCard}
+            learingCard={learingCard}
+            reviewCard={reviewCard}
+            setOpen={setOpenCard}
+            setCards={setCards}
+          />
+        ) : (
+          <ViewCardMessagePage
+            newCard={newCard}
+            learingCard={learingCard}
+            reviewCard={reviewCard}
+            setOpen={setOpenCard}
+          />
+        )}
       </Fragment>
     </RequiredRole>
   );
 };
 
 export default ReviewHome;
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
