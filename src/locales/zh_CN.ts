@@ -312,6 +312,16 @@ const customChineseMessages = {
     w_full:
       "通过运行FSRS优化器创建的权重。默认情况下，这些是由样本数据集计算出来的权重。",
   },
+  card: {
+    new: "新卡片",
+    learing: "学习中",
+    relearing: "重新学习",
+    review: "复习",
+    again: "重新学习",
+    hard: "困难",
+    good: "良好",
+    easy: "简单",
+  },
 };
 
 export default customChineseMessages;

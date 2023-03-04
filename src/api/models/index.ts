@@ -199,7 +199,7 @@ export interface card {
   type: number;
   createdAt: number;
   updateAt: number;
-  due: string;
+  due: number | string;
   stability: number;
   difficulty: number;
   elapsed_days: number;
@@ -207,7 +207,7 @@ export interface card {
   reps: number;
   lapses: number;
   state: State | string;
-  last_review?: string;
+  last_review?: number | string;
   note: note;
 }
 
