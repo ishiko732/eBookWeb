@@ -1,9 +1,8 @@
 import { Stack } from "@mui/material";
-import { Fragment, useEffect, useState } from "react";
+import { useState } from "react";
 import { file, topic } from "../../api/models";
 import AccordionItems, { AccordionItem } from "../../components/AccordionItems";
 import { Notes } from "./Notes";
-import { useReadContext } from "../../ReadContext";
 import Topic, { TopicTitle } from "./Topic";
 import { useUserContext } from "../../UserContext";
 

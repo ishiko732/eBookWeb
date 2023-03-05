@@ -82,6 +82,7 @@ const ExcerptTree = (props: {
     outline.length > 0 && arr.push(outlineAccordionItemsJSX);
     file && arr.push(selectTextJSX);
     setItems(arr);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [treeData, outline, file]);
 
   return <AccordionItems items={items} />;
