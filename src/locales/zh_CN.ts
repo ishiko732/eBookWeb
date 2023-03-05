@@ -255,6 +255,7 @@ const customChineseMessages = {
     Tip: "请谨慎操作,一旦{{type}}就无法恢复!",
     YES: "确定{{opt}}",
     NO: "取消",
+    search: "搜索...",
     opt: {
       Add: "创建",
       Delete: "删除",
@@ -279,6 +280,11 @@ const customChineseMessages = {
     read: "阅读",
     addBook: "添加到书库",
     downloadBook: "下载图书",
+    selectTexts: "选中文件区",
+    files: "资源",
+    outline: "大纲",
+    notes: "笔记",
+    topic: "主题",
   },
   topic: {
     default: "默认主题",

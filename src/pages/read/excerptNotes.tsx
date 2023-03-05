@@ -5,16 +5,18 @@ import AccordionItems, { AccordionItem } from "../../components/AccordionItems";
 import { Notes } from "./Notes";
 import { useReadContext } from "../../ReadContext";
 import Topic, { TopicTitle } from "./Topic";
+import { useUserContext } from "../../UserContext";
 
 const ExcerptNotes = (props: { file?: file | null; topic?: topic | null }) => {
   const { file } = props;
+  const { t } = useUserContext();
   const topicItem: AccordionItem = {
     title: <TopicTitle />,
     details: <Topic file={file} />,
     defaultExpanded: true,
   };
   const notesItem = {
-    title: "notes",
+    title: t("read.notes"),
     details: <Notes />,
     defaultExpanded: true,
   };

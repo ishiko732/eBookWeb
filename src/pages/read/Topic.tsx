@@ -20,6 +20,7 @@ import { t } from "i18next";
 export const TopicTitle = () => {
   const { topics, topicIndex, vd } = useReadContext();
   const [show, setShow] = useState(false);
+
   const handleCheck = useCallback(() => {
     if (topics.length <= topicIndex || !vd) {
       setShow(false);
@@ -39,7 +40,7 @@ export const TopicTitle = () => {
 
   return (
     <Stack direction="row" spacing={0}>
-      <Typography>Topic</Typography>
+      <Typography>{t("read.topic")}</Typography>
       {show && (
         <SvgIcon color="disabled">
           <FiberManualRecordRoundedIcon />

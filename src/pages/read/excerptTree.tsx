@@ -31,7 +31,7 @@ const ExcerptTree = (props: {
   const { resouceId, setResouceId, treeData, file, setFile, outline, textRef } =
     props;
   const [items, setItems] = React.useState<AccordionItem[]>([]);
-  const { user } = useUserContext();
+  const { user, t } = useUserContext();
   const handleSelectNode = (selectedFilesNode: TreeData[]) => {
     if (!selectedFilesNode) {
       return;
@@ -50,7 +50,7 @@ const ExcerptTree = (props: {
   };
 
   const selectTextJSX = {
-    title: "SelectTexts",
+    title: t("read.selectTexts") as string,
     details: (
       <SelectTextContent
         textRef={textRef}
@@ -61,7 +61,7 @@ const ExcerptTree = (props: {
   };
   useEffect(() => {
     const newFilesJSX: AccordionItem = {
-      title: "Files",
+      title: t("read.files") as string,
       details: (
         <FileTreeView
           data={treeData}
@@ -73,7 +73,7 @@ const ExcerptTree = (props: {
       defaultExpanded: props.outline.length === 0,
     };
     const outlineAccordionItemsJSX: AccordionItem = {
-      title: "Outline",
+      title: t("read.outline") as string,
       details: <OutlineItems outline={outline} />,
       defaultExpanded: outline.length > 0,
     };

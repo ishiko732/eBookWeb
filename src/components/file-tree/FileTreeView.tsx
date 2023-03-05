@@ -509,7 +509,11 @@ export default function FileTreeView({
         setData={setMessage}
         fid={parentId}
       />
-      <Search value={searchQuery} setValue={setSearchQuery} />
+      <Search
+        value={searchQuery}
+        setValue={setSearchQuery}
+        placeholder={t("TreeView.search") || undefined}
+      />
       <Divider />
       <div onContextMenu={handleContextMenu} style={{ cursor: "context-menu" }}>
         <ThemeProvider theme={getMuiTheme()}>

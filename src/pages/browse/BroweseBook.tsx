@@ -23,6 +23,7 @@ import { useSwipeableDrawerContext } from "../../components/PositionSwipeableDra
 import { BookContent } from "../../components/BookContent";
 import { CommentContent } from "../../components/comment-view";
 import { queryBook } from "./query";
+import { useUserContext } from "../../UserContext";
 
 const DrawerContent = ({
   item,
@@ -176,6 +177,7 @@ function Media(props: { books: shareBook[] }) {
 export default function BroweseBook(props: { books: shareBook[] }) {
   const [query, setQuery] = React.useState("");
   const [queryBooks, setBooks] = React.useState<shareBook[] | null>(null);
+  const { t } = useUserContext();
 
   const handleKeyUp = (
     event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -200,6 +202,7 @@ export default function BroweseBook(props: { books: shareBook[] }) {
               value={query}
               setValue={setQuery}
               handleKeyUp={handleKeyUp}
+              placeholder={t("TreeView.search") || undefined}
             />
           </Stack>
           <Divider />
