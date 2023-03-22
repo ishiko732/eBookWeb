@@ -427,7 +427,12 @@ function CustomizedSteppers({ example }: { example: example[] }) {
                   <div>
                     <div>{`S:${step.card.stability.toFixed(2)}`}</div>
                     <div>{`D:${step.card.difficulty.toFixed(2)}`}</div>
-                    <div>{`V:${FSRS_Version}`}</div>
+                    <div>{`R:${(
+                      Math.exp(
+                        (Math.log(0.9) * step.card.elapsed_days) /
+                          step.card.stability
+                      ) * 100
+                    ).toFixed(2)}%`}</div>
                   </div>
                 }
               >
