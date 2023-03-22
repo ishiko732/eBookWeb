@@ -52,8 +52,7 @@ export const TopicTitle = () => {
 
 const Topic = (props: { file?: file | null }) => {
   const { file } = props;
-  const { topics, setTopics, setTopicIndex, topicIndex, vd } =
-    useReadContext();
+  const { topics, setTopics, setTopicIndex, topicIndex, vd } = useReadContext();
   const [vditorJSX, setVditorJSX] = useState(<Fragment></Fragment>);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     if (topics.length === 0) {
@@ -73,7 +72,7 @@ const Topic = (props: { file?: file | null }) => {
         .catch((err) => {
           console.log(err);
         });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file]);
   useEffect(() => {
     setVditorJSX(() => {
