@@ -9,7 +9,7 @@ export default function Copyright(props: any) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="http://localhost:3000/">
+      <Link color="inherit" href="https://github.com/ishiko732">
         ishiko
       </Link>{" "}
       {"2022-"}
