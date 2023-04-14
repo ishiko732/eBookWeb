@@ -2,14 +2,7 @@ import { Paper, Stack, Typography, Button } from "@mui/material";
 import dayjs from "dayjs";
 import { Fragment, useEffect, useRef, useState } from "react";
 import seedrandom from "seedrandom";
-import {
-  FSRS,
-  Rating,
-  SchedulingLog,
-  State,
-  Card,
-  ReviewLog,
-} from "../../algorithm/fsrs";
+import { Card, Rating, ReviewLog, SchedulingLog, State, fsrs } from "ts-fsrs";
 import { deleteCardLog, queryCardLog, updateCard } from "../../api/fsrs";
 import { card, cardVo, fsrsParameter, note, reviewLog } from "../../api/models";
 import { noteFieldSplitCode } from "../../api/note";
@@ -18,6 +11,7 @@ import { useReadContext } from "../../ReadContext";
 import { useUserContext } from "../../UserContext";
 import { fetchMockData } from "../../utils/sleep";
 import ReviewLogContent from "./ReviewLogContent";
+import FSRS from "ts-fsrs/lib/fsrs";
 
 const LearningPage = (props: {
   newCard: card[];
@@ -40,9 +34,9 @@ const LearningPage = (props: {
   const [currentCard, setcurrentCard] = useState<card>();
   const [waitCard, setWaitCard] = useState<string[]>([]);
   useEffect(() => {
+    console.log(newCard, learningCard, reviewCard)
     const now_seed = dayjs().unix();
     const generator = seedrandom(String(now_seed));
-    setQueCard((pre) => {
       const queueCard: card[] = [];
       queueCard.push(...newCard);
       queueCard.push(...reviewCard);
@@ -50,11 +44,12 @@ const LearningPage = (props: {
       //优先插入learing在前面
       queueCard.unshift(...learningCard);
       setcurrentCard(queueCard.shift());
-      setDone(queueCard.length === 0);
-      return queueCard;
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      setDone(!currentCard);
+      setQueCard(queueCard)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setOpen]);
+
+
 
   useEffect(() => {
     const repeal = (event: KeyboardEvent) => {
@@ -226,7 +221,7 @@ const ShowAnswer = ({
   const [schedulingLog, setSchedulingLog] = useState<SchedulingLog>();
   const { setOpen, setDrawerContent } = useSwipeableDrawerContext();
   useEffect(() => {
-    fsrsRef.current = new FSRS(parameter);
+    fsrsRef.current = fsrs(parameter);
   }, [parameter]);
   useEffect(() => {
     if (!card || !show) {

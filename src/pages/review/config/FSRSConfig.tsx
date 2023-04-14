@@ -10,12 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import {
-  generatorParameters,
-  Parameters,
-  Rating,
-  State,
-} from "../../../algorithm/fsrs/models";
+
 import { useSwipeableDrawerContext } from "../../../components/PositionSwipeableDrawer";
 import Title from "../../../components/Title";
 import { useReadContext } from "../../../ReadContext";
@@ -36,8 +31,9 @@ import {
   generatorExample3,
   generatorExample4,
 } from "../../../algorithm/fsrs/example";
-import { FSRS_Version } from "../../../algorithm/fsrs";
+
 import { updateParameter } from "../../../api/fsrs";
+import { FSRSParameters, Rating, State, generatorParameters } from "ts-fsrs";
 
 interface configField {
   label: string;
@@ -70,7 +66,7 @@ const FSRSConfig = () => {
   const [example3, setExample3] = useState<example[]>([]);
   const [example4, setExample4] = useState<example[]>([]);
 
-  const handleSet = (fsrsParameter: Parameters) => {
+  const handleSet = (fsrsParameter: FSRSParameters) => {
     set_request_retention(fsrsParameter.request_retention);
     set_maximum_interval(fsrsParameter.maximum_interval);
     set_easy_bonus(fsrsParameter.easy_bonus);
