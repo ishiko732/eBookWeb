@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from "react";
-import { State } from "../../algorithm/fsrs/models";
+import { State } from "ts-fsrs";
 import { queryCards, queryParameter } from "../../api/fsrs";
 import RequiredRole from "../../config/requiredRole";
 import { useReadContext } from "../../ReadContext";

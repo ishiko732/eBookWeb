@@ -1,8 +1,8 @@
 import React from "react";
 import { createContext, useContext } from "react";
 import Vditor from "vditor";
-import { generatorParameters } from "./algorithm/fsrs/models";
 import { book, card, fsrsParameter, note, topic } from "./api/models";
+import { generatorParameters } from "ts-fsrs";
 export interface ProviderContext {
   book: book | null;
   setBook: React.Dispatch<React.SetStateAction<book | null>>;
