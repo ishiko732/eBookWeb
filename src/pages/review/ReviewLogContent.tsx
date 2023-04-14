@@ -16,7 +16,7 @@ import { Chip } from "@mui/material";
 const ReviewLogContent = ({ logs }: { logs: reviewLog[] }) => {
   const { setWidth } = useSwipeableDrawerContext();
   const { t } = useUserContext();
-  setWidth(document.body.clientWidth * 0.4);
+  setWidth(document.body.clientWidth * 0.6);
 
   return (
     <TableContainer component={Paper}>
@@ -45,17 +45,11 @@ const ReviewLogContent = ({ logs }: { logs: reviewLog[] }) => {
                       log.state as unknown as string
                     ).toLocaleLowerCase()}`
                   )}
-                  color={
-                    (t(`card.State_color.${log.state}`) as any) || undefined
-                  }
                 />
               </TableCell>
               <TableCell align="center">
                 <Chip
                   label={t(`card.Rating.${log.rating}`)}
-                  color={
-                    (t(`card.Rating_color.${log.rating}`) as any) || undefined
-                  }
                 />
               </TableCell>
               <TableCell align="center">
@@ -80,11 +74,3 @@ function createData(
 ) {
   return { name, calories, fat, carbs, protein };
 }
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
