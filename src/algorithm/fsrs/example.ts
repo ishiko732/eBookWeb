@@ -1,16 +1,16 @@
 import dayjs from "dayjs";
-import { FSRS, createCard } from "./fsrs";
-import { ReviewLog, Card, Parameters, Rating } from "./models";
+import { Card, FSRSParameters, Rating, ReviewLog, createEmptyCard } from "ts-fsrs";
+import FSRS from "ts-fsrs/lib/fsrs";
 
 export interface example {
   card: Card;
   log: ReviewLog;
 }
 
-export const generatorExample1 = (fsrsParameter: Parameters): example[] => {
+export const generatorExample1 = (fsrsParameter: FSRSParameters): example[] => {
   // new -> again -> hard->good->easy->easy->again->good->hard
   const fsrs = new FSRS(fsrsParameter);
-  const newCard = createCard();
+  const newCard = createEmptyCard();
   let card = newCard;
   let now = dayjs();
   let scheduling_cards = fsrs.repeat(card, now);
@@ -55,10 +55,10 @@ export const generatorExample1 = (fsrsParameter: Parameters): example[] => {
   return data;
 };
 
-export const generatorExample2 = (fsrsParameter: Parameters): example[] => {
+export const generatorExample2 = (fsrsParameter: FSRSParameters): example[] => {
   // new -> hard -> good->again->easy->easy->good->hard->hard
   const fsrs = new FSRS(fsrsParameter);
-  const newCard = createCard();
+  const newCard = createEmptyCard();
   let card = newCard;
   let now = dayjs();
   let scheduling_cards = fsrs.repeat(card, now);
@@ -103,10 +103,10 @@ export const generatorExample2 = (fsrsParameter: Parameters): example[] => {
   return data;
 };
 
-export const generatorExample3 = (fsrsParameter: Parameters): example[] => {
+export const generatorExample3 = (fsrsParameter: FSRSParameters): example[] => {
   // new -> good -> good->again->easy->hard->good->again->good
   const fsrs = new FSRS(fsrsParameter);
-  const newCard = createCard();
+  const newCard = createEmptyCard();
   let card = newCard;
   let now = dayjs();
   let scheduling_cards = fsrs.repeat(card, now);
@@ -151,10 +151,10 @@ export const generatorExample3 = (fsrsParameter: Parameters): example[] => {
   return data;
 };
 
-export const generatorExample4 = (fsrsParameter: Parameters): example[] => {
+export const generatorExample4 = (fsrsParameter: FSRSParameters): example[] => {
   // new -> easy -> good->again->easy->hard->good->hard->good
   const fsrs = new FSRS(fsrsParameter);
-  const newCard = createCard();
+  const newCard = createEmptyCard();
   let card = newCard;
   let now = dayjs();
   let scheduling_cards = fsrs.repeat(card, now);

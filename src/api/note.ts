@@ -1,4 +1,4 @@
-import { createCard as createCardEntity } from "../algorithm/fsrs/fsrs";
+
 import { createCard as createCardAPI } from "./fsrs";
 import request from "../config/request";
 import {
@@ -9,6 +9,7 @@ import {
   queryTopicsVo,
   topic,
 } from "./models";
+import { createEmptyCard } from "ts-fsrs";
 
 export const createTopic = (vo: createTopicVo) =>
   request({
@@ -50,7 +51,7 @@ export const createNote = (vo: createNoteVo) =>
     transformRequest: [(data) => JSON.stringify(data)],
   }).then((res) => {
     const note: note = res.data;
-    const entity = createCardEntity();
+    const entity = createEmptyCard();
     const cardVo = {
       ...entity,
       due: entity.due.format(),
