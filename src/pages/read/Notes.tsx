@@ -98,7 +98,7 @@ const Note = ({ note }: { note: note }) => {
           <ListItemText
             primary={
               commnet
-                ? `${commnet["text"]} ${note.sfld}` || note.sfld
+                ? `${note.sfld}(${commnet["text"]})` || note.sfld
                 : note.sfld
             }
             //   secondary={note.sfld}
@@ -155,11 +155,11 @@ const NoteEdit = ({
               newdata[index] = res.data;
               return newdata;
             });
-            setLoading(false);
+            finishOp()
           })
           .catch((err) => {
             console.log(err);
-            setLoading(false);
+            finishOp()
           });
     } else {
       typeof topicId === "string" &&
@@ -176,14 +176,20 @@ const NoteEdit = ({
               newdata.push(res.data);
               return newdata;
             });
-            setLoading(false);
+            finishOp()
           })
           .catch((err) => {
             console.log(err);
-            setLoading(false);
+            finishOp()
           });
     }
   };
+
+  const finishOp=()=>{
+    questionVd?.setValue('')
+    answerVd?.setValue('')
+    setLoading(false);
+  }
 
   useEffect(() => {
     const commnet = note && note?.data !== "" ? JSON.parse(note.data) : null;
@@ -193,6 +199,7 @@ const NoteEdit = ({
     );
     console.log(fields);
     setDefaultAnswer(fields && fields.length >= 2 ? fields[1] : "");
+    answerVd?.setValue(fields && fields.length >= 2 ? fields[1] : "")
     setTags(note?.tags?.split(";") || []);
   }, [note]);
 
