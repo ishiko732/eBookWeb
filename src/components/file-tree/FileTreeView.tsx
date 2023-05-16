@@ -36,6 +36,7 @@ import {
   queryTopics,
   updateTopic,
 } from "../../api/note";
+import { useReadContext } from "../../ReadContext";
 
 export default function FileTreeView({
   data,
@@ -52,6 +53,7 @@ export default function FileTreeView({
 }) {
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
+  const {setTopics,setTopicIndex} =useReadContext();
   const [contextMenu, setContextMenu] = useState<{
     mouseX: number;
     mouseY: number;
@@ -182,7 +184,11 @@ export default function FileTreeView({
         setSearchQuery(selectedNode?.at(-1)?.name || "");
         const fileId = Number(selectedNode?.at(-1)?.id.split("_").at(-1));
         (async (fileId: number) => {
+          setTopicIndex(0)
+          setTopics([])
           const topics = await queryTopics({ fileId: fileId });
+          setTopics(topics.data as unknown as topic[])
+          setTopicIndex(0)
           const isEmpty =
             Array.isArray(topics.data) && topics.data.length === 0;
           console.log(isEmpty);
