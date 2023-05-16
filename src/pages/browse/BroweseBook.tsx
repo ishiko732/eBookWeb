@@ -67,6 +67,14 @@ const MediaItem = ({ item }: { item: shareBook }) => {
       setLove((pre) => !pre);
     });
   };
+
+  React.useEffect(()=>{
+    isBrowse.current=item.browseFor4Hour
+    setBrowse(item.browse)
+    setStore(item.store)
+    setLoveCnt(item.love)
+    setLove(item.loveForDay)
+  },[item])
   const handleStoreClick = () => {
     if (!store) {
       setStore((pre) => !pre);
