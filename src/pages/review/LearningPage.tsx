@@ -12,6 +12,7 @@ import { useUserContext } from "../../UserContext";
 import { fetchMockData } from "../../utils/sleep";
 import ReviewLogContent from "./ReviewLogContent";
 import FSRS from "ts-fsrs/lib/fsrs";
+import ReactMarkdown from 'react-markdown'
 
 const LearningPage = (props: {
   newCard: card[];
@@ -182,6 +183,8 @@ const LearningPage = (props: {
         direction="column"
         spacing={2}
         height={document.body.offsetHeight * 0.8}
+        maxHeight={document.body.offsetHeight * 0.8}
+        style={{overflow: 'auto'}}
         padding="16px"
         justifyContent="space-between"
         alignItems="center"
@@ -394,9 +397,12 @@ const RatingButton = ({
 const QuestionPage = ({ note }: { note: note | undefined }) => {
   return note ? (
     <Fragment>
-      <Typography variant="h6" gutterBottom>
+      {/* <Typography variant="h6" gutterBottom>
         {note.sfld}
-      </Typography>
+      </Typography> */}
+      <ReactMarkdown>
+      {note.sfld}
+    </ReactMarkdown>
     </Fragment>
   ) : null;
 };
@@ -411,9 +417,12 @@ const AnswerPage = ({ note }: { note: note | undefined }) => {
   const answer =
     fields && fields.length > 1 ? fields[1] : t("card.answer_is_empty");
   return (
-    <Typography variant="body1" gutterBottom>
+    <ReactMarkdown>
       {answer}
-    </Typography>
+    </ReactMarkdown>
+    // <Typography variant="body1" gutterBottom>
+    //   {answer}
+    // </Typography>
   );
 };
 
