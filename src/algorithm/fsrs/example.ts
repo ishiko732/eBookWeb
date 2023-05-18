@@ -1,5 +1,11 @@
 import dayjs from "dayjs";
-import { Card, FSRSParameters, Rating, ReviewLog, createEmptyCard } from "ts-fsrs";
+import {
+  Card,
+  FSRSParameters,
+  Rating,
+  ReviewLog,
+  createEmptyCard,
+} from "ts-fsrs";
 import FSRS from "ts-fsrs/lib/fsrs";
 
 export interface example {

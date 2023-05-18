@@ -280,7 +280,7 @@ const customChineseMessages = {
     read: "阅读",
     addBook: "添加到书库",
     downloadBook: "下载图书",
-    selectTexts: "选中文件区",
+    selectTexts: "选中文本区",
     files: "资源",
     outline: "大纲",
     notes: "笔记",

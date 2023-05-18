@@ -34,22 +34,20 @@ const LearningPage = (props: {
   const [currentCard, setcurrentCard] = useState<card>();
   const [waitCard, setWaitCard] = useState<string[]>([]);
   useEffect(() => {
-    console.log(newCard, learningCard, reviewCard)
+    console.log(newCard, learningCard, reviewCard);
     const now_seed = dayjs().unix();
     const generator = seedrandom(String(now_seed));
-      const queueCard: card[] = [];
-      queueCard.push(...newCard);
-      queueCard.push(...reviewCard);
-      queueCard.sort(() => generator() - 0.5);
-      //优先插入learing在前面
-      queueCard.unshift(...learningCard);
-      setcurrentCard(queueCard.shift());
-      setDone(!currentCard);
-      setQueCard(queueCard)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    const queueCard: card[] = [];
+    queueCard.push(...newCard);
+    queueCard.push(...reviewCard);
+    queueCard.sort(() => generator() - 0.5);
+    //优先插入learing在前面
+    queueCard.unshift(...learningCard);
+    setcurrentCard(queueCard.shift());
+    setDone(!currentCard);
+    setQueCard(queueCard);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setOpen]);
-
-
 
   useEffect(() => {
     const repeal = (event: KeyboardEvent) => {

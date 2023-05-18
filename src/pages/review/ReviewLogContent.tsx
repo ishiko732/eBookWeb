@@ -48,9 +48,7 @@ const ReviewLogContent = ({ logs }: { logs: reviewLog[] }) => {
                 />
               </TableCell>
               <TableCell align="center">
-                <Chip
-                  label={t(`card.Rating.${log.rating}`)}
-                />
+                <Chip label={t(`card.Rating.${log.rating}`)} />
               </TableCell>
               <TableCell align="center">
                 <Chip label={log.scheduled_days} />
