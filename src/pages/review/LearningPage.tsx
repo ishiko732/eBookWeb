@@ -43,9 +43,12 @@ const LearningPage = (props: {
     queueCard.sort(() => generator() - 0.5);
     //优先插入learing在前面
     queueCard.unshift(...learningCard);
-    setcurrentCard(queueCard.shift());
-    setDone(!currentCard);
-    setQueCard(queueCard);
+    (async ()=>{
+      const tempCard=queueCard.shift()
+      await setcurrentCard(tempCard);
+      await setDone(!tempCard);
+      await setQueCard(queueCard);
+    })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setOpen]);
 

@@ -1,4 +1,4 @@
-import { Rating, State } from "../../algorithm/fsrs/models";
+import { Rating, State } from "ts-fsrs";
 import { role, userStatus } from "../entity/auth";
 
 export interface selectVo {
