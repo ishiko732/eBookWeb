@@ -1,7 +1,6 @@
 import Login from "../pages/auth/Login";
 import SignUp from "../pages/auth/register";
 import Dashboard from "../pages/dashboard/Dashboard";
-import MyHome from "../pages/home";
 import Stile from "../components/OutletStile";
 import NotFound from "../pages/exception/404";
 import SystemControl from "../pages/system/SystemControl";
@@ -51,13 +50,9 @@ export const routes = (props: any): route[] => {
     {
       path: "/",
       element: <Dashboard {...props} />,
-      redirect: "home",
+      redirect: "browse",
       //开头不能添加/,不然得从根目录写起'/dashboard/home'
       children: [
-        {
-          path: "home",
-          element: <MyHome {...props} />,
-        },
         {
           path: "system",
           element: <SystemControl {...props} />,
@@ -176,7 +171,7 @@ export const menus = (r: role): ListBarData[] => {
   items.push({
     icon: <WebIcon sx={{ color: "#3f51b5" }} />,
     label: "menu.Browse",
-    link: "home",
+    link: "browse",
     children: [
       {
         icon: <PublicIcon sx={{ color: "#3f51b5" }} />,
