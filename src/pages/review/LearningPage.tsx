@@ -401,7 +401,8 @@ const QuestionPage = ({ note }: { note: note | undefined }) => {
         {note.sfld}
       </Typography> */}
       <ReactMarkdown>
-      {note.sfld}
+
+      {note.sfld===""?JSON.parse(note.data).text||"":note.sfld}
     </ReactMarkdown>
     </Fragment>
   ) : null;
