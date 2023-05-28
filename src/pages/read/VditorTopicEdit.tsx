@@ -133,6 +133,9 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
         },
       },
       after: () => {
+        if(topics.length>topicIndex){
+          vditor.setValue(topics[topicIndex].data||"")
+        }
         setVd(vditor);
       },
     });
