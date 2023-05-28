@@ -27,6 +27,9 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
       toolbarConfig: {
         hide: true,
       },
+      cache:{
+        enable:false
+      },
       resize: {
         enable: true,
         position: "bottom",

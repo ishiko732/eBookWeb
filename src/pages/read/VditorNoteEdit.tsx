@@ -34,6 +34,9 @@ const VditorNoteEdit = (props: {
         hide: false,
         pin: false,
       },
+      cache:{
+        enable:false
+      },
       resize: {
         enable: true,
         position: "bottom",
