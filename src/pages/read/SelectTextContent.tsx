@@ -19,7 +19,7 @@ export const SelectTextContent = ({
     if (textRef.current.value === "") {
       return;
     }
-    console.log(textRef.current.value)
+    console.log(textRef.current.value);
     navigator.clipboard.writeText(textRef.current.value);
     setSelected(true);
     timer(1000).then(() => {

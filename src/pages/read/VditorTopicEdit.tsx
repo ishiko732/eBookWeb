@@ -176,7 +176,7 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
         (event.ctrlKey || event.metaKey) &&
         event.key.toLocaleLowerCase() === "v"
       ) {
-        vd.blur()
+        vd.blur();
         navigator.clipboard.readText().then((clipText) => {
           event.preventDefault();
           vd.insertValue(clipText);
