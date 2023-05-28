@@ -175,16 +175,17 @@ const VditorEdit = (props: { style?: React.CSSProperties }) => {
       ) {
         event.preventDefault();
         saveText(topics, topicIndex, vd);
-      } else if (
-        (event.ctrlKey || event.metaKey) &&
-        event.key.toLocaleLowerCase() === "v"
-      ) {
-        vd.blur();
-        navigator.clipboard.readText().then((clipText) => {
-          event.preventDefault();
-          vd.insertValue(clipText);
-        });
-      }
+      } 
+      // else if (
+      //   (event.ctrlKey || event.metaKey) &&
+      //   event.key.toLocaleLowerCase() === "v"
+      // ) {
+      //   vd.blur();
+      //   navigator.clipboard.readText().then((clipText) => {
+      //     event.preventDefault();
+      //     vd.insertValue(clipText);
+      //   });
+      // }
     };
     window.addEventListener("keydown", save);
     return () => {
