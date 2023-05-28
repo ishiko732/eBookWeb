@@ -35,7 +35,7 @@ export const Notes = () => {
   const { setPostion } = useSwipeableDrawerContext();
   setPostion("bottom");
   useEffect(() => {
-    setItems(notes);
+    setItems(notes.sort((a,b)=>a.createdAt-b.createdAt));
   }, [notes]);
 
   useEffect(() => {
