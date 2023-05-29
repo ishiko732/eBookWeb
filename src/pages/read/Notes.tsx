@@ -53,7 +53,7 @@ export const Notes = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topicIndex, topics]);
   return (
-    <div id="notes">
+    <div id="notes" style={{maxHeight: 200, overflow: 'auto'}}>
       <List dense>
         {items.length > 0 &&
           items.map((note, index) => (
