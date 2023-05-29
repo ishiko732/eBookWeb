@@ -194,7 +194,7 @@ export default function FileTreeView({
           console.log(isEmpty);
           isEmpty &&
             createTopic({
-              fileId: fileId,
+              fileId: Number(selectedNode?.at(-1)?.id.split("_").at(-1)),
               name: "default",
             })
               .then((res) => {
